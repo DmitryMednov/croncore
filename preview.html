@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CRONCORE — Preview</title>
+<link rel="icon" type="image/png" href="assets/logo-croncore.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --f-950: oklch(0.13 0.03 150);
+  --f-900: oklch(0.18 0.04 150);
+  --f-800: oklch(0.28 0.06 150);
+  --f-700: oklch(0.36 0.06 150);
+  --f-600: oklch(0.46 0.07 150);
+  --f-500: oklch(0.56 0.08 150);
+  --f-400: oklch(0.68 0.07 150);
+  --f-300: oklch(0.80 0.05 150);
+  --bone-50:  oklch(0.985 0.006 85);
+  --bone-100: oklch(0.96 0.008 85);
+  --clay-500: oklch(0.72 0.16 45);
+  --gold-500: oklch(0.78 0.12 90);
+  --ink:   oklch(0.97 0.012 90);
+  --ink-2: oklch(0.78 0.015 90);
+  --ink-3: oklch(0.58 0.018 90);
+  --ink-4: oklch(0.45 0.020 90);
+  --font-sans:  "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", ui-serif, Georgia, serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, monospace;
+  --glass-bg: rgba(255,255,255,0.04);
+  --glass-bg-2: rgba(255,255,255,0.06);
+  --glass-line: rgba(255,255,255,0.10);
+  --glass-line-2: rgba(255,255,255,0.18);
+  --r-md:18px; --r-lg:24px; --r-xl:32px; --r-2xl:44px; --r-pill:999px;
+  --float-1: 0 1px 2px rgba(0,0,0,0.30), 0 6px 14px -4px rgba(0,0,0,0.35);
+  --float-2: 0 2px 4px rgba(0,0,0,0.35), 0 22px 44px -14px rgba(0,0,0,0.50);
+  --rim-dark:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -1px 0 rgba(0,0,0,0.30);
+  --rim-dark-2:
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    inset 0 -1px 0 rgba(0,0,0,0.40);
+}
+*,*::before,*::after{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; min-height:100vh; }
+body{
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--f-950);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+.atmosphere{
+  position: fixed; inset: -10%;
+  z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(50% 50% at 18% 12%, oklch(0.42 0.10 150 / .55), transparent 65%),
+    radial-gradient(45% 45% at 88% 15%, oklch(0.50 0.10 145 / .35), transparent 65%),
+    radial-gradient(55% 50% at 80% 80%, oklch(0.55 0.14 45 / .18), transparent 70%),
+    radial-gradient(70% 60% at 30% 80%, oklch(0.30 0.08 150 / .50), transparent 70%),
+    linear-gradient(180deg, oklch(0.15 0.035 150), oklch(0.12 0.025 150));
+  filter: blur(40px) saturate(115%);
+}
+.atmosphere::before{
+  content:""; position:absolute; inset:0;
+  background: radial-gradient(120% 80% at 50% 50%, transparent 50%, oklch(0.10 0.03 150 / .65) 100%);
+}
+
+main{ position:relative; z-index:1; max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+@media (max-width: 800px){ main{ padding: 0 20px; } }
+
+.top{
+  display:flex; align-items:center; gap: 14px;
+  padding: 24px 0 8px;
+}
+.top img{ width: 36px; height:36px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.55)); }
+.top .name{ font-weight:600; letter-spacing:.12em; font-size:14px; color: var(--bone-50); }
+.top .crumb{
+  margin-left:auto;
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.hero{ padding: 60px 0 36px; }
+.eyebrow{
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink-3);
+  display:inline-flex; align-items:center; gap: 12px;
+}
+.eyebrow::before{
+  content:""; width:6px; height:6px; border-radius:999px;
+  background: var(--f-400);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.04), 0 0 12px var(--f-500);
+}
+h1{
+  margin: 16px 0 14px;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 500;
+  line-height: 1; letter-spacing: -.035em;
+}
+h1 em{
+  font-family: var(--font-serif);
+  font-style: italic; font-weight: 400;
+  color: var(--f-300);
+}
+.lede{
+  color: var(--ink-2);
+  font-size: clamp(16px, 1.2vw, 18px);
+  max-width: 62ch;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+@media (max-width: 800px){ .grid{ grid-template-columns: 1fr; } }
+
+.card{
+  position: relative;
+  display:flex; flex-direction: column; gap: 16px;
+  padding: 32px;
+  border-radius: var(--r-2xl);
+  background: var(--glass-bg-2);
+  border: 1px solid var(--glass-line-2);
+  box-shadow: var(--float-2), var(--rim-dark-2);
+  color: inherit; text-decoration: none;
+  min-height: 360px;
+  overflow: hidden;
+  transition: transform .2s, background .2s;
+}
+.card::before{
+  content:""; position:absolute; inset:1px; border-radius:inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 32%);
+  pointer-events:none;
+}
+.card::after{
+  content:""; position:absolute; inset:0;
+  pointer-events: none;
+}
+.card.site::after{
+  background:
+    radial-gradient(60% 50% at 30% 25%, oklch(0.55 0.13 150 / .35), transparent 65%),
+    radial-gradient(50% 40% at 90% 90%, oklch(0.7 0.15 45 / .15), transparent 70%);
+}
+.card.game::after{
+  background:
+    radial-gradient(60% 50% at 70% 30%, oklch(0.55 0.13 150 / .35), transparent 65%),
+    radial-gradient(50% 40% at 10% 90%, oklch(0.55 0.16 220 / .15), transparent 70%);
+}
+.card:hover{ transform: translateY(-3px); }
+.card > *{ position: relative; z-index: 1; }
+
+.tag-row{ display:flex; align-items:center; gap:10px; }
+.tag{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--bone-100);
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-line-2);
+}
+.tag .led{
+  width: 6px; height:6px; border-radius:999px;
+  background: var(--f-400);
+  box-shadow: 0 0 8px var(--f-400);
+}
+.tag.warn .led{ background: var(--gold-500); box-shadow: 0 0 8px var(--gold-500); }
+.tag.err  .led{ background: var(--clay-500); box-shadow: 0 0 8px var(--clay-500); }
+
+.card h2{
+  margin: 4px 0 0;
+  font-size: 36px; line-height: 1.05; letter-spacing: -.025em;
+  font-weight: 500;
+}
+.card h2 em{
+  font-family: var(--font-serif);
+  font-style: italic; font-weight: 400; color: var(--f-300);
+}
+.card p{
+  color: var(--ink-2);
+  font-size: 15px;
+  max-width: 50ch;
+  margin: 0;
+}
+.meta-row{
+  display:flex; flex-wrap: wrap; gap: 16px;
+  margin-top: auto;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .04em; color: var(--ink-3);
+}
+.meta-row b{ color: var(--bone-50); font-weight: 500; }
+
+.btn-row{ display:flex; gap: 12px; flex-wrap: wrap; }
+.btn{
+  display:inline-flex; align-items:center; gap: 10px;
+  padding: 13px 20px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-sans); font-weight: 500; font-size: 14px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: filter .15s, background .15s;
+  position: relative; isolation: isolate;
+}
+.btn::before{
+  content:""; position:absolute; inset:1px; border-radius:inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+.btn > *{ position: relative; z-index:1; }
+.btn-primary{
+  background: linear-gradient(180deg, var(--f-600), var(--f-800));
+  color: var(--bone-50);
+  border-color: rgba(0,0,0,0.4);
+  box-shadow: var(--float-1), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.45);
+}
+.btn-primary:hover{ filter: brightness(1.10); }
+.btn-secondary{
+  background: rgba(255,255,255,0.05);
+  color: var(--ink);
+  border-color: var(--glass-line-2);
+  box-shadow: var(--rim-dark);
+}
+.btn-secondary:hover{ background: rgba(255,255,255,0.10); }
+.btn[disabled]{ pointer-events: none; opacity: .5; }
+.arrow{ width:14px; height:14px; opacity:.85; transition: transform .15s; }
+.btn:hover .arrow{ transform: translateX(2px); }
+
+.notes{
+  margin: 56px 0 80px;
+  padding: 24px 28px;
+  border-radius: var(--r-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--rim-dark);
+}
+.notes h3{
+  font-size: 13px; font-weight: 500;
+  font-family: var(--font-mono);
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--bone-100);
+  margin: 0 0 12px;
+}
+.notes code{
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  background: rgba(0,0,0,0.30);
+  padding: 2px 8px;
+  border-radius: 6px;
+  color: var(--bone-50);
+  border: 1px solid var(--glass-line);
+}
+.notes ul{ margin: 0; padding: 0 0 0 20px; color: var(--ink-2); font-size: 14px; }
+.notes li{ margin: 6px 0; }
+
+footer{
+  padding: 24px 0 40px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em;
+  color: var(--ink-4);
+  border-top: 1px solid var(--glass-line);
+  display:flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+</style>
+</head>
+<body>
+
+<div class="atmosphere"></div>
+
+<main>
+  <div class="top">
+    <img src="assets/logo-croncore.png" alt="CRONCORE" />
+    <span class="name">CRONCORE</span>
+    <span class="crumb">PREVIEW · LOCAL</span>
+  </div>
+
+  <section class="hero">
+    <span class="eyebrow">Local preview · pick a build</span>
+    <h1>Both worlds, <em>one screen</em>.</h1>
+    <p class="lede">Two artefacts in this repo: the multilingual marketing site, and a vendored copy of <span style="font-family:var(--font-mono);font-size:.92em">false-earth</span> with Croncore monoliths dropped into the procedural landscape. Open either below.</p>
+  </section>
+
+  <section class="grid">
+    <!-- SITE CARD -->
+    <a class="card site" href="/">
+      <div class="tag-row">
+        <span class="tag"><span class="led"></span>STATIC · SERVES NOW</span>
+      </div>
+      <h2>Multilingual <em>Site</em></h2>
+      <p>Dark glass landing. EN / DE / RU / AR / HE / ES with auto-detect, RTL handling, and email + Telegram CTAs everywhere.</p>
+      <div class="btn-row">
+        <span class="btn btn-primary">
+          Open site
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+      <div class="meta-row">
+        <span>File <b>/index.html</b></span>
+        <span>Tech <b>Vanilla HTML + JS</b></span>
+        <span>Size <b>~97 KB</b></span>
+      </div>
+    </a>
+
+    <!-- GAME CARD -->
+    <a class="card game" id="game-card" href="/game/">
+      <div class="tag-row">
+        <span class="tag" id="game-status"><span class="led"></span>BUILT · NEEDS WEBGPU</span>
+      </div>
+      <h2>Game <em>Mode</em></h2>
+      <p>Vendored <code style="font-family:var(--font-mono);font-size:.92em">false-earth</code> with Croncore monoliths in a ring around spawn. Walk up, click → opens the matching site section.</p>
+      <div class="btn-row">
+        <span class="btn btn-primary">
+          Launch game
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+        <span class="btn btn-secondary" id="src-btn" onclick="event.preventDefault(); window.open('https://github.com/momentchan/false-earth','_blank','noopener')">
+          Original false-earth
+        </span>
+      </div>
+      <div class="meta-row">
+        <span>File <b>/game/</b></span>
+        <span>Tech <b>R3F · WebGPU · TSL</b></span>
+        <span>Browser <b>Chrome / Edge / Arc</b></span>
+      </div>
+    </a>
+  </section>
+
+  <section class="notes">
+    <h3>How to run locally</h3>
+    <ul>
+      <li>Site only: open <code>index.html</code> directly, or run <code>python3 -m http.server</code> from the repo root.</li>
+      <li>Site + game in one server: run <code>python3 serve.py</code> from the repo root, then open <code>http://localhost:8000/preview.html</code>. The server routes <code>/game/</code>, <code>/textures/</code>, <code>/audio/</code>, etc. into <code>game/dist/</code> automatically.</li>
+      <li>To rebuild the game after editing <code>game/src/components/CroncoreBlocks.tsx</code>: <code>cd game &amp;&amp; npm install &amp;&amp; npm run build</code>.</li>
+      <li>WebGPU is required. Chrome 121+, Edge 121+, Arc on desktop. Safari and Firefox stable do not work yet.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>© 2026 CRONCORE — local preview</span>
+    <span>false-earth © momentchan · MIT</span>
+  </footer>
+</main>
+
+<script>
+  // Light health check: if the game build is missing, dim the launch button.
+  fetch('/game/index.html', { method: 'HEAD' }).then(r => {
+    if (!r.ok) markGameMissing();
+  }).catch(markGameMissing);
+
+  function markGameMissing(){
+    const card = document.getElementById('game-card');
+    const status = document.getElementById('game-status');
+    if (!card || !status) return;
+    card.href = '#';
+    card.style.opacity = '.55';
+    card.onclick = (e) => { e.preventDefault(); alert('game/dist not found. Run:\n\n  cd game\n  npm install\n  npm run build'); };
+    status.innerHTML = '<span class="led" style="background:oklch(0.78 0.12 90); box-shadow:0 0 8px oklch(0.78 0.12 90)"></span>NOT BUILT · RUN npm run build';
+    status.classList.add('warn');
+  }
+</script>
+
+</body>
+</html>
