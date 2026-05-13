@@ -1,0 +1,1306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CRONCORE — The Investor's Circle</title>
+<meta name="description" content="Your private AI advisor for deals, capital, structure and access. Available in Telegram. Private access only." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   TOKENS — pulled from Croncore Design System (dark variant)
+   ========================================================= */
+:root{
+  /* Forest scale */
+  --f-950: oklch(0.13 0.03 150);
+  --f-900: oklch(0.18 0.04 150);
+  --f-850: oklch(0.22 0.05 150);
+  --f-800: oklch(0.28 0.06 150);
+  --f-700: oklch(0.36 0.06 150);
+  --f-600: oklch(0.46 0.07 150);
+  --f-500: oklch(0.56 0.08 150);
+  --f-400: oklch(0.68 0.07 150);
+  --f-300: oklch(0.80 0.05 150);
+  --f-200: oklch(0.89 0.03 150);
+  --f-100: oklch(0.94 0.018 150);
+
+  /* Bone — text on dark */
+  --bone-50:  oklch(0.985 0.006 85);
+  --bone-100: oklch(0.96 0.008 85);
+  --bone-300: oklch(0.84 0.012 85);
+  --bone-400: oklch(0.72 0.012 85);
+  --bone-500: oklch(0.60 0.010 85);
+
+  /* Clay — single accent (attention) */
+  --clay-500: oklch(0.72 0.16 45);
+  --clay-400: oklch(0.80 0.13 45);
+  --clay-300: oklch(0.88 0.09 45);
+
+  /* Gold — single warm trim for premium moments */
+  --gold-500: oklch(0.78 0.12 90);
+  --gold-300: oklch(0.88 0.08 90);
+
+  /* Text */
+  --ink:   oklch(0.97 0.012 90);
+  --ink-2: oklch(0.78 0.015 90);
+  --ink-3: oklch(0.58 0.018 90);
+  --ink-4: oklch(0.45 0.020 90);
+
+  /* Type */
+  --font-sans:  "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", ui-serif, Georgia, serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, monospace;
+
+  /* Spacing */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
+  --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px; --s-10:128px;
+
+  /* Radii */
+  --r-sm:12px; --r-md:18px; --r-lg:24px; --r-xl:32px; --r-2xl:44px; --r-pill:999px;
+
+  /* Glass on dark — translucent dark fills + light edges */
+  --glass-bg: rgba(255,255,255,0.04);
+  --glass-bg-2: rgba(255,255,255,0.06);
+  --glass-bg-3: rgba(255,255,255,0.08);
+  --glass-line: rgba(255,255,255,0.10);
+  --glass-line-2: rgba(255,255,255,0.18);
+  --rim-dark:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -1px 0 rgba(0,0,0,0.30);
+  --rim-dark-2:
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    inset 0 -1px 0 rgba(0,0,0,0.40),
+    inset 1px 0 0 rgba(255,255,255,0.08),
+    inset -1px 0 0 rgba(255,255,255,0.06);
+  --float-1: 0 1px 2px rgba(0,0,0,0.30), 0 6px 14px -4px rgba(0,0,0,0.35);
+  --float-2: 0 2px 4px rgba(0,0,0,0.35), 0 22px 44px -14px rgba(0,0,0,0.50);
+  --float-3: 0 40px 80px -24px rgba(0,0,0,0.65);
+}
+
+*,*::before,*::after{ box-sizing: border-box; }
+html,body{ margin:0; padding:0; }
+html{ scroll-behavior: smooth; }
+body{
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--f-950);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   ATMOSPHERE — the dark, lit interior of the "club"
+   ========================================================= */
+.atmosphere{
+  position: fixed; inset: -10%;
+  z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(50% 50% at 18% 12%, oklch(0.42 0.10 150 / .55), transparent 65%),
+    radial-gradient(45% 45% at 88% 15%, oklch(0.50 0.10 145 / .35), transparent 65%),
+    radial-gradient(55% 50% at 80% 80%, oklch(0.55 0.14 45 / .18), transparent 70%),
+    radial-gradient(70% 60% at 30% 80%, oklch(0.30 0.08 150 / .50), transparent 70%),
+    radial-gradient(120% 80% at 50% 50%, oklch(0.20 0.05 150 / .30), transparent 70%),
+    linear-gradient(180deg, oklch(0.15 0.035 150), oklch(0.12 0.025 150));
+  filter: blur(40px) saturate(115%);
+}
+.atmosphere::after{
+  content:""; position:absolute; inset:0;
+  background-image:
+    radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,.20) 1px, transparent 1px);
+  background-size: 3px 3px, 8px 8px;
+  background-position: 0 0, 2px 3px;
+  mix-blend-mode: overlay;
+  opacity: .9;
+}
+/* Vignette at edges */
+.atmosphere::before{
+  content:""; position:absolute; inset:0;
+  background: radial-gradient(120% 80% at 50% 50%, transparent 50%, oklch(0.10 0.03 150 / .65) 100%);
+}
+
+main{ position: relative; z-index: 1; }
+
+/* =========================================================
+   PRIMITIVES
+   ========================================================= */
+.glass{
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--float-1), var(--rim-dark);
+}
+.glass-2{
+  background: var(--glass-bg-2);
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  border: 1px solid var(--glass-line-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--float-2), var(--rim-dark-2);
+  position: relative;
+}
+.glass::before, .glass-2::before{
+  content:""; position:absolute; inset:1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 32%);
+  pointer-events: none;
+}
+.glass > *, .glass-2 > *{ position: relative; z-index: 1; }
+
+/* Typography */
+h1,h2,h3,h4{ margin:0; letter-spacing: -0.025em; font-weight: 500; }
+em.serif, .serif-em{
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--f-300);
+}
+.mono{ font-family: var(--font-mono); }
+
+.eyebrow{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display:inline-flex; align-items:center; gap: var(--s-3);
+}
+.eyebrow::before{
+  content:""; width: 6px; height:6px; border-radius:999px;
+  background: var(--f-400);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.04), 0 0 12px var(--f-500);
+}
+
+a{ color: inherit; }
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+.page{ max-width: 1320px; margin: 0 auto; padding: 0 var(--s-7); }
+@media (max-width: 800px){ .page{ padding: 0 var(--s-4); } }
+
+section{ padding: var(--s-9) 0; position: relative; }
+@media (max-width: 800px){ section{ padding: var(--s-8) 0; } }
+
+.section-head{
+  display:flex; flex-direction: column; gap: var(--s-3);
+  margin-bottom: var(--s-7);
+  max-width: 760px;
+}
+.section-head h2{
+  font-size: clamp(32px, 4.4vw, 56px);
+  line-height: 1.02;
+  letter-spacing: -.03em;
+  font-weight: 500;
+}
+.section-head p{
+  color: var(--ink-2);
+  font-size: clamp(15px, 1.2vw, 17px);
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* =========================================================
+   TOPBAR — floating capsule
+   ========================================================= */
+.topbar{
+  position: sticky; top: 12px; z-index: 50;
+  margin: 12px auto 0;
+  max-width: 1320px;
+  padding: 0 var(--s-4);
+}
+.topbar-inner{
+  display:flex; align-items:center; gap: var(--s-4);
+  padding: 9px 12px 9px 18px;
+  border-radius: var(--r-pill);
+  background: rgba(15,25,20,0.55);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-line-2);
+  box-shadow: var(--float-2), var(--rim-dark-2);
+  position: relative;
+}
+.topbar-inner::before{
+  content:""; position:absolute; inset:1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), transparent 35%);
+  pointer-events:none;
+}
+.topbar-inner > *{ position: relative; z-index: 1; }
+.brand-lock{ display:flex; align-items:center; gap: 10px; }
+.brand-lock img{ width: 28px; height: 28px; display:block; filter: drop-shadow(0 4px 8px rgba(0,0,0,.55)); }
+.brand-lock .wm{
+  font-weight: 600;
+  letter-spacing: .12em;
+  font-size: 14px;
+  color: var(--bone-50);
+}
+.topbar nav{
+  margin-left: auto;
+  display:flex; gap: 4px;
+  align-items: center;
+}
+@media (max-width: 720px){ .topbar nav.main-nav{ display:none; } }
+.topbar nav a{
+  color: var(--ink-2); text-decoration: none; font-size: 13px;
+  font-family: var(--font-mono); letter-spacing: .04em;
+  padding: 7px 12px; border-radius: var(--r-pill);
+  transition: background .15s ease, color .15s ease;
+}
+.topbar nav a:hover{ color: var(--ink); background: rgba(255,255,255,0.06); }
+
+/* Language switcher */
+.lang{
+  display:flex; gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-pill);
+  background: rgba(0,0,0,0.30);
+  border: 1px solid var(--glass-line);
+  font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: .08em;
+  align-items: center;
+}
+.lang button{
+  appearance: none; border: 0;
+  background: transparent; cursor: pointer;
+  color: var(--ink-3);
+  padding: 6px 9px;
+  border-radius: var(--r-pill);
+  font: inherit;
+  transition: background .15s, color .15s;
+}
+.lang button:hover{ color: var(--ink); }
+.lang button.active{
+  color: var(--bone-50);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: var(--rim-dark);
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap: 10px;
+  font-family: var(--font-sans); font-weight: 500; font-size: 14.5px;
+  border-radius: var(--r-pill); padding: 14px 22px;
+  cursor: pointer; text-decoration: none;
+  transition: transform .12s ease, box-shadow .15s ease, background .15s ease, filter .15s;
+  line-height: 1; letter-spacing: -.005em;
+  border: 1px solid transparent;
+  position: relative; isolation: isolate;
+  color: var(--ink);
+}
+.btn::before{
+  content:""; position:absolute; inset:1px; border-radius:inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+.btn > *{ position: relative; z-index: 1; }
+.btn:active{ transform: translateY(1px); }
+.btn-primary{
+  background: linear-gradient(180deg, var(--f-600), var(--f-800));
+  color: var(--bone-50);
+  border-color: rgba(0,0,0,0.4);
+  box-shadow:
+    var(--float-2),
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 -1px 0 rgba(0,0,0,0.45),
+    0 0 0 1px rgba(255,255,255,0.06);
+}
+.btn-primary:hover{ filter: brightness(1.10); }
+.btn-secondary{
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(16px);
+  color: var(--ink);
+  border-color: var(--glass-line-2);
+  box-shadow: var(--float-1), var(--rim-dark);
+}
+.btn-secondary:hover{ background: rgba(255,255,255,0.10); }
+.btn-ghost{ background: transparent; color: var(--ink-2); box-shadow: none; }
+.btn-ghost::before{ display: none; }
+.btn-ghost:hover{ color: var(--ink); background: rgba(255,255,255,0.04); }
+.btn-sm{ padding: 10px 16px; font-size: 13px; }
+.btn-lg{ padding: 17px 26px; font-size: 15.5px; }
+.btn .tg{
+  width: 16px; height: 16px;
+  display: inline-flex;
+}
+.btn-arrow svg{ width: 14px; height: 14px; opacity: .85; transition: transform .15s; }
+.btn:hover .btn-arrow svg{ transform: translateX(2px); }
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{ padding-top: var(--s-9); padding-bottom: var(--s-9); }
+.hero-grid{
+  display:grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: var(--s-8);
+  align-items: stretch;
+}
+@media (max-width: 1000px){ .hero-grid{ grid-template-columns: 1fr; gap: var(--s-6); } }
+
+.hero-text{
+  display:flex; flex-direction: column; justify-content: center;
+}
+.brand-name{
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: clamp(13px, 1.1vw, 15px);
+  letter-spacing: .35em;
+  color: var(--ink-2);
+  margin-top: var(--s-5);
+}
+.hero h1{
+  margin-top: var(--s-4);
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: .96;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+}
+.hero h1 em{
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--f-300);
+}
+.hero .lede{
+  margin-top: var(--s-5);
+  font-size: clamp(17px, 1.4vw, 20px);
+  color: var(--ink-2);
+  max-width: 54ch;
+}
+.hero .sub{
+  margin-top: var(--s-4);
+  font-size: 15px;
+  color: var(--ink-3);
+  max-width: 56ch;
+}
+.cta-row{
+  margin-top: var(--s-6);
+  display:flex; gap: var(--s-3); flex-wrap: wrap; align-items: center;
+}
+.cta-foot{
+  margin-top: var(--s-4);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  display:flex; align-items:center; gap: var(--s-3);
+}
+.cta-foot::before{
+  content:""; width:6px; height:6px; border-radius:999px; background: oklch(0.72 0.16 150);
+  box-shadow: 0 0 10px oklch(0.72 0.16 150);
+}
+
+/* Mark card */
+.hero-mark{
+  border-radius: var(--r-2xl);
+  padding: var(--s-7);
+  display:flex; flex-direction: column; gap: var(--s-5);
+  position: relative; overflow: hidden;
+  min-height: 460px;
+}
+.hero-mark::after{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(60% 50% at 30% 30%, oklch(0.55 0.13 150 / .35), transparent 65%),
+    radial-gradient(50% 40% at 80% 85%, oklch(0.7 0.15 45 / .18), transparent 70%);
+  pointer-events: none;
+}
+.hero-mark .crest{
+  flex:1;
+  display:grid; place-items:center;
+  position: relative;
+}
+.hero-mark .crest img{
+  width: 75%; max-width: 380px;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 40px 50px rgba(0,0,0,.55))
+    drop-shadow(0 6px 0 rgba(255,255,255,.04));
+}
+/* Concentric rings behind the mark */
+.hero-mark .rings{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.hero-mark .rings::before,
+.hero-mark .rings::after{
+  content:"";
+  position:absolute; top:50%; left:50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.06);
+  width: 60%; aspect-ratio: 1/1;
+}
+.hero-mark .rings::after{
+  width: 80%;
+  border-color: rgba(255,255,255,0.04);
+}
+.hero-mark .crest-meta{
+  display:flex; justify-content: space-between; align-items:end;
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--ink-3); letter-spacing: .14em; text-transform: uppercase;
+}
+.hero-mark .crest-meta b{ display:block; color: var(--ink); font-weight: 500; font-size: 12px; letter-spacing: .04em; text-transform: none; margin-top: 4px; }
+
+/* Hero ticker — small live-data feel under the mark */
+.hero-ticker{
+  display:flex; gap: var(--s-4); flex-wrap: wrap;
+  margin-top: var(--s-7);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--glass-line);
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+  letter-spacing: .04em;
+}
+.hero-ticker .tick{ display:flex; align-items:center; gap: 8px; }
+.hero-ticker .tick .led{ width:6px; height:6px; border-radius:999px; background: var(--f-400); box-shadow: 0 0 8px var(--f-400); }
+.hero-ticker .tick b{ color: var(--bone-50); font-weight: 500; }
+
+/* =========================================================
+   INTRO — five pillars
+   ========================================================= */
+.intro-grid{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--s-7);
+  align-items: end;
+}
+@media (max-width: 900px){ .intro-grid{ grid-template-columns: 1fr; gap: var(--s-5); } }
+.intro-grid h2{
+  font-size: clamp(32px, 4.4vw, 56px);
+  line-height: 1.02; letter-spacing: -.03em;
+}
+.intro-grid h2 em{ font-family: var(--font-serif); font-style: italic; font-weight:400; color: var(--f-300); }
+.intro-grid p{ color: var(--ink-2); font-size: 16px; max-width: 60ch; margin-top: var(--s-4); }
+
+.pillars{ display:flex; gap: var(--s-3); flex-wrap: wrap; }
+.pillar{
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: .08em;
+  padding: 9px 16px;
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass-line-2);
+  color: var(--bone-100);
+  box-shadow: var(--rim-dark);
+  display:inline-flex; align-items:center; gap: 8px;
+  position: relative;
+}
+.pillar::before{ content:""; width: 6px; height:6px; border-radius:999px; background: var(--f-400); box-shadow: 0 0 8px var(--f-500); }
+.pillar:nth-child(2)::before{ background: var(--f-500); }
+.pillar:nth-child(3)::before{ background: var(--f-600); }
+.pillar:nth-child(4)::before{ background: var(--gold-500); box-shadow: 0 0 8px var(--gold-500); }
+.pillar:nth-child(5)::before{ background: var(--clay-500); box-shadow: 0 0 8px var(--clay-500); }
+
+/* =========================================================
+   SERVICES — 6 cards
+   ========================================================= */
+.services-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-5);
+}
+@media (max-width: 1000px){ .services-grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px){ .services-grid{ grid-template-columns: 1fr; } }
+
+.svc-card{
+  padding: var(--s-6);
+  display:flex; flex-direction: column; gap: var(--s-4);
+  min-height: 320px;
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+.svc-card:hover{
+  transform: translateY(-3px);
+  background: var(--glass-bg-2);
+  border-color: var(--glass-line-2);
+}
+.svc-head{ display:flex; justify-content: space-between; align-items: flex-start; gap: var(--s-3); }
+.svc-icon{
+  width: 48px; height: 48px;
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, var(--f-700), var(--f-900));
+  display:grid; place-items:center;
+  color: var(--bone-50);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    var(--float-1),
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset 0 -1px 0 rgba(0,0,0,0.4);
+}
+.svc-icon svg{ width: 22px; height: 22px; }
+.svc-no{
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--ink-4); letter-spacing: .14em;
+}
+.svc-card h3{
+  font-size: 21px;
+  letter-spacing: -.015em;
+  line-height: 1.15;
+}
+.svc-card p{
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0;
+  flex: 1;
+}
+.svc-foot{
+  display:flex; justify-content: space-between; align-items:center;
+  margin-top: var(--s-2);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--glass-line);
+}
+.svc-foot a{
+  font-family: var(--font-mono);
+  font-size: 12px; letter-spacing: .04em;
+  color: var(--bone-50);
+  text-decoration: none;
+  display:inline-flex; align-items:center; gap: 8px;
+  transition: gap .15s;
+}
+.svc-foot a:hover{ gap: 12px; color: var(--f-300); }
+.svc-foot a svg{ width: 14px; height: 14px; }
+.svc-tag{
+  font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+/* =========================================================
+   AI ADVISOR — terminal style
+   ========================================================= */
+.advisor-grid{
+  display:grid; grid-template-columns: 1fr 1.05fr; gap: var(--s-7); align-items: stretch;
+}
+@media (max-width: 1000px){ .advisor-grid{ grid-template-columns: 1fr; } }
+
+.advisor-text h2{ font-size: clamp(32px, 4.4vw, 56px); line-height: 1.02; letter-spacing: -.03em; }
+.advisor-text h2 em{ font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--f-300); }
+.advisor-text p{ color: var(--ink-2); font-size: 16px; max-width: 56ch; margin-top: var(--s-4); }
+.examples{
+  margin-top: var(--s-6);
+  display:flex; flex-direction: column; gap: var(--s-3);
+}
+.example-chip{
+  display:flex; align-items:center; gap: var(--s-3);
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-pill);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-decoration: none;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.example-chip:hover{ background: rgba(255,255,255,0.08); border-color: var(--glass-line-2); transform: translateX(4px); }
+.example-chip .q{ color: var(--ink-3); font-weight: 500; flex-shrink: 0; }
+.example-chip .arr{ margin-left: auto; opacity:.5; }
+
+/* Terminal */
+.terminal{
+  display:flex; flex-direction: column;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  min-height: 540px;
+  background: rgba(8,16,12,0.65);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid var(--glass-line-2);
+  box-shadow: var(--float-3), var(--rim-dark-2);
+}
+.terminal::before{
+  content:""; position:absolute; inset:1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent 30%);
+  pointer-events:none;
+}
+.terminal-bar{
+  display:flex; align-items:center; gap: var(--s-3);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--glass-line);
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--ink-3); letter-spacing: .08em;
+}
+.terminal-bar .dots{ display:flex; gap: 6px; }
+.terminal-bar .dots span{
+  width:10px; height:10px; border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.terminal-bar .dots span:first-child{ background: oklch(0.55 0.16 25 / .8); }
+.terminal-bar .dots span:nth-child(2){ background: oklch(0.78 0.13 90 / .8); }
+.terminal-bar .dots span:nth-child(3){ background: oklch(0.65 0.14 150 / .8); }
+.terminal-bar .title{ color: var(--bone-100); font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+.terminal-bar .right{ margin-left: auto; color: var(--ink-4); }
+
+.terminal-body{
+  padding: var(--s-5) var(--s-6);
+  display:flex; flex-direction: column; gap: var(--s-4);
+  flex: 1;
+}
+.msg{ display:flex; flex-direction: column; gap: 6px; max-width: 90%; }
+.msg .who{ font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-4); }
+.msg.user{ align-self: flex-end; align-items: flex-end; }
+.msg.user .bubble{
+  background: linear-gradient(180deg, var(--f-700), var(--f-800));
+  border: 1px solid rgba(255,255,255,0.10);
+  color: var(--bone-50);
+  padding: 12px 16px; border-radius: 18px 18px 4px 18px;
+  font-size: 14.5px; font-weight: 400;
+  box-shadow: var(--float-1), var(--rim-dark);
+  max-width: 80%;
+}
+.msg.bot .bubble{
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass-line-2);
+  color: var(--ink);
+  padding: 14px 16px; border-radius: 18px 18px 18px 4px;
+  font-size: 14px;
+  box-shadow: var(--rim-dark);
+  font-family: var(--font-mono);
+}
+.msg.bot .who{ color: var(--f-300); }
+.bubble .line{ display:block; margin: 4px 0; }
+.bubble .pill-row{ display:flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.bubble .pillet{
+  font-size: 11px; letter-spacing: .04em;
+  padding: 4px 10px; border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-line);
+  color: var(--bone-100);
+}
+
+.terminal-input{
+  padding: 14px 18px;
+  border-top: 1px solid var(--glass-line);
+  display:flex; align-items:center; gap: 10px;
+}
+.terminal-input .prompt{ color: var(--f-300); font-family: var(--font-mono); font-size: 13px; }
+.terminal-input input{
+  flex:1;
+  background: transparent; border: 0; color: var(--ink);
+  font-family: var(--font-mono); font-size: 13px;
+  outline: none;
+}
+.terminal-input .send{
+  width: 32px; height:32px; border-radius: 999px;
+  background: var(--f-700);
+  display:grid; place-items:center; color: white;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+}
+.terminal-input .send svg{ width: 14px; height: 14px; }
+
+/* =========================================================
+   HOW IT WORKS
+   ========================================================= */
+.steps{
+  display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5);
+}
+@media (max-width: 900px){ .steps{ grid-template-columns: 1fr; } }
+.step{
+  padding: var(--s-6);
+  display:flex; flex-direction: column; gap: var(--s-3);
+  min-height: 240px;
+  position: relative;
+}
+.step .num{
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: .16em;
+  color: var(--ink-4);
+}
+.step .big{
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1; letter-spacing: -.02em;
+  color: var(--f-400);
+  opacity: .9;
+}
+.step h3{ font-size: 22px; letter-spacing: -.015em; margin-top: var(--s-2); }
+.step p{ color: var(--ink-2); margin: 0; font-size: 14.5px; flex: 1; }
+
+/* =========================================================
+   TRUST
+   ========================================================= */
+.trust-grid{
+  display:grid; grid-template-columns: 1fr 1.1fr; gap: var(--s-7); align-items: center;
+}
+@media (max-width: 900px){ .trust-grid{ grid-template-columns: 1fr; } }
+.trust-text h2{ font-size: clamp(32px, 4.4vw, 56px); line-height: 1.02; letter-spacing: -.03em; }
+.trust-text h2 em{ font-family: var(--font-serif); font-style: italic; font-weight:400; color: var(--f-300); }
+.trust-text p{ color: var(--ink-2); margin-top: var(--s-4); font-size: 16px; max-width: 50ch; }
+
+.audience-grid{
+  display:grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-3);
+}
+.audience{
+  padding: var(--s-4) var(--s-5);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-md);
+  display:flex; align-items:center; gap: var(--s-3);
+  box-shadow: var(--rim-dark);
+  position: relative;
+}
+.audience .ic{
+  width: 32px; height: 32px;
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-line-2);
+  display:grid; place-items:center;
+  color: var(--f-300);
+}
+.audience .ic svg{ width: 16px; height: 16px; }
+.audience .label{ font-size: 14.5px; color: var(--ink); font-weight: 500; }
+
+/* =========================================================
+   FINAL CTA
+   ========================================================= */
+.finale{
+  padding: var(--s-9) var(--s-7);
+  border-radius: var(--r-2xl);
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+@media (max-width: 700px){ .finale{ padding: var(--s-7) var(--s-5); } }
+.finale::after{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(50% 50% at 50% 0%, oklch(0.55 0.13 150 / .35), transparent 70%),
+    radial-gradient(40% 50% at 50% 100%, oklch(0.7 0.15 45 / .15), transparent 70%);
+  pointer-events: none;
+}
+.finale .crest-sm{
+  width: 80px; height:80px; margin: 0 auto;
+  display:grid; place-items:center;
+  position: relative; z-index: 1;
+}
+.finale .crest-sm img{ width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,.6)); }
+.finale h2{
+  margin-top: var(--s-5);
+  font-size: clamp(40px, 5.8vw, 76px);
+  line-height: 1; letter-spacing: -.035em;
+  position: relative; z-index: 1;
+}
+.finale h2 em{ font-family: var(--font-serif); font-style: italic; font-weight:400; color: var(--f-300); }
+.finale p{
+  margin-top: var(--s-4);
+  max-width: 52ch; margin-left:auto; margin-right:auto;
+  color: var(--ink-2); font-size: 17px;
+  position: relative; z-index: 1;
+}
+.finale .cta-row{ justify-content: center; }
+.finale .tag-line{
+  margin-top: var(--s-6);
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .35em;
+  text-transform: uppercase; color: var(--ink-3);
+  position: relative; z-index: 1;
+  display:flex; gap: var(--s-5); justify-content: center; flex-wrap: wrap;
+}
+.finale .tag-line span::before{ content:"· "; color: var(--f-400); }
+.finale .tag-line span:first-child::before{ content:""; }
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+footer{
+  margin-top: var(--s-9);
+  padding-bottom: var(--s-7);
+}
+.footer-inner{
+  padding: var(--s-6) var(--s-7);
+  border-radius: var(--r-xl);
+  display:grid; grid-template-columns: 1fr auto; gap: var(--s-5);
+  align-items: center;
+}
+@media (max-width: 800px){
+  .footer-inner{ grid-template-columns: 1fr; padding: var(--s-5); }
+}
+.footer-brand{ display:flex; align-items:center; gap: 12px; }
+.footer-brand img{ width: 32px; height: 32px; }
+.footer-brand .name{ color: var(--bone-50); font-weight: 600; letter-spacing: .12em; font-size: 14px; }
+.footer-brand .sub{ color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; margin-top: 2px; }
+.footer-links{ display:flex; gap: var(--s-5); flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.footer-links a{ text-decoration: none; color: var(--ink-3); transition: color .15s; }
+.footer-links a:hover{ color: var(--bone-50); }
+.footer-fine{
+  margin-top: var(--s-5); padding-top: var(--s-4);
+  border-top: 1px solid var(--glass-line);
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--ink-4); letter-spacing: .04em;
+  display:flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s-3);
+}
+
+/* =========================================================
+   ANIMATION — subtle bot bubble entrance / pulse
+   ========================================================= */
+@keyframes ledPulse{
+  0%,100%{ box-shadow: 0 0 10px oklch(0.72 0.16 150); }
+  50%{ box-shadow: 0 0 18px oklch(0.72 0.16 150); }
+}
+.cta-foot::before, .audience .ic{ animation: ledPulse 3.5s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<div class="atmosphere"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-lock">
+      <img src="assets/logo-croncore.png" alt="Croncore" />
+      <span class="wm">CRONCORE</span>
+    </div>
+    <nav class="main-nav">
+      <a href="#services">Services</a>
+      <a href="#advisor">Advisor</a>
+      <a href="#how">How it works</a>
+      <a href="#access">Access</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button class="active" data-lang="en">EN</button>
+      <button data-lang="de">DE</button>
+      <button data-lang="ru">RU</button>
+      <button data-lang="ar">AR</button>
+      <button data-lang="he">HE</button>
+      <button data-lang="es">ES</button>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- ============================================
+       1. HERO
+       ============================================ -->
+  <section class="hero" data-screen-label="01 Hero">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <span class="eyebrow">Private AI advisor · Telegram only · invite based</span>
+        <div class="brand-name">C&nbsp;·&nbsp;R&nbsp;·&nbsp;O&nbsp;·&nbsp;N&nbsp;·&nbsp;C&nbsp;·&nbsp;O&nbsp;·&nbsp;R&nbsp;·&nbsp;E</div>
+        <h1>The Investor's<br/><em>Circle</em>.</h1>
+        <p class="lede">Your private AI advisor for deals, capital, structure and access.</p>
+        <p class="sub">Ask questions, explore investment opportunities, structure deals and reach trusted partners — all through one private AI interface.</p>
+
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <svg class="tg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+            Open AI Advisor
+          </a>
+          <a class="btn btn-secondary btn-lg" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            Request Private Access
+            <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+        </div>
+        <div class="cta-foot">Available in Telegram · private access only</div>
+      </div>
+
+      <div class="glass-2 hero-mark">
+        <div class="rings"></div>
+        <div class="crest">
+          <img src="assets/logo-croncore.png" alt="" />
+        </div>
+        <div class="crest-meta">
+          <div>Status<b>ONLINE · 24/7</b></div>
+          <div style="text-align:right">Members<b>by invitation</b></div>
+        </div>
+        <div class="hero-ticker">
+          <span class="tick"><span class="led"></span>UAE&nbsp;·&nbsp;<b>SPV ready</b></span>
+          <span class="tick"><span class="led" style="background:var(--gold-500); box-shadow:0 0 8px var(--gold-500);"></span>EU&nbsp;·&nbsp;<b>licensed structures</b></span>
+          <span class="tick"><span class="led" style="background:var(--clay-500); box-shadow:0 0 8px var(--clay-500);"></span>Global&nbsp;·&nbsp;<b>fintech rails</b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       2. INTRO
+       ============================================ -->
+  <section data-screen-label="02 Intro">
+    <div class="intro-grid">
+      <div>
+        <span class="eyebrow">One entry point</span>
+        <h2 style="margin-top: var(--s-4)">One private entry point for <em class="serif-em">global</em> opportunities.</h2>
+        <p>CRONCORE helps investors, founders and family offices navigate fintech, capital markets, legal structuring, SPVs, tokenization and concierge requests through an AI-powered advisory layer.</p>
+      </div>
+      <div class="pillars">
+        <span class="pillar">Deals</span>
+        <span class="pillar">Capital</span>
+        <span class="pillar">Structure</span>
+        <span class="pillar">Access</span>
+        <span class="pillar">Network</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       3. SERVICES
+       ============================================ -->
+  <section id="services" data-screen-label="03 Services">
+    <div class="section-head">
+      <span class="eyebrow">Services · six directions</span>
+      <h2>Everything one investor <em class="serif-em">actually</em> needs.</h2>
+      <p>Six private directions, one interface. Start with any of them — CRONCORE routes the rest.</p>
+    </div>
+
+    <div class="services-grid">
+
+      <!-- Card 1: Payments & Fintech -->
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2.5"/><path d="M2.5 10.5h19M6 15h3M12 15h2"/></svg>
+          </div>
+          <span class="svc-no">— 01</span>
+        </div>
+        <h3>Payments &amp; Fintech</h3>
+        <p>Payment infrastructure, acquiring, PSP, EMI, crypto rails, banking setup and global fintech solutions.</p>
+        <div class="svc-foot">
+          <span class="svc-tag">Infrastructure</span>
+          <span>Discuss Payments
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Card 2: Investments & DeFi -->
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 3 5-7 4 4"/><path d="M3 20h18"/></svg>
+          </div>
+          <span class="svc-no">— 02</span>
+        </div>
+        <h3>Investments &amp; DeFi</h3>
+        <p>Private deals, venture opportunities, secondaries, digital assets, DeFi infrastructure and alternative investments.</p>
+        <div class="svc-foot">
+          <span class="svc-tag">Capital</span>
+          <span>Explore Investments
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Card 3: SPV & Tokenization -->
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7.5"/><path d="M12 4.5v3M12 16.5v3M4.5 12h3M16.5 12h3"/></svg>
+          </div>
+          <span class="svc-no">— 03</span>
+        </div>
+        <h3>SPV &amp; Tokenization</h3>
+        <p>SPV creation, tokenization, syndicates, investor onboarding, cap table logic and digital ownership models.</p>
+        <div class="svc-foot">
+          <span class="svc-tag">Structure</span>
+          <span>Structure a Deal
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Card 4: Legal & Corporate -->
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14.5 3v4h4M9 12h6M9 16h6M9 8h2"/></svg>
+          </div>
+          <span class="svc-no">— 04</span>
+        </div>
+        <h3>Legal &amp; Corporate</h3>
+        <p>Company setup, UAE and European structures, compliance, licensing, tax coordination and corporate administration.</p>
+        <div class="svc-foot">
+          <span class="svc-tag">Jurisdiction</span>
+          <span>Get Structuring Help
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Card 5: Concierge & Real Estate -->
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V9l7-5 7 5v11"/><rect x="9" y="13" width="6" height="7"/><path d="M9 9h6"/></svg>
+          </div>
+          <span class="svc-no">— 05</span>
+        </div>
+        <h3>Concierge &amp; Real Estate</h3>
+        <p>Relocation, real estate sourcing, residency support, lifestyle services and private network access.</p>
+        <div class="svc-foot">
+          <span class="svc-tag">Lifestyle</span>
+          <span>Request Concierge
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Card 6: Private Network -->
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.5 7.4l4 3.2M17.5 7.4l-4 3.2M6.5 16.6l4-3.2M17.5 16.6l-4-3.2"/></svg>
+          </div>
+          <span class="svc-no">— 06</span>
+        </div>
+        <h3>Private Network</h3>
+        <p>Curated access to partners, experts, investors, operators and selected opportunities within The Investor's Circle.</p>
+        <div class="svc-foot">
+          <span class="svc-tag">Access</span>
+          <span>Request Access
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================================
+       4. AI ADVISOR
+       ============================================ -->
+  <section id="advisor" data-screen-label="04 Advisor">
+    <div class="advisor-grid">
+      <div class="advisor-text">
+        <span class="eyebrow">AI Advisor</span>
+        <h2 style="margin-top: var(--s-4)">Start with a <em class="serif-em">question</em>.</h2>
+        <p>Instead of searching for the right expert, structure or partner manually, start a private conversation in CRONCORE Bot. The system qualifies what you need and routes it.</p>
+
+        <div class="examples">
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span> "I need a payment solution for my business"
+            <span class="arr">↗</span>
+          </a>
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span> "I am looking for investment opportunities"
+            <span class="arr">↗</span>
+          </a>
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span> "I need to register a company in Europe or UAE"
+            <span class="arr">↗</span>
+          </a>
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span> "How does equity tokenization work?"
+            <span class="arr">↗</span>
+          </a>
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span> "I am looking for real estate opportunities"
+            <span class="arr">↗</span>
+          </a>
+        </div>
+
+        <div class="cta-row" style="margin-top: var(--s-6);">
+          <a class="btn btn-primary" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <svg class="tg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+            Ask CRONCORE Bot
+          </a>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <span class="title">@CRONCORE_bot · live</span>
+          <span class="right">PRIVATE · ENCRYPTED</span>
+        </div>
+        <div class="terminal-body">
+          <div class="msg user">
+            <span class="who">You · 14:02</span>
+            <div class="bubble">I am looking for investment opportunities in MENA fintech. Ticket size €250–500k, 12-month horizon.</div>
+          </div>
+          <div class="msg bot">
+            <span class="who">Croncore · 14:02</span>
+            <div class="bubble">
+              <span class="line">→ Matching against 47 active deals in <b style="color:var(--bone-50)">MENA fintech</b>.</span>
+              <span class="line">→ 6 candidates inside your range. 2 inside The Investor's Circle (private).</span>
+              <span class="line" style="color:var(--ink-3)">Filter further:</span>
+              <div class="pill-row">
+                <span class="pillet">payments</span>
+                <span class="pillet">acquiring</span>
+                <span class="pillet">B2B SaaS</span>
+                <span class="pillet">crypto rails</span>
+              </div>
+            </div>
+          </div>
+          <div class="msg user">
+            <span class="who">You · 14:03</span>
+            <div class="bubble">Payments. Show me the two private ones.</div>
+          </div>
+          <div class="msg bot">
+            <span class="who">Croncore · 14:03</span>
+            <div class="bubble">
+              <span class="line">↳ Forwarding to dealflow desk. NDA + accreditation check requested.</span>
+              <span class="line" style="color: var(--f-300)">Estimated time to first call: <b style="color:var(--bone-50)">under 48h</b>.</span>
+            </div>
+          </div>
+        </div>
+        <div class="terminal-input">
+          <span class="prompt">›</span>
+          <input type="text" placeholder="Type a question, or pick a suggestion…" readonly />
+          <a class="send" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" aria-label="Open in Telegram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       5. HOW IT WORKS
+       ============================================ -->
+  <section id="how" data-screen-label="05 How">
+    <div class="section-head">
+      <span class="eyebrow">How it works · three steps</span>
+      <h2>From a single message <em class="serif-em">to the right room</em>.</h2>
+    </div>
+
+    <div class="steps">
+      <div class="glass step">
+        <span class="num">— STEP 01</span>
+        <span class="big">i.</span>
+        <h3>Open the bot</h3>
+        <p>Start a private conversation in Telegram. No account, no signup form — just a message.</p>
+      </div>
+      <div class="glass step">
+        <span class="num">— STEP 02</span>
+        <span class="big">ii.</span>
+        <h3>Choose a category</h3>
+        <p>Fintech, investments, SPV, legal, concierge, private network. Pick a direction or describe it freely.</p>
+      </div>
+      <div class="glass step">
+        <span class="num">— STEP 03</span>
+        <span class="big">iii.</span>
+        <h3>Get routed</h3>
+        <p>CRONCORE qualifies the request and routes it to the right expert, partner or live opportunity.</p>
+      </div>
+    </div>
+
+    <div class="cta-row" style="margin-top: var(--s-7); justify-content: center;">
+      <a class="btn btn-primary btn-lg" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+        <svg class="tg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+        Open in Telegram
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================================
+       6. TRUST / POSITIONING
+       ============================================ -->
+  <section data-screen-label="06 Trust">
+    <div class="trust-grid">
+      <div class="trust-text">
+        <span class="eyebrow">Built for</span>
+        <h2 style="margin-top: var(--s-4)">For private investors and <em class="serif-em">cross-border</em> businesses.</h2>
+        <p>CRONCORE is designed for people who need fast access to trusted information, deal flow, structuring support and reliable partners — without the noise of public platforms.</p>
+      </div>
+
+      <div class="audience-grid">
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 17l5-5 4 3 5-7 4 4"/></svg></span>
+          <span class="label">For investors</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg></span>
+          <span class="label">For founders</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 21V9l5-4 5 4M12.5 21V13l5-4 4 4v8"/><path d="M5 13h0M10 13h0M16 16h0M19 19h0"/></svg></span>
+          <span class="label">For family offices</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2.5" y="6" width="19" height="13" rx="2"/><path d="M2.5 10.5h19"/></svg></span>
+          <span class="label">For fintech companies</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+          <span class="label">International entrepreneurs</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0"/></svg></span>
+          <span class="label">For private clients</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       7. FINAL CTA
+       ============================================ -->
+  <section id="access" data-screen-label="07 Final CTA">
+    <div class="glass-2 finale">
+      <div class="crest-sm"><img src="assets/logo-croncore.png" alt="" /></div>
+      <h2>Enter <em class="serif-em">The Investor's Circle</em>.</h2>
+      <p>Start with one question. CRONCORE will guide you in the right direction.</p>
+      <div class="cta-row" style="margin-top: var(--s-6);">
+        <a class="btn btn-primary btn-lg" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+          <svg class="tg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+          Open CRONCORE Bot
+        </a>
+      </div>
+      <div class="tag-line">
+        <span>Deals</span><span>Capital</span><span>Structure</span><span>Access</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="glass footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo-croncore.png" alt="" />
+        <div>
+          <div class="name">CRONCORE</div>
+          <div class="sub">The Investor's Circle</div>
+        </div>
+      </div>
+      <nav class="footer-links">
+        <a href="#services">Services</a>
+        <a href="#advisor">Advisor</a>
+        <a href="#how">How it works</a>
+        <a href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">Telegram</a>
+        <a href="#access">Access</a>
+      </nav>
+    </div>
+    <div class="page footer-fine" style="padding-top: var(--s-5)">
+      <span>© 2026 CRONCORE. Private network. Invitation only.</span>
+      <span>Information shared in the bot does not constitute investment, legal or tax advice.</span>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  // Language switcher — UI only (no copy translations wired yet, but structure ready)
+  document.querySelectorAll('.lang button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.lang button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      const lang = b.dataset.lang;
+      document.documentElement.lang = lang;
+      // RTL handling for AR / HE
+      if (lang === 'ar' || lang === 'he') {
+        document.documentElement.dir = 'rtl';
+      } else {
+        document.documentElement.dir = 'ltr';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
