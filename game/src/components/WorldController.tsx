@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useControls } from 'leva';
 import * as THREE from 'three/webgpu';
 import {
@@ -30,8 +30,39 @@ import { CroncoreBlocks } from './CroncoreBlocks';
 export function WorldController() {
     const setActiveTargets = useGameStore((state) => state.setActiveTargets);
     const setComponentReady = useGameStore((state) => state.setComponentReady);
+    const { scene } = useThree();
 
     const debugMode = new URLSearchParams(window.location.search).get('debug') === 'true';
+
+    // Some R3F deps (camera-controls debug helpers etc.) silently mount
+    // Line2 / LineSegments2 objects that ride on the classic LineMaterial.
+    // The WebGPU node renderer can't translate it, warns "Material
+    // 'LineMaterial' is not compatible", and then emits drawIndexed with
+    // Infinity every frame — black screen + console spam. Walk the scene
+    // a few times after mount and hide any such object so the renderer
+    // skips it entirely.
+    useEffect(() => {
+        const sweep = () => {
+            let hidden = 0;
+            scene.traverse((obj: any) => {
+                const isBadLine = obj?.isLine2 || obj?.isLineSegments2;
+                const mat = obj?.material;
+                const isBadMat = mat && (mat.type === 'LineMaterial' || mat.isLineMaterial);
+                if (isBadLine || isBadMat) {
+                    if (obj.visible) {
+                        obj.visible = false;
+                        hidden++;
+                    }
+                }
+            });
+            if (hidden > 0) {
+                console.info(`[Croncore] hid ${hidden} LineMaterial object(s) the WebGPU pipeline can't render.`);
+            }
+        };
+        sweep();
+        const tids = [250, 1000, 3000].map((ms) => setTimeout(sweep, ms));
+        return () => tids.forEach(clearTimeout);
+    }, [scene]);
 
     // Enable eruda console only in debug mode (?debug=true)
     useEffect(() => {
