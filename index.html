@@ -10,15 +10,6 @@
 <meta property="og:title" content="CRONCORE — The Investor's Circle" />
 <meta property="og:description" content="Your private AI advisor for deals, capital, structure and access." />
 <meta property="og:image" content="assets/logo-croncore.png" />
-
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
-  }
-}
-</script>
 <meta name="theme-color" content="#0a1810" />
 
 <link rel="icon" type="image/png" href="assets/logo-croncore.png" />
@@ -296,7 +287,6 @@ section{ padding: var(--s-9) 0; position: relative; }
   display:flex; gap: 4px;
   align-items: center;
 }
-@media (max-width: 900px){ .topbar nav.main-nav{ display:none; } }
 .topbar nav a{
   color: var(--ink-2); text-decoration: none; font-size: 13px;
   font-family: var(--font-mono); letter-spacing: .04em;
@@ -331,6 +321,60 @@ section{ padding: var(--s-9) 0; position: relative; }
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.10);
   box-shadow: var(--rim-dark);
+}
+
+/* Hamburger — visible only on mobile, toggles the topbar nav drawer. */
+.hamburger{
+  display: none;
+  appearance: none; border: 0; padding: 0;
+  width: 36px; height: 36px;
+  align-items: center; justify-content: center;
+  background: transparent;
+  color: var(--bone-100);
+  cursor: pointer;
+  border-radius: var(--r-pill);
+  transition: background .15s, color .15s;
+}
+.hamburger:hover{ background: rgba(255,255,255,0.06); color: var(--bone-50); }
+.hamburger svg{ width: 22px; height: 22px; }
+.hamburger svg path{ transition: transform .25s ease, opacity .15s ease; transform-origin: 50% 50%; }
+.hamburger[aria-expanded="true"] .hb-top{ transform: translateY(5px) rotate(45deg); }
+.hamburger[aria-expanded="true"] .hb-mid{ opacity: 0; }
+.hamburger[aria-expanded="true"] .hb-bot{ transform: translateY(-5px) rotate(-45deg); }
+
+@media (max-width: 900px){
+  .topbar nav.main-nav{
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: var(--s-4); right: var(--s-4);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 10px;
+    border-radius: var(--r-lg);
+    background: rgba(15,25,20,0.92);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid var(--glass-line-2);
+    box-shadow: var(--float-2), var(--rim-dark-2);
+    z-index: 51;
+  }
+  .topbar nav.main-nav.open{ display: flex; }
+  .topbar nav.main-nav a{
+    padding: 12px 16px;
+    font-size: 14px;
+    border-radius: var(--r-md);
+  }
+  .topbar nav.main-nav a:hover{ background: rgba(255,255,255,0.08); }
+  .hamburger{ display: inline-flex; }
+}
+@media (max-width: 460px){
+  .topbar-inner{ gap: 8px; padding: 8px 8px 8px 14px; }
+  .brand-lock .wm{ font-size: 12px; letter-spacing: .10em; }
+  .brand-lock img{ width: 24px; height: 24px; }
+  .lang{ font-size: 9.5px; }
+  .lang button{ padding: 5px 7px; }
 }
 
 /* =========================================================
@@ -407,14 +451,6 @@ section{ padding: var(--s-9) 0; position: relative; }
 
 .hero-text{
   display:flex; flex-direction: column; justify-content: center;
-}
-.brand-name{
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: clamp(13px, 1.1vw, 15px);
-  letter-spacing: .35em;
-  color: var(--ink-2);
-  margin-top: var(--s-5);
 }
 .hero h1{
   margin-top: var(--s-4);
@@ -945,91 +981,6 @@ html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit
   }
 }
 
-/* =========================================================
-   ASTRONAUT — final embed before footer
-   ========================================================= */
-.astro-section{
-  padding: var(--s-9) 0 var(--s-8);
-  position: relative;
-}
-.astro-grid{
-  display:grid;
-  grid-template-columns: .85fr 1.15fr;
-  gap: var(--s-7);
-  align-items: center;
-}
-@media (max-width: 900px){ .astro-grid{ grid-template-columns: 1fr; gap: var(--s-5); } }
-.astro-text h2{
-  font-size: clamp(36px, 5vw, 64px);
-  line-height: 1.02; letter-spacing: -.03em;
-  font-weight: 500;
-  margin-top: var(--s-4);
-}
-.astro-text h2 em{ font-family: var(--font-serif); font-style: italic; font-weight:400; color: var(--f-300); }
-.astro-text p{
-  color: var(--ink-2);
-  font-size: 16px; max-width: 50ch;
-  margin-top: var(--s-4);
-}
-.astro-text .cta-row{ margin-top: var(--s-6); }
-.astro-stage{
-  position: relative;
-  aspect-ratio: 1 / 1.1;
-  max-height: 620px;
-  border-radius: var(--r-2xl);
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--glass-line);
-  overflow: hidden;
-  box-shadow: var(--float-3), var(--rim-dark-2);
-  isolation: isolate;
-}
-.astro-stage::before{
-  content:""; position:absolute; inset:0;
-  background:
-    radial-gradient(55% 50% at 50% 60%, oklch(0.55 0.13 150 / .45), transparent 65%),
-    radial-gradient(40% 35% at 50% 25%, oklch(0.7 0.15 45 / .12), transparent 70%);
-  pointer-events: none; z-index: 0;
-}
-.astro-stage::after{
-  content:""; position:absolute; inset:1px;
-  border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 32%);
-  pointer-events:none; z-index: 3;
-}
-.astro-stage canvas{
-  position: relative; z-index: 1;
-  display:block;
-  width: 100%; height: 100%;
-}
-.astro-stage .astro-loading{
-  position: absolute; inset: 0; z-index: 2;
-  display:grid; place-items:center;
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
-  color: var(--ink-3);
-  transition: opacity .4s ease;
-  pointer-events: none;
-}
-.astro-stage[data-ready="1"] .astro-loading{ opacity: 0; }
-.astro-stage .astro-floor{
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 35%;
-  background: linear-gradient(180deg, transparent, oklch(0.10 0.03 150 / .55));
-  pointer-events: none; z-index: 2;
-}
-.astro-stage .astro-meta{
-  position: absolute; left: 16px; right: 16px; bottom: 14px; z-index: 2;
-  display:flex; justify-content: space-between; gap: 12px;
-  font-family: var(--font-mono); font-size: 10.5px;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--ink-3);
-}
-.astro-stage .astro-meta b{ color: var(--bone-50); font-weight: 500; }
-.astro-stage .astro-meta .led{
-  display:inline-block; width:6px; height:6px; border-radius:999px;
-  background: var(--f-400); box-shadow: 0 0 8px var(--f-500);
-  margin-right: 6px; vertical-align: middle;
-}
 </style>
 </head>
 <body>
@@ -1047,8 +998,14 @@ html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit
       <a href="#advisor" data-i18n="nav_advisor">Advisor</a>
       <a href="#how" data-i18n="nav_how">How it works</a>
       <a href="#access" data-i18n="nav_access">Access</a>
-      <a href="/game/" data-i18n="nav_game">Game</a>
     </nav>
+    <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path class="hb-top" d="M4 7h16"/>
+        <path class="hb-mid" d="M4 12h16"/>
+        <path class="hb-bot" d="M4 17h16"/>
+      </svg>
+    </button>
     <div class="lang" role="group" aria-label="Language">
       <button class="active" data-lang="en">EN</button>
       <button data-lang="de">DE</button>
@@ -1069,7 +1026,6 @@ html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit
     <div class="hero-grid">
       <div class="hero-text">
         <span class="eyebrow" data-i18n="hero_eyebrow">Private AI advisor · Telegram only · invite based</span>
-        <div class="brand-name">C&nbsp;·&nbsp;R&nbsp;·&nbsp;O&nbsp;·&nbsp;N&nbsp;·&nbsp;C&nbsp;·&nbsp;O&nbsp;·&nbsp;R&nbsp;·&nbsp;E</div>
         <h1 data-i18n-html="hero_h1">The Investor's<br/><em>Circle</em>.</h1>
         <p class="lede" data-i18n="hero_lede">Your private AI advisor for deals, capital, structure and access.</p>
         <p class="sub" data-i18n="hero_sub">Ask questions, explore investment opportunities, structure deals and reach trusted partners — all through one private AI interface.</p>
@@ -1148,7 +1104,7 @@ html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit
           </div>
           <span class="svc-no">— 01</span>
         </div>
-        <h3 data-i18n="svc1_title">Payments &amp; Fintech</h3>
+        <h3 data-i18n="svc1_title">Payments & Fintech</h3>
         <p data-i18n="svc1_desc">Payment infrastructure, acquiring, PSP, EMI, crypto rails, banking setup and global fintech solutions.</p>
         <div class="svc-foot">
           <span class="svc-tag" data-i18n="svc1_tag">Infrastructure</span>
@@ -1165,7 +1121,7 @@ html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit
           </div>
           <span class="svc-no">— 02</span>
         </div>
-        <h3 data-i18n="svc2_title">Investments &amp; DeFi</h3>
+        <h3 data-i18n="svc2_title">Investments & DeFi</h3>
         <p data-i18n="svc2_desc">Private deals, venture opportunities, secondaries, digital assets, DeFi infrastructure and alternative investments.</p>
         <div class="svc-foot">
           <span class="svc-tag" data-i18n="svc2_tag">Capital</span>
@@ -1182,7 +1138,7 @@ html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit
           </div>
           <span class="svc-no">— 03</span>
         </div>
-        <h3 data-i18n="svc3_title">SPV &amp; Tokenization</h3>
+        <h3 data-i18n="svc3_title">SPV & Tokenization</h3>
         <p data-i18n="svc3_desc">SPV creation, tokenization, syndicates, investor onboarding, cap table logic and digital ownership models.</p>
         <div class="svc-foot">
           <span class="svc-tag" data-i18n="svc3_tag">Structure</span>
@@ -1199,7 +1155,7 @@ html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit
           </div>
           <span class="svc-no">— 04</span>
         </div>
-        <h3 data-i18n="svc4_title">Legal &amp; Corporate</h3>
+        <h3 data-i18n="svc4_title">Legal & Corporate</h3>
         <p data-i18n="svc4_desc">Company setup, UAE and European structures, compliance, licensing, tax coordination and corporate administration.</p>
         <div class="svc-foot">
           <span class="svc-tag" data-i18n="svc4_tag">Jurisdiction</span>
@@ -1216,7 +1172,7 @@ html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit
           </div>
           <span class="svc-no">— 05</span>
         </div>
-        <h3 data-i18n="svc5_title">Concierge &amp; Real Estate</h3>
+        <h3 data-i18n="svc5_title">Concierge & Real Estate</h3>
         <p data-i18n="svc5_desc">Relocation, real estate sourcing, residency support, lifestyle services and private network access.</p>
         <div class="svc-foot">
           <span class="svc-tag" data-i18n="svc5_tag">Lifestyle</span>
@@ -1449,35 +1405,6 @@ html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit
     </div>
   </section>
 
-  <!-- ============================================
-       8. ASTRONAUT — game embed
-       ============================================ -->
-  <section class="astro-section zoom-on-scroll" data-screen-label="08 Astronaut">
-    <div class="astro-grid">
-      <div class="astro-text">
-        <span class="eyebrow" data-i18n="astro_eyebrow">Step inside · game mode</span>
-        <h2 data-i18n-html="astro_h2">Walk <em class="serif-em">the terrain</em>.</h2>
-        <p data-i18n="astro_p">The Investor's Circle, in 3D. Explore the world we just built — the same six directions, this time as a place you can move through.</p>
-        <div class="cta-row">
-          <a class="btn btn-primary btn-lg" href="/game/">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 2a14 14 0 0 1 0 20M12 2a14 14 0 0 0 0 20M3 12h18"/></svg>
-            <span data-i18n="astro_btn">Enter the world</span>
-            <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </a>
-        </div>
-      </div>
-      <div class="astro-stage" id="astro-stage" data-glb="game/models/Astronaut.glb">
-        <canvas id="astronaut-canvas" aria-hidden="true"></canvas>
-        <div class="astro-loading" data-i18n="astro_loading">SUMMONING ASTRONAUT…</div>
-        <div class="astro-floor"></div>
-        <div class="astro-meta">
-          <span><span class="led"></span><b>VAT.001</b> · <span data-i18n="astro_meta_render">Real-time</span></span>
-          <span><span data-i18n="astro_meta_circle">CRONCORE · Investor's Circle</span></span>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <footer>
     <div class="glass footer-inner">
       <div class="footer-brand">
@@ -1512,7 +1439,7 @@ const I18N = {
   en: {
     meta_title: "CRONCORE — The Investor's Circle",
     meta_desc: "Your private AI advisor for deals, capital, structure and access. Available in Telegram. Private access only.",
-    nav_services: "Services", nav_advisor: "Advisor", nav_how: "How it works", nav_access: "Access", nav_game: "Game",
+    nav_services: "Services", nav_advisor: "Advisor", nav_how: "How it works", nav_access: "Access",
     hero_eyebrow: "Private AI advisor · Telegram only · invite based",
     hero_h1: "The Investor's<br/><em>Circle</em>.",
     hero_lede: "Your private AI advisor for deals, capital, structure and access.",
@@ -1534,11 +1461,11 @@ const I18N = {
     svc_eyebrow: "Services · six directions",
     svc_h2: "Everything one investor <em class=\"serif-em\">actually</em> needs.",
     svc_p: "Six private directions, one interface. Start with any of them — CRONCORE routes the rest.",
-    svc1_title: "Payments &amp; Fintech", svc1_desc: "Payment infrastructure, acquiring, PSP, EMI, crypto rails, banking setup and global fintech solutions.", svc1_tag: "Infrastructure", svc1_cta: "Discuss Payments",
-    svc2_title: "Investments &amp; DeFi", svc2_desc: "Private deals, venture opportunities, secondaries, digital assets, DeFi infrastructure and alternative investments.", svc2_tag: "Capital", svc2_cta: "Explore Investments",
-    svc3_title: "SPV &amp; Tokenization", svc3_desc: "SPV creation, tokenization, syndicates, investor onboarding, cap table logic and digital ownership models.", svc3_tag: "Structure", svc3_cta: "Structure a Deal",
-    svc4_title: "Legal &amp; Corporate", svc4_desc: "Company setup, UAE and European structures, compliance, licensing, tax coordination and corporate administration.", svc4_tag: "Jurisdiction", svc4_cta: "Get Structuring Help",
-    svc5_title: "Concierge &amp; Real Estate", svc5_desc: "Relocation, real estate sourcing, residency support, lifestyle services and private network access.", svc5_tag: "Lifestyle", svc5_cta: "Request Concierge",
+    svc1_title: "Payments & Fintech", svc1_desc: "Payment infrastructure, acquiring, PSP, EMI, crypto rails, banking setup and global fintech solutions.", svc1_tag: "Infrastructure", svc1_cta: "Discuss Payments",
+    svc2_title: "Investments & DeFi", svc2_desc: "Private deals, venture opportunities, secondaries, digital assets, DeFi infrastructure and alternative investments.", svc2_tag: "Capital", svc2_cta: "Explore Investments",
+    svc3_title: "SPV & Tokenization", svc3_desc: "SPV creation, tokenization, syndicates, investor onboarding, cap table logic and digital ownership models.", svc3_tag: "Structure", svc3_cta: "Structure a Deal",
+    svc4_title: "Legal & Corporate", svc4_desc: "Company setup, UAE and European structures, compliance, licensing, tax coordination and corporate administration.", svc4_tag: "Jurisdiction", svc4_cta: "Get Structuring Help",
+    svc5_title: "Concierge & Real Estate", svc5_desc: "Relocation, real estate sourcing, residency support, lifestyle services and private network access.", svc5_tag: "Lifestyle", svc5_cta: "Request Concierge",
     svc6_title: "Private Network", svc6_desc: "Curated access to partners, experts, investors, operators and selected opportunities within The Investor's Circle.", svc6_tag: "Access", svc6_cta: "Request Access",
     advisor_eyebrow: "AI Advisor",
     advisor_h2: "Start with a <em class=\"serif-em\">question</em>.",
@@ -1569,13 +1496,6 @@ const I18N = {
     aud1: "For investors", aud2: "For founders", aud3: "For family offices", aud4: "For fintech companies", aud5: "International entrepreneurs", aud6: "For private clients",
     finale_h2: "Enter <em class=\"serif-em\">The Investor's Circle</em>.",
     finale_p: "Start with one question. CRONCORE will guide you in the right direction.",
-    astro_eyebrow: "Step inside · game mode",
-    astro_h2: "Walk <em class=\"serif-em\">the terrain</em>.",
-    astro_p: "The Investor's Circle, in 3D. Explore the world we just built — the same six directions, this time as a place you can move through.",
-    astro_btn: "Enter the world",
-    astro_loading: "SUMMONING ASTRONAUT…",
-    astro_meta_render: "Real-time",
-    astro_meta_circle: "CRONCORE · Investor's Circle",
     footer_sub: "The Investor's Circle",
     footer_l1: "© 2026 CRONCORE. Private network. Invitation only.",
     footer_l2: "Information shared in the bot does not constitute investment, legal or tax advice."
@@ -1583,7 +1503,7 @@ const I18N = {
   de: {
     meta_title: "CRONCORE — Der Investorenkreis",
     meta_desc: "Ihr privater KI-Berater für Deals, Kapital, Strukturen und Zugang. Verfügbar in Telegram. Nur privater Zugang.",
-    nav_services: "Leistungen", nav_advisor: "Berater", nav_how: "So funktioniert's", nav_access: "Zugang", nav_game: "Spiel",
+    nav_services: "Leistungen", nav_advisor: "Berater", nav_how: "So funktioniert's", nav_access: "Zugang",
     hero_eyebrow: "Privater KI-Berater · Nur Telegram · Auf Einladung",
     hero_h1: "Der Investoren-<br/><em>Kreis</em>.",
     hero_lede: "Ihr privater KI-Berater für Deals, Kapital, Strukturen und Zugang.",
@@ -1605,11 +1525,11 @@ const I18N = {
     svc_eyebrow: "Leistungen · sechs Richtungen",
     svc_h2: "Alles, was ein Investor <em class=\"serif-em\">wirklich</em> braucht.",
     svc_p: "Sechs private Richtungen, eine Schnittstelle. Beginnen Sie mit einer beliebigen — CRONCORE leitet den Rest.",
-    svc1_title: "Zahlungen &amp; Fintech", svc1_desc: "Zahlungsinfrastruktur, Acquiring, PSP, EMI, Krypto-Rails, Banking-Setup und globale Fintech-Lösungen.", svc1_tag: "Infrastruktur", svc1_cta: "Zahlungen besprechen",
-    svc2_title: "Investitionen &amp; DeFi", svc2_desc: "Private Deals, Venture-Chancen, Secondaries, digitale Vermögenswerte, DeFi-Infrastruktur und alternative Investments.", svc2_tag: "Kapital", svc2_cta: "Investitionen erkunden",
-    svc3_title: "SPV &amp; Tokenisierung", svc3_desc: "SPV-Erstellung, Tokenisierung, Syndikate, Investor-Onboarding, Cap-Table-Logik und digitale Eigentumsmodelle.", svc3_tag: "Struktur", svc3_cta: "Deal strukturieren",
-    svc4_title: "Recht &amp; Corporate", svc4_desc: "Firmengründung, VAE- und europäische Strukturen, Compliance, Lizenzierung, Steuerkoordination und Corporate-Administration.", svc4_tag: "Jurisdiktion", svc4_cta: "Strukturierungshilfe",
-    svc5_title: "Concierge &amp; Immobilien", svc5_desc: "Relocation, Immobiliensuche, Aufenthaltsbetreuung, Lifestyle-Services und privater Netzwerkzugang.", svc5_tag: "Lifestyle", svc5_cta: "Concierge anfragen",
+    svc1_title: "Zahlungen & Fintech", svc1_desc: "Zahlungsinfrastruktur, Acquiring, PSP, EMI, Krypto-Rails, Banking-Setup und globale Fintech-Lösungen.", svc1_tag: "Infrastruktur", svc1_cta: "Zahlungen besprechen",
+    svc2_title: "Investitionen & DeFi", svc2_desc: "Private Deals, Venture-Chancen, Secondaries, digitale Vermögenswerte, DeFi-Infrastruktur und alternative Investments.", svc2_tag: "Kapital", svc2_cta: "Investitionen erkunden",
+    svc3_title: "SPV & Tokenisierung", svc3_desc: "SPV-Erstellung, Tokenisierung, Syndikate, Investor-Onboarding, Cap-Table-Logik und digitale Eigentumsmodelle.", svc3_tag: "Struktur", svc3_cta: "Deal strukturieren",
+    svc4_title: "Recht & Corporate", svc4_desc: "Firmengründung, VAE- und europäische Strukturen, Compliance, Lizenzierung, Steuerkoordination und Corporate-Administration.", svc4_tag: "Jurisdiktion", svc4_cta: "Strukturierungshilfe",
+    svc5_title: "Concierge & Immobilien", svc5_desc: "Relocation, Immobiliensuche, Aufenthaltsbetreuung, Lifestyle-Services und privater Netzwerkzugang.", svc5_tag: "Lifestyle", svc5_cta: "Concierge anfragen",
     svc6_title: "Privates Netzwerk", svc6_desc: "Kuratierter Zugang zu Partnern, Experten, Investoren, Operatoren und ausgewählten Möglichkeiten im Investorenkreis.", svc6_tag: "Zugang", svc6_cta: "Zugang anfragen",
     advisor_eyebrow: "KI-Berater",
     advisor_h2: "Beginnen Sie mit einer <em class=\"serif-em\">Frage</em>.",
@@ -1640,13 +1560,6 @@ const I18N = {
     aud1: "Für Investoren", aud2: "Für Gründer", aud3: "Für Family Offices", aud4: "Für Fintech-Unternehmen", aud5: "Internationale Unternehmer", aud6: "Für Privatkunden",
     finale_h2: "Betreten Sie <em class=\"serif-em\">den Investorenkreis</em>.",
     finale_p: "Beginnen Sie mit einer Frage. CRONCORE führt Sie in die richtige Richtung.",
-    astro_eyebrow: "Eintreten · Spielmodus",
-    astro_h2: "Durchquere <em class=\"serif-em\">das Gelände</em>.",
-    astro_p: "Der Investorenkreis, in 3D. Erkunden Sie die Welt, die wir gerade gebaut haben — dieselben sechs Richtungen, diesmal als Ort, durch den Sie sich bewegen können.",
-    astro_btn: "Die Welt betreten",
-    astro_loading: "ASTRONAUT WIRD GERUFEN…",
-    astro_meta_render: "Echtzeit",
-    astro_meta_circle: "CRONCORE · Investorenkreis",
     footer_sub: "Der Investorenkreis",
     footer_l1: "© 2026 CRONCORE. Privates Netzwerk. Nur auf Einladung.",
     footer_l2: "Informationen aus dem Bot stellen keine Anlage-, Rechts- oder Steuerberatung dar."
@@ -1654,7 +1567,7 @@ const I18N = {
   ru: {
     meta_title: "CRONCORE — Круг Инвесторов",
     meta_desc: "Ваш частный AI-советник по сделкам, капиталу, структуре и доступу. Доступно в Telegram. Только частный доступ.",
-    nav_services: "Услуги", nav_advisor: "Советник", nav_how: "Как это работает", nav_access: "Доступ", nav_game: "Игра",
+    nav_services: "Услуги", nav_advisor: "Советник", nav_how: "Как это работает", nav_access: "Доступ",
     hero_eyebrow: "Частный AI-советник · Только Telegram · По приглашению",
     hero_h1: "Круг <em>Инвесторов</em>.",
     hero_lede: "Ваш частный AI-советник по сделкам, капиталу, структуре и доступу.",
@@ -1711,13 +1624,6 @@ const I18N = {
     aud1: "Для инвесторов", aud2: "Для основателей", aud3: "Для family offices", aud4: "Для финтех-компаний", aud5: "Международные предприниматели", aud6: "Для частных клиентов",
     finale_h2: "Войдите в <em class=\"serif-em\">Круг Инвесторов</em>.",
     finale_p: "Начните с одного вопроса. CRONCORE подскажет правильное направление.",
-    astro_eyebrow: "Войти · игровой режим",
-    astro_h2: "Пройдите <em class=\"serif-em\">по миру</em>.",
-    astro_p: "Круг Инвесторов в 3D. Исследуйте мир, который мы только что построили — те же шесть направлений, теперь как пространство, по которому можно ходить.",
-    astro_btn: "Войти в мир",
-    astro_loading: "ВЫЗЫВАЕМ КОСМОНАВТА…",
-    astro_meta_render: "В реальном времени",
-    astro_meta_circle: "CRONCORE · Круг Инвесторов",
     footer_sub: "Круг Инвесторов",
     footer_l1: "© 2026 CRONCORE. Частная сеть. Только по приглашению.",
     footer_l2: "Информация в боте не является инвестиционной, юридической или налоговой консультацией."
@@ -1725,7 +1631,7 @@ const I18N = {
   ar: {
     meta_title: "CRONCORE — دائرة المستثمرين",
     meta_desc: "مستشارك الخاص بالذكاء الاصطناعي للصفقات ورأس المال والهيكلة والوصول. متاح في تيليجرام. وصول خاص فقط.",
-    nav_services: "الخدمات", nav_advisor: "المستشار", nav_how: "كيف يعمل", nav_access: "الوصول", nav_game: "لعبة",
+    nav_services: "الخدمات", nav_advisor: "المستشار", nav_how: "كيف يعمل", nav_access: "الوصول",
     hero_eyebrow: "مستشار ذكاء اصطناعي خاص · تيليجرام فقط · بالدعوة",
     hero_h1: "دائرة <em>المستثمرين</em>.",
     hero_lede: "مستشارك الخاص بالذكاء الاصطناعي للصفقات ورأس المال والهيكلة والوصول.",
@@ -1782,13 +1688,6 @@ const I18N = {
     aud1: "للمستثمرين", aud2: "للمؤسسين", aud3: "للمكاتب العائلية", aud4: "لشركات الفينتك", aud5: "لرواد الأعمال الدوليين", aud6: "للعملاء الخاصين",
     finale_h2: "ادخل <em class=\"serif-em\">دائرة المستثمرين</em>.",
     finale_p: "ابدأ بسؤال واحد. ستوجّهك CRONCORE في الاتجاه الصحيح.",
-    astro_eyebrow: "ادخل · وضع اللعبة",
-    astro_h2: "اعبر <em class=\"serif-em\">المنطقة</em>.",
-    astro_p: "دائرة المستثمرين بتقنية ثلاثية الأبعاد. استكشف العالم الذي بنيناه للتو — نفس الاتجاهات الستة، لكن هذه المرة كمكان يمكنك التحرك فيه.",
-    astro_btn: "ادخل العالم",
-    astro_loading: "نستدعي رائد الفضاء…",
-    astro_meta_render: "زمن فعلي",
-    astro_meta_circle: "CRONCORE · دائرة المستثمرين",
     footer_sub: "دائرة المستثمرين",
     footer_l1: "© 2026 CRONCORE. شبكة خاصة. بالدعوة فقط.",
     footer_l2: "المعلومات المشاركة في البوت لا تشكّل استشارة استثمارية أو قانونية أو ضريبية."
@@ -1796,7 +1695,7 @@ const I18N = {
   he: {
     meta_title: "CRONCORE — מעגל המשקיעים",
     meta_desc: "יועץ ה-AI הפרטי שלך לעסקאות, הון, מבנה וגישה. זמין בטלגרם. גישה פרטית בלבד.",
-    nav_services: "שירותים", nav_advisor: "יועץ", nav_how: "איך זה עובד", nav_access: "גישה", nav_game: "משחק",
+    nav_services: "שירותים", nav_advisor: "יועץ", nav_how: "איך זה עובד", nav_access: "גישה",
     hero_eyebrow: "יועץ AI פרטי · בטלגרם בלבד · בהזמנה",
     hero_h1: "מעגל <em>המשקיעים</em>.",
     hero_lede: "יועץ ה-AI הפרטי שלך לעסקאות, הון, מבנה וגישה.",
@@ -1853,13 +1752,6 @@ const I18N = {
     aud1: "למשקיעים", aud2: "למייסדים", aud3: "למשרדי משפחה", aud4: "לחברות פינטק", aud5: "יזמים בינלאומיים", aud6: "ללקוחות פרטיים",
     finale_h2: "היכנסו אל <em class=\"serif-em\">מעגל המשקיעים</em>.",
     finale_p: "התחילו בשאלה אחת. CRONCORE תוביל אתכם לכיוון הנכון.",
-    astro_eyebrow: "כנסו פנימה · מצב משחק",
-    astro_h2: "צעדו <em class=\"serif-em\">בשטח</em>.",
-    astro_p: "מעגל המשקיעים בתלת-ממד. חקרו את העולם שזה עתה בנינו — אותם שישה כיוונים, הפעם כמקום שאפשר לנוע בו.",
-    astro_btn: "הכנסו לעולם",
-    astro_loading: "מזמנים אסטרונאוט…",
-    astro_meta_render: "בזמן אמת",
-    astro_meta_circle: "CRONCORE · מעגל המשקיעים",
     footer_sub: "מעגל המשקיעים",
     footer_l1: "© 2026 CRONCORE. רשת פרטית. בהזמנה בלבד.",
     footer_l2: "מידע המשותף בבוט אינו מהווה ייעוץ השקעות, משפטי או מס."
@@ -1867,7 +1759,7 @@ const I18N = {
   es: {
     meta_title: "CRONCORE — El Círculo del Inversor",
     meta_desc: "Su asesor privado de IA para acuerdos, capital, estructura y acceso. Disponible en Telegram. Solo acceso privado.",
-    nav_services: "Servicios", nav_advisor: "Asesor", nav_how: "Cómo funciona", nav_access: "Acceso", nav_game: "Juego",
+    nav_services: "Servicios", nav_advisor: "Asesor", nav_how: "Cómo funciona", nav_access: "Acceso",
     hero_eyebrow: "Asesor de IA privado · Solo Telegram · Por invitación",
     hero_h1: "El Círculo del<br/><em>Inversor</em>.",
     hero_lede: "Su asesor privado de IA para acuerdos, capital, estructura y acceso.",
@@ -1924,13 +1816,6 @@ const I18N = {
     aud1: "Para inversores", aud2: "Para fundadores", aud3: "Para family offices", aud4: "Para empresas fintech", aud5: "Emprendedores internacionales", aud6: "Para clientes privados",
     finale_h2: "Entre al <em class=\"serif-em\">Círculo del Inversor</em>.",
     finale_p: "Comience con una pregunta. CRONCORE le orientará en la dirección correcta.",
-    astro_eyebrow: "Entra · modo juego",
-    astro_h2: "Recorre <em class=\"serif-em\">el terreno</em>.",
-    astro_p: "El Círculo del Inversor, en 3D. Explora el mundo que acabamos de construir — las mismas seis direcciones, esta vez como un lugar por el que puedes moverte.",
-    astro_btn: "Entrar al mundo",
-    astro_loading: "INVOCANDO ASTRONAUTA…",
-    astro_meta_render: "Tiempo real",
-    astro_meta_circle: "CRONCORE · Círculo del Inversor",
     footer_sub: "El Círculo del Inversor",
     footer_l1: "© 2026 CRONCORE. Red privada. Solo por invitación.",
     footer_l2: "La información compartida en el bot no constituye asesoramiento de inversión, legal o fiscal."
@@ -1992,168 +1877,26 @@ document.addEventListener("DOMContentLoaded", () => {
     b.addEventListener("click", () => applyLang(b.dataset.lang));
   });
   applyLang(detectInitialLang());
+
+  // Mobile hamburger — toggles the drawer above ≤900 px viewports.
+  const hamburger = document.querySelector(".hamburger");
+  const mainNav   = document.querySelector(".topbar nav.main-nav");
+  if (hamburger && mainNav){
+    const close = () => { mainNav.classList.remove("open"); hamburger.setAttribute("aria-expanded", "false"); };
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = mainNav.classList.toggle("open");
+      hamburger.setAttribute("aria-expanded", String(isOpen));
+    });
+    mainNav.addEventListener("click", (e) => { if (e.target.tagName === "A") close(); });
+    document.addEventListener("click", (e) => {
+      if (!mainNav.classList.contains("open")) return;
+      if (mainNav.contains(e.target) || hamburger.contains(e.target)) return;
+      close();
+    });
+    window.matchMedia("(min-width: 901px)").addEventListener("change", (ev) => { if (ev.matches) close(); });
+  }
 });
-</script>
-
-<script type="module">
-/* =========================================================
-   ASTRONAUT — lazy three.js scene in the astro-section.
-   Boots only when the section is near the viewport. If the
-   3D pipeline can't run (CSP blocks Draco WASM eval, three.js
-   fails to load, GPU init throws, …) we degrade gracefully
-   to a static poster of the in-game scene.
-   ========================================================= */
-const stage = document.getElementById("astro-stage");
-if (stage && !matchMedia("(prefers-reduced-motion: reduce)").matches){
-  const observer = new IntersectionObserver(async (entries) => {
-    if (!entries.some(e => e.isIntersecting)) return;
-    observer.disconnect();
-    try {
-      await boot();
-    } catch(err) {
-      console.warn("astronaut boot failed, falling back to poster:", err);
-      showPosterFallback();
-    }
-  }, { rootMargin: "300px 0px" });
-  observer.observe(stage);
-}
-
-function showPosterFallback(){
-  if (!stage) return;
-  const canvas = document.getElementById("astronaut-canvas");
-  if (canvas) canvas.style.display = "none";
-  let poster = stage.querySelector(".astro-poster");
-  if (!poster){
-    poster = document.createElement("img");
-    poster.className = "astro-poster";
-    poster.src = "game/Screenshot.png";
-    poster.alt = "";
-    poster.loading = "lazy";
-    poster.style.cssText = "position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;filter:saturate(.85) contrast(1.05);";
-    stage.appendChild(poster);
-  }
-  stage.setAttribute("data-ready", "1");
-}
-
-async function boot(){
-  const THREE = await import("three");
-  const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
-  const { DRACOLoader } = await import("three/addons/loaders/DRACOLoader.js");
-
-  const canvas = document.getElementById("astronaut-canvas");
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
-
-  const stageEl = canvas.parentElement;
-  function sizeRenderer(){
-    const w = stageEl.clientWidth || 1;
-    const h = stageEl.clientHeight || 1;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-  }
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50);
-  camera.position.set(0, 1.55, 4.6);
-  camera.lookAt(0, 1.05, 0);
-
-  scene.add(new THREE.AmbientLight(0xb6d8c4, 0.55));
-  const key = new THREE.DirectionalLight(0xfff2d0, 1.6);
-  key.position.set(3, 5, 4);
-  scene.add(key);
-  const rim = new THREE.DirectionalLight(0x6fc498, 1.15);
-  rim.position.set(-3.2, 1.6, -2.4);
-  scene.add(rim);
-  const fill = new THREE.DirectionalLight(0x4a8aaa, 0.6);
-  fill.position.set(0, 0.4, 3.5);
-  scene.add(fill);
-
-  const disc = new THREE.Mesh(
-    new THREE.CircleGeometry(1.4, 64),
-    new THREE.MeshBasicMaterial({ color: 0x2c6c4e, transparent: true, opacity: 0.25 })
-  );
-  disc.rotation.x = -Math.PI / 2;
-  disc.position.y = 0.001;
-  scene.add(disc);
-
-  // The Astronaut.glb ships with Draco-compressed mesh data — register the
-  // decoder before parsing, otherwise GLTFLoader throws "No DRACOLoader
-  // instance provided". Decoder lives on Google's CDN; if CSP blocks the
-  // WASM/JS init this whole boot rejects and the caller swaps in the poster.
-  const draco = new DRACOLoader();
-  draco.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.6/");
-  draco.setDecoderConfig({ type: "js" });
-
-  const loader = new GLTFLoader();
-  loader.setDRACOLoader(draco);
-
-  const gltfPath = stage.dataset.glb || "game/models/Astronaut.glb";
-  const gltf = await loader.loadAsync(gltfPath);
-  draco.dispose();
-
-  const root = gltf.scene;
-  root.position.y = 0;
-  root.scale.setScalar(1.05);
-
-  const brandedMat = new THREE.MeshStandardMaterial({
-    color: 0x182a22,
-    emissive: 0x2c6c4e,
-    emissiveIntensity: 0.32,
-    metalness: 0.55,
-    roughness: 0.35,
-  });
-  const visorMat = new THREE.MeshStandardMaterial({
-    color: 0x0a1f18,
-    emissive: 0x88e4b3,
-    emissiveIntensity: 0.6,
-    metalness: 0.9,
-    roughness: 0.18,
-  });
-  root.traverse(obj => {
-    if (!obj.isMesh) return;
-    obj.castShadow = false;
-    obj.receiveShadow = false;
-    const name = (obj.name || "").toLowerCase();
-    if (name.includes("helmet") || name.includes("visor") || name.includes("glass")){
-      obj.material = visorMat;
-    } else {
-      obj.material = brandedMat;
-    }
-  });
-
-  let mixer = null;
-  if (gltf.animations && gltf.animations.length){
-    mixer = new THREE.AnimationMixer(root);
-    mixer.clipAction(gltf.animations[0]).play();
-  }
-
-  scene.add(root);
-  stage.setAttribute("data-ready", "1");
-
-  const clock = new THREE.Clock();
-  let running = true;
-  const pauseObs = new IntersectionObserver(([e]) => { running = e.isIntersecting; }, { threshold: 0 });
-  pauseObs.observe(stage);
-
-  function tick(){
-    requestAnimationFrame(tick);
-    if (!running) return;
-    const dt = clock.getDelta();
-    const t = clock.getElapsedTime();
-    root.rotation.y += dt * 0.18;
-    root.position.y = Math.sin(t * 0.8) * 0.045;
-    if (mixer) mixer.update(dt);
-    renderer.render(scene, camera);
-  }
-
-  sizeRenderer();
-  window.addEventListener("resize", sizeRenderer);
-  tick();
-}
 </script>
 
 </body>
