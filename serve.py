@@ -2,15 +2,16 @@
 """
 CRONCORE preview server.
 
-Serves both the marketing site (root) and the vendored false-earth game
-(game/dist) from a single port with the routing the game expects:
+Both the marketing site and the false-earth-derived game are committed
+as static files under the repo root, so a plain HTTP server is enough.
 
-  /                       → index.html (multilingual landing)
-  /preview.html           → portal that links to site + game
-  /game/  /game/anything  → served from game/dist/
-  /textures/* /audio/*    → falls through to game/dist/ (game uses
-  /models/*   /fonts/*      absolute paths internally — Vite copied
-  /vat/*      /assets/*     these from game/public/)
+    /                       → index.html  (multilingual landing)
+    /preview.html           → portal that links to both builds
+    /game/  /game/anything  → game/index.html and game/<anything>
+    /assets/*               → assets/ at the repo root (logo etc.)
+
+The game's built JS uses relative paths for textures/audio/models/vat,
+so deploying at sub-paths (e.g. https://croncore.io/game/) works as-is.
 
 Run from the repo root:
 
@@ -24,55 +25,22 @@ import os
 import socketserver
 import sys
 from pathlib import Path
-from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parent
-GAME_DIST = ROOT / "game" / "dist"
-
-# Top-level paths whose contents live under game/dist (the game's bundled
-# JS hard-codes absolute URLs like "/textures/foo.ktx2").
-GAME_FALLBACK_PREFIXES = ("/textures/", "/audio/", "/models/", "/fonts/", "/vat/")
+GAME = ROOT / "game"
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
-    def translate_path(self, path: str) -> str:
-        # Strip query/fragment, decode percent-escapes, normalise.
-        raw = path.split("?", 1)[0].split("#", 1)[0]
-        raw = unquote(raw)
-
-        # 1) Explicit /game/* → game/dist/*
-        if raw == "/game" or raw == "/game/":
-            return str(GAME_DIST / "index.html")
-        if raw.startswith("/game/"):
-            sub = raw[len("/game/") :].lstrip("/")
-            return str(GAME_DIST / sub)
-
-        # 2) Asset prefixes the game expects at root (textures, audio, …).
-        for prefix in GAME_FALLBACK_PREFIXES:
-            if raw.startswith(prefix):
-                return str(GAME_DIST / raw.lstrip("/"))
-
-        # 3) /assets/* — shared namespace. Prefer the main site (logo.png),
-        # fall back to the game build (hashed JS chunks).
-        if raw.startswith("/assets/"):
-            site_candidate = ROOT / raw.lstrip("/")
-            if site_candidate.exists():
-                return str(site_candidate)
-            return str(GAME_DIST / raw.lstrip("/"))
-
-        # 4) Default: serve from repo root.
-        return super().translate_path(raw)
-
     def end_headers(self) -> None:
-        # Some browsers refuse to fetch KTX2/EXR/HDR with strict no-cache;
-        # leaving defaults. Just add a short Cache-Control for assets so
-        # repeated reloads don't redownload 80MB of textures.
-        if self.path.startswith(("/textures/", "/audio/", "/models/", "/fonts/", "/vat/", "/assets/")):
+        # Cache heavy game assets so a reload doesn't redownload ~80 MB.
+        if any(self.path.startswith(p) for p in (
+            "/game/textures/", "/game/audio/", "/game/models/",
+            "/game/fonts/", "/game/vat/", "/game/assets/",
+        )):
             self.send_header("Cache-Control", "public, max-age=3600")
         super().end_headers()
 
     def log_message(self, fmt: str, *args) -> None:
-        # Quieter logs — keep only non-200 lines.
         try:
             status = int(args[1])
         except (ValueError, IndexError):
@@ -84,10 +52,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 def main() -> int:
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     os.chdir(ROOT)
-    if not GAME_DIST.exists():
+    if not (GAME / "assets").exists():
         print(
-            "[warn] game/dist/ is missing. Run `cd game && npm install && npm run build` "
-            "to enable the game preview. Site will still serve.",
+            "[warn] game/assets/ is missing. Run `cd game && ./build.sh` to "
+            "rebuild and place artefacts under game/. Site will still serve.",
             file=sys.stderr,
         )
     with socketserver.ThreadingTCPServer(("", port), Handler) as httpd:
