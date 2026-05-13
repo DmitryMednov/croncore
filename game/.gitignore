@@ -1,5 +1,5 @@
-# dependencies
+# dependencies & build intermediates
 node_modules/
 package-lock.json
-# committed-but-strip-maps to enable instant preview without local build
+dist/
 *.map

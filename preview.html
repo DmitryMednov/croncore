@@ -337,8 +337,8 @@ footer{
     <h3>How to run locally</h3>
     <ul>
       <li>Site only: open <code>index.html</code> directly, or run <code>python3 -m http.server</code> from the repo root.</li>
-      <li>Site + game in one server: run <code>python3 serve.py</code> from the repo root, then open <code>http://localhost:8000/preview.html</code>. The server routes <code>/game/</code>, <code>/textures/</code>, <code>/audio/</code>, etc. into <code>game/dist/</code> automatically.</li>
-      <li>To rebuild the game after editing <code>game/src/components/CroncoreBlocks.tsx</code>: <code>cd game &amp;&amp; npm install &amp;&amp; npm run build</code>.</li>
+      <li>Site + game in one server: run <code>python3 serve.py</code> from the repo root, then open <code>http://localhost:8000/preview.html</code>. The game lives at <code>game/</code> with relative asset paths, so any static host works without rewrites.</li>
+      <li>To rebuild the game after editing <code>game/src/components/CroncoreBlocks.tsx</code>: <code>cd game &amp;&amp; ./build.sh</code> (handles install + Vite build + bundle patch + promote to game/).</li>
       <li>WebGPU is required. Chrome 121+, Edge 121+, Arc on desktop. Safari and Firefox stable do not work yet.</li>
     </ul>
   </section>
