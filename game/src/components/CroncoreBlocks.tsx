@@ -1,4 +1,4 @@
-import { Billboard, Edges, Html } from '@react-three/drei';
+import { Billboard, Html } from '@react-three/drei';
 import { useState } from 'react';
 
 /**
@@ -92,15 +92,11 @@ function Monolith({ position, rotationY, title, sub, href }: MonolithProps) {
                 <meshStandardMaterial
                     color="#0a1d14"
                     emissive={hovered ? '#9deec0' : '#2c6c4e'}
-                    emissiveIntensity={hovered ? 1.15 : 0.42}
-                    metalness={0.15}
-                    roughness={0.35}
+                    emissiveIntensity={hovered ? 1.35 : 0.55}
+                    metalness={0.25}
+                    roughness={0.30}
                     transparent
-                    opacity={0.88}
-                />
-                <Edges
-                    threshold={15}
-                    color={hovered ? '#dffbe9' : '#7fc4a0'}
+                    opacity={0.92}
                 />
             </mesh>
 
