@@ -1,0 +1,1903 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title data-i18n="meta_title">CRONCORE — The Investor's Circle</title>
+<meta name="description" data-i18n-meta="meta_desc" content="Your private AI advisor for deals, capital, structure and access. Available in Telegram. Private access only." />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="CRONCORE — The Investor's Circle" />
+<meta property="og:description" content="Your private AI advisor for deals, capital, structure and access." />
+<meta property="og:image" content="assets/logo-croncore.png" />
+<meta name="theme-color" content="#0a1810" />
+
+<link rel="icon" type="image/png" href="assets/logo-croncore.png" />
+<link rel="apple-touch-icon" href="assets/logo-croncore.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Serif+Hebrew:wght@400;500;600;700&family=Noto+Sans+Hebrew:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   TOKENS — pulled from Croncore Design System (dark variant)
+   ========================================================= */
+:root{
+  --f-950: oklch(0.13 0.03 150);
+  --f-900: oklch(0.18 0.04 150);
+  --f-850: oklch(0.22 0.05 150);
+  --f-800: oklch(0.28 0.06 150);
+  --f-700: oklch(0.36 0.06 150);
+  --f-600: oklch(0.46 0.07 150);
+  --f-500: oklch(0.56 0.08 150);
+  --f-400: oklch(0.68 0.07 150);
+  --f-300: oklch(0.80 0.05 150);
+  --f-200: oklch(0.89 0.03 150);
+  --f-100: oklch(0.94 0.018 150);
+
+  --bone-50:  oklch(0.985 0.006 85);
+  --bone-100: oklch(0.96 0.008 85);
+  --bone-300: oklch(0.84 0.012 85);
+  --bone-400: oklch(0.72 0.012 85);
+  --bone-500: oklch(0.60 0.010 85);
+
+  --clay-500: oklch(0.72 0.16 45);
+  --clay-400: oklch(0.80 0.13 45);
+  --clay-300: oklch(0.88 0.09 45);
+
+  --gold-500: oklch(0.78 0.12 90);
+  --gold-300: oklch(0.88 0.08 90);
+
+  --ink:   oklch(0.97 0.012 90);
+  --ink-2: oklch(0.78 0.015 90);
+  --ink-3: oklch(0.58 0.018 90);
+  --ink-4: oklch(0.45 0.020 90);
+
+  --font-sans:  "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", ui-serif, Georgia, serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, monospace;
+
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
+  --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px; --s-10:128px;
+
+  --r-sm:12px; --r-md:18px; --r-lg:24px; --r-xl:32px; --r-2xl:44px; --r-pill:999px;
+
+  --glass-bg: rgba(255,255,255,0.04);
+  --glass-bg-2: rgba(255,255,255,0.06);
+  --glass-bg-3: rgba(255,255,255,0.08);
+  --glass-line: rgba(255,255,255,0.10);
+  --glass-line-2: rgba(255,255,255,0.18);
+  --rim-dark:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -1px 0 rgba(0,0,0,0.30);
+  --rim-dark-2:
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    inset 0 -1px 0 rgba(0,0,0,0.40),
+    inset 1px 0 0 rgba(255,255,255,0.08),
+    inset -1px 0 0 rgba(255,255,255,0.06);
+  --float-1: 0 1px 2px rgba(0,0,0,0.30), 0 6px 14px -4px rgba(0,0,0,0.35);
+  --float-2: 0 2px 4px rgba(0,0,0,0.35), 0 22px 44px -14px rgba(0,0,0,0.50);
+  --float-3: 0 40px 80px -24px rgba(0,0,0,0.65);
+}
+
+*,*::before,*::after{ box-sizing: border-box; }
+html,body{ margin:0; padding:0; }
+html{ scroll-behavior: smooth; }
+body{
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--f-950);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+/* RTL language packs — swap sans+serif to Noto for AR/HE so glyphs render properly */
+html[lang="ar"] body{ font-family: "Noto Sans Arabic", var(--font-sans); }
+html[lang="he"] body{ font-family: "Noto Sans Hebrew", var(--font-sans); }
+html[lang="ar"] em.serif, html[lang="ar"] .serif-em,
+html[lang="ar"] .hero h1 em, html[lang="ar"] .step .big{
+  font-family: "Noto Sans Arabic", var(--font-serif);
+  font-style: normal;
+}
+html[lang="he"] em.serif, html[lang="he"] .serif-em,
+html[lang="he"] .hero h1 em, html[lang="he"] .step .big{
+  font-family: "Noto Serif Hebrew", var(--font-serif);
+  font-style: normal;
+}
+
+/* RTL — flip directional helpers */
+html[dir="rtl"] .topbar nav{ margin-left: 0; margin-right: auto; }
+html[dir="rtl"] .btn-arrow svg{ transform: scaleX(-1); }
+html[dir="rtl"] .btn:hover .btn-arrow svg{ transform: scaleX(-1) translateX(2px); }
+html[dir="rtl"] .example-chip:hover{ transform: translateX(-4px); }
+html[dir="rtl"] .svc-foot a:hover{ gap: 12px; }
+html[dir="rtl"] .msg.user{ align-self: flex-start; align-items: flex-start; }
+html[dir="rtl"] .msg.user .bubble{ border-radius: 18px 18px 18px 4px; }
+html[dir="rtl"] .msg.bot{ align-self: flex-end; align-items: flex-end; }
+html[dir="rtl"] .msg.bot .bubble{ border-radius: 18px 18px 4px 18px; }
+html[dir="rtl"] .terminal-bar .right{ margin-left: 0; margin-right: auto; }
+html[dir="rtl"] .terminal-bar .dots{ order: 2; }
+/* In Arabic/Hebrew the mono micro-letter-spacing breaks readability */
+html[lang="ar"] .eyebrow, html[lang="he"] .eyebrow,
+html[lang="ar"] .pillar, html[lang="he"] .pillar,
+html[lang="ar"] .svc-no, html[lang="he"] .svc-no,
+html[lang="ar"] .step .num, html[lang="he"] .step .num,
+html[lang="ar"] .footer-links, html[lang="he"] .footer-links,
+html[lang="ar"] .topbar nav a, html[lang="he"] .topbar nav a,
+html[lang="ar"] .hero-ticker, html[lang="he"] .hero-ticker,
+html[lang="ar"] .cta-foot, html[lang="he"] .cta-foot,
+html[lang="ar"] .finale .tag-line, html[lang="he"] .finale .tag-line{
+  letter-spacing: .02em;
+  text-transform: none;
+}
+
+/* =========================================================
+   ATMOSPHERE
+   ========================================================= */
+.atmosphere{
+  position: fixed; inset: -10%;
+  z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(50% 50% at 18% 12%, oklch(0.42 0.10 150 / .55), transparent 65%),
+    radial-gradient(45% 45% at 88% 15%, oklch(0.50 0.10 145 / .35), transparent 65%),
+    radial-gradient(55% 50% at 80% 80%, oklch(0.55 0.14 45 / .18), transparent 70%),
+    radial-gradient(70% 60% at 30% 80%, oklch(0.30 0.08 150 / .50), transparent 70%),
+    radial-gradient(120% 80% at 50% 50%, oklch(0.20 0.05 150 / .30), transparent 70%),
+    linear-gradient(180deg, oklch(0.15 0.035 150), oklch(0.12 0.025 150));
+  filter: blur(40px) saturate(115%);
+}
+.atmosphere::after{
+  content:""; position:absolute; inset:0;
+  background-image:
+    radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,.20) 1px, transparent 1px);
+  background-size: 3px 3px, 8px 8px;
+  background-position: 0 0, 2px 3px;
+  mix-blend-mode: overlay;
+  opacity: .9;
+}
+.atmosphere::before{
+  content:""; position:absolute; inset:0;
+  background: radial-gradient(120% 80% at 50% 50%, transparent 50%, oklch(0.10 0.03 150 / .65) 100%);
+}
+
+main{ position: relative; z-index: 1; }
+
+/* =========================================================
+   PRIMITIVES
+   ========================================================= */
+.glass{
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--float-1), var(--rim-dark);
+}
+.glass-2{
+  background: var(--glass-bg-2);
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  border: 1px solid var(--glass-line-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--float-2), var(--rim-dark-2);
+  position: relative;
+}
+.glass::before, .glass-2::before{
+  content:""; position:absolute; inset:1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 32%);
+  pointer-events: none;
+}
+.glass > *, .glass-2 > *{ position: relative; z-index: 1; }
+
+h1,h2,h3,h4{ margin:0; letter-spacing: -0.025em; font-weight: 500; }
+em.serif, .serif-em{
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--f-300);
+}
+.mono{ font-family: var(--font-mono); }
+
+.eyebrow{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display:inline-flex; align-items:center; gap: var(--s-3);
+}
+.eyebrow::before{
+  content:""; width: 6px; height:6px; border-radius:999px;
+  background: var(--f-400);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.04), 0 0 12px var(--f-500);
+}
+
+a{ color: inherit; }
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+.page{ max-width: 1320px; margin: 0 auto; padding: 0 var(--s-7); }
+@media (max-width: 800px){ .page{ padding: 0 var(--s-4); } }
+
+section{ padding: var(--s-9) 0; position: relative; }
+@media (max-width: 800px){ section{ padding: var(--s-8) 0; } }
+
+.section-head{
+  display:flex; flex-direction: column; gap: var(--s-3);
+  margin-bottom: var(--s-7);
+  max-width: 760px;
+}
+.section-head h2{
+  font-size: clamp(32px, 4.4vw, 56px);
+  line-height: 1.02;
+  letter-spacing: -.03em;
+  font-weight: 500;
+}
+.section-head p{
+  color: var(--ink-2);
+  font-size: clamp(15px, 1.2vw, 17px);
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+.topbar{
+  position: sticky; top: 12px; z-index: 50;
+  margin: 12px auto 0;
+  max-width: 1320px;
+  padding: 0 var(--s-4);
+}
+.topbar-inner{
+  display:flex; align-items:center; gap: var(--s-4);
+  padding: 9px 12px 9px 18px;
+  border-radius: var(--r-pill);
+  background: rgba(15,25,20,0.55);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-line-2);
+  box-shadow: var(--float-2), var(--rim-dark-2);
+  position: relative;
+}
+.topbar-inner::before{
+  content:""; position:absolute; inset:1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), transparent 35%);
+  pointer-events:none;
+}
+.topbar-inner > *{ position: relative; z-index: 1; }
+.brand-lock{ display:flex; align-items:center; gap: 10px; text-decoration: none; }
+.brand-lock img{ width: 28px; height: 28px; display:block; filter: drop-shadow(0 4px 8px rgba(0,0,0,.55)); }
+.brand-lock .wm{
+  font-weight: 600;
+  letter-spacing: .12em;
+  font-size: 14px;
+  color: var(--bone-50);
+}
+.topbar nav{
+  margin-left: auto;
+  display:flex; gap: 4px;
+  align-items: center;
+}
+.topbar nav a{
+  color: var(--ink-2); text-decoration: none; font-size: 13px;
+  font-family: var(--font-mono); letter-spacing: .04em;
+  padding: 7px 12px; border-radius: var(--r-pill);
+  transition: background .15s ease, color .15s ease;
+  white-space: nowrap;
+}
+.topbar nav a:hover{ color: var(--ink); background: rgba(255,255,255,0.06); }
+
+.lang{
+  display:flex; gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-pill);
+  background: rgba(0,0,0,0.30);
+  border: 1px solid var(--glass-line);
+  font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: .08em;
+  align-items: center;
+}
+.lang button{
+  appearance: none; border: 0;
+  background: transparent; cursor: pointer;
+  color: var(--ink-3);
+  padding: 6px 9px;
+  border-radius: var(--r-pill);
+  font: inherit;
+  transition: background .15s, color .15s;
+}
+.lang button:hover{ color: var(--ink); }
+.lang button.active{
+  color: var(--bone-50);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: var(--rim-dark);
+}
+
+/* Hamburger — visible only on mobile, toggles the topbar nav drawer. */
+.hamburger{
+  display: none;
+  appearance: none; border: 0; padding: 0;
+  width: 36px; height: 36px;
+  align-items: center; justify-content: center;
+  background: transparent;
+  color: var(--bone-100);
+  cursor: pointer;
+  border-radius: var(--r-pill);
+  transition: background .15s, color .15s;
+}
+.hamburger:hover{ background: rgba(255,255,255,0.06); color: var(--bone-50); }
+.hamburger svg{ width: 22px; height: 22px; }
+.hamburger svg path{ transition: transform .25s ease, opacity .15s ease; transform-origin: 50% 50%; }
+.hamburger[aria-expanded="true"] .hb-top{ transform: translateY(5px) rotate(45deg); }
+.hamburger[aria-expanded="true"] .hb-mid{ opacity: 0; }
+.hamburger[aria-expanded="true"] .hb-bot{ transform: translateY(-5px) rotate(-45deg); }
+
+@media (max-width: 900px){
+  .topbar nav.main-nav{
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: var(--s-4); right: var(--s-4);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 10px;
+    border-radius: var(--r-lg);
+    background: rgba(15,25,20,0.92);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid var(--glass-line-2);
+    box-shadow: var(--float-2), var(--rim-dark-2);
+    z-index: 51;
+  }
+  .topbar nav.main-nav.open{ display: flex; }
+  .topbar nav.main-nav a{
+    padding: 12px 16px;
+    font-size: 14px;
+    border-radius: var(--r-md);
+  }
+  .topbar nav.main-nav a:hover{ background: rgba(255,255,255,0.08); }
+  .hamburger{ display: inline-flex; }
+}
+@media (max-width: 460px){
+  .topbar-inner{ gap: 8px; padding: 8px 8px 8px 14px; }
+  .brand-lock .wm{ font-size: 12px; letter-spacing: .10em; }
+  .brand-lock img{ width: 24px; height: 24px; }
+  .lang{ font-size: 9.5px; }
+  .lang button{ padding: 5px 7px; }
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap: 10px;
+  font-family: var(--font-sans); font-weight: 500; font-size: 14.5px;
+  border-radius: var(--r-pill); padding: 14px 22px;
+  cursor: pointer; text-decoration: none;
+  transition: transform .12s ease, box-shadow .15s ease, background .15s ease, filter .15s;
+  line-height: 1; letter-spacing: -.005em;
+  border: 1px solid transparent;
+  position: relative; isolation: isolate;
+  color: var(--ink);
+}
+.btn::before{
+  content:""; position:absolute; inset:1px; border-radius:inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+.btn > *{ position: relative; z-index: 1; }
+.btn:active{ transform: translateY(1px); }
+.btn-primary{
+  background: linear-gradient(180deg, var(--f-600), var(--f-800));
+  color: var(--bone-50);
+  border-color: rgba(0,0,0,0.4);
+  box-shadow:
+    var(--float-2),
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 -1px 0 rgba(0,0,0,0.45),
+    0 0 0 1px rgba(255,255,255,0.06);
+}
+.btn-primary:hover{ filter: brightness(1.10); }
+.btn-secondary{
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(16px);
+  color: var(--ink);
+  border-color: var(--glass-line-2);
+  box-shadow: var(--float-1), var(--rim-dark);
+}
+.btn-secondary:hover{ background: rgba(255,255,255,0.10); }
+.btn-email{
+  background: rgba(255,255,255,0.03);
+  color: var(--ink);
+  border-color: var(--glass-line);
+  box-shadow: var(--rim-dark);
+  backdrop-filter: blur(16px);
+}
+.btn-email:hover{ background: rgba(255,255,255,0.08); border-color: var(--glass-line-2); }
+.btn-ghost{ background: transparent; color: var(--ink-2); box-shadow: none; }
+.btn-ghost::before{ display: none; }
+.btn-ghost:hover{ color: var(--ink); background: rgba(255,255,255,0.04); }
+.btn-sm{ padding: 10px 16px; font-size: 13px; }
+.btn-lg{ padding: 17px 26px; font-size: 15.5px; }
+.btn .tg, .btn .mail{
+  width: 16px; height: 16px;
+  display: inline-flex;
+}
+.btn-arrow svg{ width: 14px; height: 14px; opacity: .85; transition: transform .15s; }
+.btn:hover .btn-arrow svg{ transform: translateX(2px); }
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{ padding-top: var(--s-9); padding-bottom: var(--s-9); }
+.hero-grid{
+  display:grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: var(--s-8);
+  align-items: stretch;
+}
+@media (max-width: 1000px){ .hero-grid{ grid-template-columns: 1fr; gap: var(--s-6); } }
+
+.hero-text{
+  display:flex; flex-direction: column; justify-content: center;
+}
+.hero h1{
+  margin-top: var(--s-4);
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: .96;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+}
+.hero h1 em{
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--f-300);
+}
+.hero .lede{
+  margin-top: var(--s-5);
+  font-size: clamp(17px, 1.4vw, 20px);
+  color: var(--ink-2);
+  max-width: 54ch;
+}
+.hero .sub{
+  margin-top: var(--s-4);
+  font-size: 15px;
+  color: var(--ink-3);
+  max-width: 56ch;
+}
+.cta-row{
+  margin-top: var(--s-6);
+  display:flex; gap: var(--s-3); flex-wrap: wrap; align-items: center;
+}
+.cta-foot{
+  margin-top: var(--s-4);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  display:flex; align-items:center; gap: var(--s-3);
+}
+.cta-foot::before{
+  content:""; width:6px; height:6px; border-radius:999px; background: oklch(0.72 0.16 150);
+  box-shadow: 0 0 10px oklch(0.72 0.16 150);
+}
+
+.hero-mark{
+  border-radius: var(--r-2xl);
+  padding: var(--s-7);
+  display:flex; flex-direction: column; gap: var(--s-5);
+  position: relative; overflow: hidden;
+  min-height: 460px;
+}
+.hero-mark::after{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(60% 50% at 30% 30%, oklch(0.55 0.13 150 / .35), transparent 65%),
+    radial-gradient(50% 40% at 80% 85%, oklch(0.7 0.15 45 / .18), transparent 70%);
+  pointer-events: none;
+}
+.hero-mark .crest{
+  flex:1;
+  display:grid; place-items:center;
+  position: relative;
+}
+.hero-mark .crest img{
+  width: 75%; max-width: 380px;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 40px 50px rgba(0,0,0,.55))
+    drop-shadow(0 6px 0 rgba(255,255,255,.04));
+}
+.hero-mark .rings{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.hero-mark .rings::before,
+.hero-mark .rings::after{
+  content:"";
+  position:absolute; top:50%; left:50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.06);
+  width: 60%; aspect-ratio: 1/1;
+}
+.hero-mark .rings::after{
+  width: 80%;
+  border-color: rgba(255,255,255,0.04);
+}
+.hero-mark .crest-meta{
+  display:flex; justify-content: space-between; align-items:end;
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--ink-3); letter-spacing: .14em; text-transform: uppercase;
+}
+.hero-mark .crest-meta b{ display:block; color: var(--ink); font-weight: 500; font-size: 12px; letter-spacing: .04em; text-transform: none; margin-top: 4px; }
+
+.hero-ticker{
+  display:flex; gap: var(--s-4); flex-wrap: wrap;
+  margin-top: var(--s-7);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--glass-line);
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+  letter-spacing: .04em;
+}
+.hero-ticker .tick{ display:flex; align-items:center; gap: 8px; }
+.hero-ticker .tick .led{ width:6px; height:6px; border-radius:999px; background: var(--f-400); box-shadow: 0 0 8px var(--f-400); }
+.hero-ticker .tick b{ color: var(--bone-50); font-weight: 500; }
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+.intro-grid{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--s-7);
+  align-items: end;
+}
+@media (max-width: 900px){ .intro-grid{ grid-template-columns: 1fr; gap: var(--s-5); } }
+.intro-grid h2{
+  font-size: clamp(32px, 4.4vw, 56px);
+  line-height: 1.02; letter-spacing: -.03em;
+}
+.intro-grid h2 em{ font-family: var(--font-serif); font-style: italic; font-weight:400; color: var(--f-300); }
+.intro-grid p{ color: var(--ink-2); font-size: 16px; max-width: 60ch; margin-top: var(--s-4); }
+
+.pillars{ display:flex; gap: var(--s-3); flex-wrap: wrap; }
+.pillar{
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: .08em;
+  padding: 9px 16px;
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass-line-2);
+  color: var(--bone-100);
+  box-shadow: var(--rim-dark);
+  display:inline-flex; align-items:center; gap: 8px;
+  position: relative;
+}
+.pillar::before{ content:""; width: 6px; height:6px; border-radius:999px; background: var(--f-400); box-shadow: 0 0 8px var(--f-500); }
+.pillar:nth-child(2)::before{ background: var(--f-500); }
+.pillar:nth-child(3)::before{ background: var(--f-600); }
+.pillar:nth-child(4)::before{ background: var(--gold-500); box-shadow: 0 0 8px var(--gold-500); }
+.pillar:nth-child(5)::before{ background: var(--clay-500); box-shadow: 0 0 8px var(--clay-500); }
+
+/* =========================================================
+   SERVICES
+   ========================================================= */
+.services-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-5);
+}
+@media (max-width: 1000px){ .services-grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px){ .services-grid{ grid-template-columns: 1fr; } }
+
+.svc-card{
+  padding: var(--s-6);
+  display:flex; flex-direction: column; gap: var(--s-4);
+  min-height: 320px;
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+.svc-card:hover{
+  transform: translateY(-3px);
+  background: var(--glass-bg-2);
+  border-color: var(--glass-line-2);
+}
+.svc-head{ display:flex; justify-content: space-between; align-items: flex-start; gap: var(--s-3); }
+.svc-icon{
+  width: 48px; height: 48px;
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, var(--f-700), var(--f-900));
+  display:grid; place-items:center;
+  color: var(--bone-50);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    var(--float-1),
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset 0 -1px 0 rgba(0,0,0,0.4);
+}
+.svc-icon svg{ width: 22px; height: 22px; }
+.svc-no{
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--ink-4); letter-spacing: .14em;
+}
+.svc-card h3{
+  font-size: 21px;
+  letter-spacing: -.015em;
+  line-height: 1.15;
+}
+.svc-card p{
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0;
+  flex: 1;
+}
+.svc-foot{
+  display:flex; justify-content: space-between; align-items:center;
+  margin-top: var(--s-2);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--glass-line);
+}
+.svc-foot a, .svc-foot span.cta-link{
+  font-family: var(--font-mono);
+  font-size: 12px; letter-spacing: .04em;
+  color: var(--bone-50);
+  text-decoration: none;
+  display:inline-flex; align-items:center; gap: 8px;
+  transition: gap .15s;
+}
+.svc-foot a:hover, .svc-card:hover .svc-foot span.cta-link{ gap: 12px; color: var(--f-300); }
+.svc-foot a svg, .svc-foot .cta-link svg{ width: 14px; height: 14px; }
+.svc-tag{
+  font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+/* =========================================================
+   AI ADVISOR
+   ========================================================= */
+.advisor-grid{
+  display:grid; grid-template-columns: 1fr 1.05fr; gap: var(--s-7); align-items: stretch;
+}
+@media (max-width: 1000px){ .advisor-grid{ grid-template-columns: 1fr; } }
+
+.advisor-text h2{ font-size: clamp(32px, 4.4vw, 56px); line-height: 1.02; letter-spacing: -.03em; }
+.advisor-text h2 em{ font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--f-300); }
+.advisor-text p{ color: var(--ink-2); font-size: 16px; max-width: 56ch; margin-top: var(--s-4); }
+.examples{
+  margin-top: var(--s-6);
+  display:flex; flex-direction: column; gap: var(--s-3);
+}
+.example-chip{
+  display:flex; align-items:center; gap: var(--s-3);
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-pill);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-decoration: none;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.example-chip:hover{ background: rgba(255,255,255,0.08); border-color: var(--glass-line-2); transform: translateX(4px); }
+.example-chip .q{ color: var(--ink-3); font-weight: 500; flex-shrink: 0; }
+.example-chip .arr{ margin-left: auto; opacity:.5; }
+html[dir="rtl"] .example-chip .arr{ margin-left: 0; margin-right: auto; }
+html[lang="ar"] .example-chip, html[lang="he"] .example-chip{ font-family: inherit; }
+
+.terminal{
+  position: relative;
+  display:flex; flex-direction: column;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  min-height: 540px;
+  background: rgba(8,16,12,0.65);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid var(--glass-line-2);
+  box-shadow: var(--float-3), var(--rim-dark-2);
+}
+.terminal::before{
+  content:""; position:absolute; inset:1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent 30%);
+  pointer-events:none;
+}
+.terminal-bar{
+  display:flex; align-items:center; gap: var(--s-3);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--glass-line);
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--ink-3); letter-spacing: .08em;
+}
+.terminal-bar .dots{ display:flex; gap: 6px; }
+.terminal-bar .dots span{
+  width:10px; height:10px; border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.terminal-bar .dots span:first-child{ background: oklch(0.55 0.16 25 / .8); }
+.terminal-bar .dots span:nth-child(2){ background: oklch(0.78 0.13 90 / .8); }
+.terminal-bar .dots span:nth-child(3){ background: oklch(0.65 0.14 150 / .8); }
+.terminal-bar .title{ color: var(--bone-100); font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+.terminal-bar .right{ margin-left: auto; color: var(--ink-4); }
+
+.terminal-body{
+  padding: var(--s-5) var(--s-6);
+  display:flex; flex-direction: column; gap: var(--s-4);
+  flex: 1;
+}
+.msg{ display:flex; flex-direction: column; gap: 6px; max-width: 90%; }
+.msg .who{ font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-4); }
+.msg.user{ align-self: flex-end; align-items: flex-end; }
+.msg.user .bubble{
+  background: linear-gradient(180deg, var(--f-700), var(--f-800));
+  border: 1px solid rgba(255,255,255,0.10);
+  color: var(--bone-50);
+  padding: 12px 16px; border-radius: 18px 18px 4px 18px;
+  font-size: 14.5px; font-weight: 400;
+  box-shadow: var(--float-1), var(--rim-dark);
+  max-width: 80%;
+}
+.msg.bot .bubble{
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass-line-2);
+  color: var(--ink);
+  padding: 14px 16px; border-radius: 18px 18px 18px 4px;
+  font-size: 14px;
+  box-shadow: var(--rim-dark);
+  font-family: var(--font-mono);
+}
+html[lang="ar"] .msg.bot .bubble, html[lang="he"] .msg.bot .bubble{ font-family: inherit; }
+.msg.bot .who{ color: var(--f-300); }
+.bubble .line{ display:block; margin: 4px 0; }
+.bubble .pill-row{ display:flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.bubble .pillet{
+  font-size: 11px; letter-spacing: .04em;
+  padding: 4px 10px; border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-line);
+  color: var(--bone-100);
+}
+
+.terminal-input{
+  padding: 14px 18px;
+  border-top: 1px solid var(--glass-line);
+  display:flex; align-items:center; gap: 10px;
+}
+.terminal-input .prompt{ color: var(--f-300); font-family: var(--font-mono); font-size: 13px; }
+.terminal-input input{
+  flex:1;
+  background: transparent; border: 0; color: var(--ink);
+  font-family: var(--font-mono); font-size: 13px;
+  outline: none;
+}
+html[lang="ar"] .terminal-input input,
+html[lang="he"] .terminal-input input{ font-family: inherit; }
+.terminal-input .send{
+  width: 32px; height:32px; border-radius: 999px;
+  background: var(--f-700);
+  display:grid; place-items:center; color: white;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+}
+.terminal-input .send svg{ width: 14px; height: 14px; }
+
+/* =========================================================
+   HOW IT WORKS
+   ========================================================= */
+.steps{
+  display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5);
+}
+@media (max-width: 900px){ .steps{ grid-template-columns: 1fr; } }
+.step{
+  padding: var(--s-6);
+  display:flex; flex-direction: column; gap: var(--s-3);
+  min-height: 240px;
+  position: relative;
+}
+.step .num{
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: .16em;
+  color: var(--ink-4);
+}
+.step .big{
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1; letter-spacing: -.02em;
+  color: var(--f-400);
+  opacity: .9;
+}
+.step h3{ font-size: 22px; letter-spacing: -.015em; margin-top: var(--s-2); }
+.step p{ color: var(--ink-2); margin: 0; font-size: 14.5px; flex: 1; }
+
+/* =========================================================
+   TRUST
+   ========================================================= */
+.trust-grid{
+  display:grid; grid-template-columns: 1fr 1.1fr; gap: var(--s-7); align-items: center;
+}
+@media (max-width: 900px){ .trust-grid{ grid-template-columns: 1fr; } }
+.trust-text h2{ font-size: clamp(32px, 4.4vw, 56px); line-height: 1.02; letter-spacing: -.03em; }
+.trust-text h2 em{ font-family: var(--font-serif); font-style: italic; font-weight:400; color: var(--f-300); }
+.trust-text p{ color: var(--ink-2); margin-top: var(--s-4); font-size: 16px; max-width: 50ch; }
+
+.audience-grid{
+  display:grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-3);
+}
+.audience{
+  padding: var(--s-4) var(--s-5);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-md);
+  display:flex; align-items:center; gap: var(--s-3);
+  box-shadow: var(--rim-dark);
+  position: relative;
+}
+.audience .ic{
+  width: 32px; height: 32px;
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-line-2);
+  display:grid; place-items:center;
+  color: var(--f-300);
+}
+.audience .ic svg{ width: 16px; height: 16px; }
+.audience .label{ font-size: 14.5px; color: var(--ink); font-weight: 500; }
+
+/* =========================================================
+   FINAL CTA
+   ========================================================= */
+.finale{
+  padding: var(--s-9) var(--s-7);
+  border-radius: var(--r-2xl);
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+@media (max-width: 700px){ .finale{ padding: var(--s-7) var(--s-5); } }
+.finale::after{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(50% 50% at 50% 0%, oklch(0.55 0.13 150 / .35), transparent 70%),
+    radial-gradient(40% 50% at 50% 100%, oklch(0.7 0.15 45 / .15), transparent 70%);
+  pointer-events: none;
+}
+.finale .crest-sm{
+  width: 80px; height:80px; margin: 0 auto;
+  display:grid; place-items:center;
+  position: relative; z-index: 1;
+}
+.finale .crest-sm img{ width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,.6)); }
+.finale h2{
+  margin-top: var(--s-5);
+  font-size: clamp(40px, 5.8vw, 76px);
+  line-height: 1; letter-spacing: -.035em;
+  position: relative; z-index: 1;
+}
+.finale h2 em{ font-family: var(--font-serif); font-style: italic; font-weight:400; color: var(--f-300); }
+.finale p{
+  margin-top: var(--s-4);
+  max-width: 52ch; margin-left:auto; margin-right:auto;
+  color: var(--ink-2); font-size: 17px;
+  position: relative; z-index: 1;
+}
+.finale .cta-row{ justify-content: center; }
+.finale .tag-line{
+  margin-top: var(--s-6);
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .35em;
+  text-transform: uppercase; color: var(--ink-3);
+  position: relative; z-index: 1;
+  display:flex; gap: var(--s-5); justify-content: center; flex-wrap: wrap;
+}
+.finale .tag-line span::before{ content:"· "; color: var(--f-400); }
+.finale .tag-line span:first-child::before{ content:""; }
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+footer{
+  margin-top: var(--s-9);
+  padding-bottom: var(--s-7);
+}
+.footer-inner{
+  padding: var(--s-6) var(--s-7);
+  border-radius: var(--r-xl);
+  display:grid; grid-template-columns: 1fr auto; gap: var(--s-5);
+  align-items: center;
+}
+@media (max-width: 800px){
+  .footer-inner{ grid-template-columns: 1fr; padding: var(--s-5); }
+}
+.footer-brand{ display:flex; align-items:center; gap: 12px; }
+.footer-brand img{ width: 32px; height: 32px; }
+.footer-brand .name{ color: var(--bone-50); font-weight: 600; letter-spacing: .12em; font-size: 14px; }
+.footer-brand .sub{ color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; margin-top: 2px; }
+.footer-links{ display:flex; gap: var(--s-5); flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.footer-links a{ text-decoration: none; color: var(--ink-3); transition: color .15s; }
+.footer-links a:hover{ color: var(--bone-50); }
+.footer-fine{
+  margin-top: var(--s-5); padding-top: var(--s-4);
+  border-top: 1px solid var(--glass-line);
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--ink-4); letter-spacing: .04em;
+  display:flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s-3);
+}
+html[lang="ar"] .footer-fine, html[lang="he"] .footer-fine{ font-family: inherit; }
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+@keyframes ledPulse{
+  0%,100%{ box-shadow: 0 0 10px oklch(0.72 0.16 150); }
+  50%{ box-shadow: 0 0 18px oklch(0.72 0.16 150); }
+}
+.cta-foot::before, .audience .ic{ animation: ledPulse 3.5s ease-in-out infinite; }
+
+/* =========================================================
+   SCROLL-DRIVEN ZOOM — section pump
+   Each marked section zooms in as it enters and zooms out as
+   it leaves. CSS scroll-driven animations (Chrome 115+, Edge,
+   Safari TP). Older browsers see static sections — no JS fallback.
+   ========================================================= */
+@supports (animation-timeline: view()){
+  .zoom-on-scroll{
+    animation: zoom-cycle linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+    will-change: transform, opacity, filter;
+  }
+  @keyframes zoom-cycle{
+    0%   { transform: scale(.88); opacity: 0;   filter: blur(10px); }
+    22%  { transform: scale(1);   opacity: 1;   filter: blur(0); }
+    78%  { transform: scale(1);   opacity: 1;   filter: blur(0); }
+    100% { transform: scale(1.06);opacity: .25; filter: blur(6px); }
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .zoom-on-scroll{
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="atmosphere"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand-lock" href="#top" aria-label="CRONCORE">
+      <img src="assets/logo-croncore.png" alt="Croncore" />
+      <span class="wm">CRONCORE</span>
+    </a>
+    <nav class="main-nav">
+      <a href="#services" data-i18n="nav_services">Services</a>
+      <a href="#advisor" data-i18n="nav_advisor">Advisor</a>
+      <a href="#how" data-i18n="nav_how">How it works</a>
+      <a href="#access" data-i18n="nav_access">Access</a>
+    </nav>
+    <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path class="hb-top" d="M4 7h16"/>
+        <path class="hb-mid" d="M4 12h16"/>
+        <path class="hb-bot" d="M4 17h16"/>
+      </svg>
+    </button>
+    <div class="lang" role="group" aria-label="Language">
+      <button class="active" data-lang="en">EN</button>
+      <button data-lang="de">DE</button>
+      <button data-lang="ru">RU</button>
+      <button data-lang="ar">AR</button>
+      <button data-lang="he">HE</button>
+      <button data-lang="es">ES</button>
+    </div>
+  </div>
+</header>
+
+<main class="page" id="top">
+
+  <!-- ============================================
+       1. HERO
+       ============================================ -->
+  <section class="hero" data-screen-label="01 Hero">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <span class="eyebrow" data-i18n="hero_eyebrow">Private AI advisor · Telegram only · invite based</span>
+        <h1 data-i18n-html="hero_h1">The Investor's<br/><em>Circle</em>.</h1>
+        <p class="lede" data-i18n="hero_lede">Your private AI advisor for deals, capital, structure and access.</p>
+        <p class="sub" data-i18n="hero_sub">Ask questions, explore investment opportunities, structure deals and reach trusted partners — all through one private AI interface.</p>
+
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <svg class="tg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+            <span data-i18n="btn_open_advisor">Open AI Advisor</span>
+          </a>
+          <a class="btn btn-secondary btn-lg" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span data-i18n="btn_request_access">Request Private Access</span>
+            <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+          <a class="btn btn-email btn-lg" href="mailto:hello@croncore.com?subject=CRONCORE%20%E2%80%94%20Private%20Access%20Request">
+            <svg class="mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            <span data-i18n="btn_email">Request via Email</span>
+          </a>
+        </div>
+        <div class="cta-foot" data-i18n="cta_foot">Available in Telegram · private access only</div>
+      </div>
+
+      <div class="glass-2 hero-mark">
+        <div class="rings"></div>
+        <div class="crest">
+          <img src="assets/logo-croncore.png" alt="" />
+        </div>
+        <div class="crest-meta">
+          <div><span data-i18n="mark_status">Status</span><b data-i18n="mark_status_value">ONLINE · 24/7</b></div>
+          <div style="text-align:right"><span data-i18n="mark_members">Members</span><b data-i18n="mark_members_value">by invitation</b></div>
+        </div>
+        <div class="hero-ticker">
+          <span class="tick"><span class="led"></span>UAE&nbsp;·&nbsp;<b data-i18n="tick_uae">SPV ready</b></span>
+          <span class="tick"><span class="led" style="background:var(--gold-500); box-shadow:0 0 8px var(--gold-500);"></span>EU&nbsp;·&nbsp;<b data-i18n="tick_eu">licensed structures</b></span>
+          <span class="tick"><span class="led" style="background:var(--clay-500); box-shadow:0 0 8px var(--clay-500);"></span><span data-i18n="tick_global_label">Global</span>&nbsp;·&nbsp;<b data-i18n="tick_global">fintech rails</b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       2. INTRO
+       ============================================ -->
+  <section class="zoom-on-scroll" data-screen-label="02 Intro">
+    <div class="intro-grid">
+      <div>
+        <span class="eyebrow" data-i18n="intro_eyebrow">One entry point</span>
+        <h2 style="margin-top: var(--s-4)" data-i18n-html="intro_h2">One private entry point for <em class="serif-em">global</em> opportunities.</h2>
+        <p data-i18n="intro_p">CRONCORE helps investors, founders and family offices navigate fintech, capital markets, legal structuring, SPVs, tokenization and concierge requests through an AI-powered advisory layer.</p>
+      </div>
+      <div class="pillars">
+        <span class="pillar" data-i18n="pillar_deals">Deals</span>
+        <span class="pillar" data-i18n="pillar_capital">Capital</span>
+        <span class="pillar" data-i18n="pillar_structure">Structure</span>
+        <span class="pillar" data-i18n="pillar_access">Access</span>
+        <span class="pillar" data-i18n="pillar_network">Network</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       3. SERVICES
+       ============================================ -->
+  <section id="services" class="zoom-on-scroll" data-screen-label="03 Services">
+    <div class="section-head">
+      <span class="eyebrow" data-i18n="svc_eyebrow">Services · six directions</span>
+      <h2 data-i18n-html="svc_h2">Everything one investor <em class="serif-em">actually</em> needs.</h2>
+      <p data-i18n="svc_p">Six private directions, one interface. Start with any of them — CRONCORE routes the rest.</p>
+    </div>
+
+    <div class="services-grid">
+
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2.5"/><path d="M2.5 10.5h19M6 15h3M12 15h2"/></svg>
+          </div>
+          <span class="svc-no">— 01</span>
+        </div>
+        <h3 data-i18n="svc1_title">Payments & Fintech</h3>
+        <p data-i18n="svc1_desc">Payment infrastructure, acquiring, PSP, EMI, crypto rails, banking setup and global fintech solutions.</p>
+        <div class="svc-foot">
+          <span class="svc-tag" data-i18n="svc1_tag">Infrastructure</span>
+          <span class="cta-link"><span data-i18n="svc1_cta">Discuss Payments</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 3 5-7 4 4"/><path d="M3 20h18"/></svg>
+          </div>
+          <span class="svc-no">— 02</span>
+        </div>
+        <h3 data-i18n="svc2_title">Investments & DeFi</h3>
+        <p data-i18n="svc2_desc">Private deals, venture opportunities, secondaries, digital assets, DeFi infrastructure and alternative investments.</p>
+        <div class="svc-foot">
+          <span class="svc-tag" data-i18n="svc2_tag">Capital</span>
+          <span class="cta-link"><span data-i18n="svc2_cta">Explore Investments</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7.5"/><path d="M12 4.5v3M12 16.5v3M4.5 12h3M16.5 12h3"/></svg>
+          </div>
+          <span class="svc-no">— 03</span>
+        </div>
+        <h3 data-i18n="svc3_title">SPV & Tokenization</h3>
+        <p data-i18n="svc3_desc">SPV creation, tokenization, syndicates, investor onboarding, cap table logic and digital ownership models.</p>
+        <div class="svc-foot">
+          <span class="svc-tag" data-i18n="svc3_tag">Structure</span>
+          <span class="cta-link"><span data-i18n="svc3_cta">Structure a Deal</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14.5 3v4h4M9 12h6M9 16h6M9 8h2"/></svg>
+          </div>
+          <span class="svc-no">— 04</span>
+        </div>
+        <h3 data-i18n="svc4_title">Legal & Corporate</h3>
+        <p data-i18n="svc4_desc">Company setup, UAE and European structures, compliance, licensing, tax coordination and corporate administration.</p>
+        <div class="svc-foot">
+          <span class="svc-tag" data-i18n="svc4_tag">Jurisdiction</span>
+          <span class="cta-link"><span data-i18n="svc4_cta">Get Structuring Help</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V9l7-5 7 5v11"/><rect x="9" y="13" width="6" height="7"/><path d="M9 9h6"/></svg>
+          </div>
+          <span class="svc-no">— 05</span>
+        </div>
+        <h3 data-i18n="svc5_title">Concierge & Real Estate</h3>
+        <p data-i18n="svc5_desc">Relocation, real estate sourcing, residency support, lifestyle services and private network access.</p>
+        <div class="svc-foot">
+          <span class="svc-tag" data-i18n="svc5_tag">Lifestyle</span>
+          <span class="cta-link"><span data-i18n="svc5_cta">Request Concierge</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="glass svc-card" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" style="text-decoration:none; color: inherit;">
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.5 7.4l4 3.2M17.5 7.4l-4 3.2M6.5 16.6l4-3.2M17.5 16.6l-4-3.2"/></svg>
+          </div>
+          <span class="svc-no">— 06</span>
+        </div>
+        <h3 data-i18n="svc6_title">Private Network</h3>
+        <p data-i18n="svc6_desc">Curated access to partners, experts, investors, operators and selected opportunities within The Investor's Circle.</p>
+        <div class="svc-foot">
+          <span class="svc-tag" data-i18n="svc6_tag">Access</span>
+          <span class="cta-link"><span data-i18n="svc6_cta">Request Access</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================================
+       4. AI ADVISOR
+       ============================================ -->
+  <section id="advisor" class="zoom-on-scroll" data-screen-label="04 Advisor">
+    <div class="advisor-grid">
+      <div class="advisor-text">
+        <span class="eyebrow" data-i18n="advisor_eyebrow">AI Advisor</span>
+        <h2 style="margin-top: var(--s-4)" data-i18n-html="advisor_h2">Start with a <em class="serif-em">question</em>.</h2>
+        <p data-i18n="advisor_p">Instead of searching for the right expert, structure or partner manually, start a private conversation in CRONCORE Bot. The system qualifies what you need and routes it.</p>
+
+        <div class="examples">
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span>
+            <span data-i18n="ex1">"I need a payment solution for my business"</span>
+            <span class="arr">↗</span>
+          </a>
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span>
+            <span data-i18n="ex2">"I am looking for investment opportunities"</span>
+            <span class="arr">↗</span>
+          </a>
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span>
+            <span data-i18n="ex3">"I need to register a company in Europe or UAE"</span>
+            <span class="arr">↗</span>
+          </a>
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span>
+            <span data-i18n="ex4">"How does equity tokenization work?"</span>
+            <span class="arr">↗</span>
+          </a>
+          <a class="example-chip" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <span class="q">›</span>
+            <span data-i18n="ex5">"I am looking for real estate opportunities"</span>
+            <span class="arr">↗</span>
+          </a>
+        </div>
+
+        <div class="cta-row" style="margin-top: var(--s-6);">
+          <a class="btn btn-primary" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+            <svg class="tg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+            <span data-i18n="btn_ask_bot">Ask CRONCORE Bot</span>
+          </a>
+          <a class="btn btn-email" href="mailto:hello@croncore.com?subject=CRONCORE%20%E2%80%94%20Question%20for%20Advisor">
+            <svg class="mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            <span data-i18n="btn_email">Request via Email</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <span class="title" data-i18n="term_title">@CRONCORE_bot · live</span>
+          <span class="right" data-i18n="term_private">PRIVATE · ENCRYPTED</span>
+        </div>
+        <div class="terminal-body">
+          <div class="msg user">
+            <span class="who">You · 14:02</span>
+            <div class="bubble" data-i18n="msg_user1">I am looking for investment opportunities in MENA fintech. Ticket size €250–500k, 12-month horizon.</div>
+          </div>
+          <div class="msg bot">
+            <span class="who">Croncore · 14:02</span>
+            <div class="bubble">
+              <span class="line" data-i18n-html="msg_bot1_l1">→ Matching against 47 active deals in <b style="color:var(--bone-50)">MENA fintech</b>.</span>
+              <span class="line" data-i18n="msg_bot1_l2">→ 6 candidates inside your range. 2 inside The Investor's Circle (private).</span>
+              <span class="line" style="color:var(--ink-3)" data-i18n="msg_bot1_l3">Filter further:</span>
+              <div class="pill-row">
+                <span class="pillet" data-i18n="pillet1">payments</span>
+                <span class="pillet" data-i18n="pillet2">acquiring</span>
+                <span class="pillet">B2B SaaS</span>
+                <span class="pillet" data-i18n="pillet4">crypto rails</span>
+              </div>
+            </div>
+          </div>
+          <div class="msg user">
+            <span class="who">You · 14:03</span>
+            <div class="bubble" data-i18n="msg_user2">Payments. Show me the two private ones.</div>
+          </div>
+          <div class="msg bot">
+            <span class="who">Croncore · 14:03</span>
+            <div class="bubble">
+              <span class="line" data-i18n="msg_bot2_l1">↳ Forwarding to dealflow desk. NDA + accreditation check requested.</span>
+              <span class="line" style="color: var(--f-300)" data-i18n-html="msg_bot2_l2">Estimated time to first call: <b style="color:var(--bone-50)">under 48h</b>.</span>
+            </div>
+          </div>
+        </div>
+        <div class="terminal-input">
+          <span class="prompt">›</span>
+          <input type="text" data-i18n-placeholder="input_placeholder" placeholder="Type a question, or pick a suggestion…" readonly />
+          <a class="send" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" aria-label="Open in Telegram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       5. HOW IT WORKS
+       ============================================ -->
+  <section id="how" class="zoom-on-scroll" data-screen-label="05 How">
+    <div class="section-head">
+      <span class="eyebrow" data-i18n="how_eyebrow">How it works · three steps</span>
+      <h2 data-i18n-html="how_h2">From a single message <em class="serif-em">to the right room</em>.</h2>
+    </div>
+
+    <div class="steps">
+      <div class="glass step">
+        <span class="num" data-i18n="step1_num">— STEP 01</span>
+        <span class="big">i.</span>
+        <h3 data-i18n="step1_title">Open the bot</h3>
+        <p data-i18n="step1_desc">Start a private conversation in Telegram. No account, no signup form — just a message.</p>
+      </div>
+      <div class="glass step">
+        <span class="num" data-i18n="step2_num">— STEP 02</span>
+        <span class="big">ii.</span>
+        <h3 data-i18n="step2_title">Choose a category</h3>
+        <p data-i18n="step2_desc">Fintech, investments, SPV, legal, concierge, private network. Pick a direction or describe it freely.</p>
+      </div>
+      <div class="glass step">
+        <span class="num" data-i18n="step3_num">— STEP 03</span>
+        <span class="big">iii.</span>
+        <h3 data-i18n="step3_title">Get routed</h3>
+        <p data-i18n="step3_desc">CRONCORE qualifies the request and routes it to the right expert, partner or live opportunity.</p>
+      </div>
+    </div>
+
+    <div class="cta-row" style="margin-top: var(--s-7); justify-content: center;">
+      <a class="btn btn-primary btn-lg" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+        <svg class="tg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+        <span data-i18n="btn_open_telegram">Open in Telegram</span>
+      </a>
+      <a class="btn btn-email btn-lg" href="mailto:hello@croncore.com?subject=CRONCORE%20%E2%80%94%20Private%20Access%20Request">
+        <svg class="mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        <span data-i18n="btn_email">Request via Email</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================================
+       6. TRUST / POSITIONING
+       ============================================ -->
+  <section class="zoom-on-scroll" data-screen-label="06 Trust">
+    <div class="trust-grid">
+      <div class="trust-text">
+        <span class="eyebrow" data-i18n="trust_eyebrow">Built for</span>
+        <h2 style="margin-top: var(--s-4)" data-i18n-html="trust_h2">For private investors and <em class="serif-em">cross-border</em> businesses.</h2>
+        <p data-i18n="trust_p">CRONCORE is designed for people who need fast access to trusted information, deal flow, structuring support and reliable partners — without the noise of public platforms.</p>
+      </div>
+
+      <div class="audience-grid">
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 17l5-5 4 3 5-7 4 4"/></svg></span>
+          <span class="label" data-i18n="aud1">For investors</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg></span>
+          <span class="label" data-i18n="aud2">For founders</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 21V9l5-4 5 4M12.5 21V13l5-4 4 4v8"/><path d="M5 13h0M10 13h0M16 16h0M19 19h0"/></svg></span>
+          <span class="label" data-i18n="aud3">For family offices</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2.5" y="6" width="19" height="13" rx="2"/><path d="M2.5 10.5h19"/></svg></span>
+          <span class="label" data-i18n="aud4">For fintech companies</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+          <span class="label" data-i18n="aud5">International entrepreneurs</span>
+        </div>
+        <div class="audience">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0"/></svg></span>
+          <span class="label" data-i18n="aud6">For private clients</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       7. FINAL CTA
+       ============================================ -->
+  <section id="access" class="zoom-on-scroll" data-screen-label="07 Final CTA">
+    <div class="glass-2 finale">
+      <div class="crest-sm"><img src="assets/logo-croncore.png" alt="" /></div>
+      <h2 data-i18n-html="finale_h2">Enter <em class="serif-em">The Investor's Circle</em>.</h2>
+      <p data-i18n="finale_p">Start with one question. CRONCORE will guide you in the right direction.</p>
+      <div class="cta-row" style="margin-top: var(--s-6);">
+        <a class="btn btn-primary btn-lg" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">
+          <svg class="tg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.3 18.7 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2l-10.2 6.4-4.4-1.4c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.5.2 1 1.6Z"/></svg>
+          <span data-i18n="btn_open_bot">Open CRONCORE Bot</span>
+        </a>
+        <a class="btn btn-email btn-lg" href="mailto:hello@croncore.com?subject=CRONCORE%20%E2%80%94%20Private%20Access%20Request">
+          <svg class="mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          <span data-i18n="btn_email">Request via Email</span>
+        </a>
+      </div>
+      <div class="tag-line">
+        <span data-i18n="pillar_deals">Deals</span><span data-i18n="pillar_capital">Capital</span><span data-i18n="pillar_structure">Structure</span><span data-i18n="pillar_access">Access</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="glass footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo-croncore.png" alt="" />
+        <div>
+          <div class="name">CRONCORE</div>
+          <div class="sub" data-i18n="footer_sub">The Investor's Circle</div>
+        </div>
+      </div>
+      <nav class="footer-links">
+        <a href="#services" data-i18n="nav_services">Services</a>
+        <a href="#advisor" data-i18n="nav_advisor">Advisor</a>
+        <a href="#how" data-i18n="nav_how">How it works</a>
+        <a href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener">Telegram</a>
+        <a href="mailto:hello@croncore.com?subject=CRONCORE%20%E2%80%94%20Private%20Access%20Request">Email</a>
+        <a href="#access" data-i18n="nav_access">Access</a>
+      </nav>
+    </div>
+    <div class="page footer-fine" style="padding-top: var(--s-5)">
+      <span data-i18n="footer_l1">© 2026 CRONCORE. Private network. Invitation only.</span>
+      <span data-i18n="footer_l2">Information shared in the bot does not constitute investment, legal or tax advice.</span>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+/* =========================================================
+   TRANSLATIONS
+   ========================================================= */
+const I18N = {
+  en: {
+    meta_title: "CRONCORE — The Investor's Circle",
+    meta_desc: "Your private AI advisor for deals, capital, structure and access. Available in Telegram. Private access only.",
+    nav_services: "Services", nav_advisor: "Advisor", nav_how: "How it works", nav_access: "Access",
+    hero_eyebrow: "Private AI advisor · Telegram only · invite based",
+    hero_h1: "The Investor's<br/><em>Circle</em>.",
+    hero_lede: "Your private AI advisor for deals, capital, structure and access.",
+    hero_sub: "Ask questions, explore investment opportunities, structure deals and reach trusted partners — all through one private AI interface.",
+    btn_open_advisor: "Open AI Advisor",
+    btn_request_access: "Request Private Access",
+    btn_email: "Request via Email",
+    btn_ask_bot: "Ask CRONCORE Bot",
+    btn_open_telegram: "Open in Telegram",
+    btn_open_bot: "Open CRONCORE Bot",
+    cta_foot: "Available in Telegram · private access only",
+    mark_status: "Status", mark_status_value: "ONLINE · 24/7",
+    mark_members: "Members", mark_members_value: "by invitation",
+    tick_uae: "SPV ready", tick_eu: "licensed structures", tick_global_label: "Global", tick_global: "fintech rails",
+    intro_eyebrow: "One entry point",
+    intro_h2: "One private entry point for <em class=\"serif-em\">global</em> opportunities.",
+    intro_p: "CRONCORE helps investors, founders and family offices navigate fintech, capital markets, legal structuring, SPVs, tokenization and concierge requests through an AI-powered advisory layer.",
+    pillar_deals: "Deals", pillar_capital: "Capital", pillar_structure: "Structure", pillar_access: "Access", pillar_network: "Network",
+    svc_eyebrow: "Services · six directions",
+    svc_h2: "Everything one investor <em class=\"serif-em\">actually</em> needs.",
+    svc_p: "Six private directions, one interface. Start with any of them — CRONCORE routes the rest.",
+    svc1_title: "Payments & Fintech", svc1_desc: "Payment infrastructure, acquiring, PSP, EMI, crypto rails, banking setup and global fintech solutions.", svc1_tag: "Infrastructure", svc1_cta: "Discuss Payments",
+    svc2_title: "Investments & DeFi", svc2_desc: "Private deals, venture opportunities, secondaries, digital assets, DeFi infrastructure and alternative investments.", svc2_tag: "Capital", svc2_cta: "Explore Investments",
+    svc3_title: "SPV & Tokenization", svc3_desc: "SPV creation, tokenization, syndicates, investor onboarding, cap table logic and digital ownership models.", svc3_tag: "Structure", svc3_cta: "Structure a Deal",
+    svc4_title: "Legal & Corporate", svc4_desc: "Company setup, UAE and European structures, compliance, licensing, tax coordination and corporate administration.", svc4_tag: "Jurisdiction", svc4_cta: "Get Structuring Help",
+    svc5_title: "Concierge & Real Estate", svc5_desc: "Relocation, real estate sourcing, residency support, lifestyle services and private network access.", svc5_tag: "Lifestyle", svc5_cta: "Request Concierge",
+    svc6_title: "Private Network", svc6_desc: "Curated access to partners, experts, investors, operators and selected opportunities within The Investor's Circle.", svc6_tag: "Access", svc6_cta: "Request Access",
+    advisor_eyebrow: "AI Advisor",
+    advisor_h2: "Start with a <em class=\"serif-em\">question</em>.",
+    advisor_p: "Instead of searching for the right expert, structure or partner manually, start a private conversation in CRONCORE Bot. The system qualifies what you need and routes it.",
+    ex1: "\"I need a payment solution for my business\"",
+    ex2: "\"I am looking for investment opportunities\"",
+    ex3: "\"I need to register a company in Europe or UAE\"",
+    ex4: "\"How does equity tokenization work?\"",
+    ex5: "\"I am looking for real estate opportunities\"",
+    term_title: "@CRONCORE_bot · live", term_private: "PRIVATE · ENCRYPTED",
+    msg_user1: "I am looking for investment opportunities in MENA fintech. Ticket size €250–500k, 12-month horizon.",
+    msg_bot1_l1: "→ Matching against 47 active deals in <b style=\"color:var(--bone-50)\">MENA fintech</b>.",
+    msg_bot1_l2: "→ 6 candidates inside your range. 2 inside The Investor's Circle (private).",
+    msg_bot1_l3: "Filter further:",
+    pillet1: "payments", pillet2: "acquiring", pillet4: "crypto rails",
+    msg_user2: "Payments. Show me the two private ones.",
+    msg_bot2_l1: "↳ Forwarding to dealflow desk. NDA + accreditation check requested.",
+    msg_bot2_l2: "Estimated time to first call: <b style=\"color:var(--bone-50)\">under 48h</b>.",
+    input_placeholder: "Type a question, or pick a suggestion…",
+    how_eyebrow: "How it works · three steps",
+    how_h2: "From a single message <em class=\"serif-em\">to the right room</em>.",
+    step1_num: "— STEP 01", step1_title: "Open the bot", step1_desc: "Start a private conversation in Telegram. No account, no signup form — just a message.",
+    step2_num: "— STEP 02", step2_title: "Choose a category", step2_desc: "Fintech, investments, SPV, legal, concierge, private network. Pick a direction or describe it freely.",
+    step3_num: "— STEP 03", step3_title: "Get routed", step3_desc: "CRONCORE qualifies the request and routes it to the right expert, partner or live opportunity.",
+    trust_eyebrow: "Built for",
+    trust_h2: "For private investors and <em class=\"serif-em\">cross-border</em> businesses.",
+    trust_p: "CRONCORE is designed for people who need fast access to trusted information, deal flow, structuring support and reliable partners — without the noise of public platforms.",
+    aud1: "For investors", aud2: "For founders", aud3: "For family offices", aud4: "For fintech companies", aud5: "International entrepreneurs", aud6: "For private clients",
+    finale_h2: "Enter <em class=\"serif-em\">The Investor's Circle</em>.",
+    finale_p: "Start with one question. CRONCORE will guide you in the right direction.",
+    footer_sub: "The Investor's Circle",
+    footer_l1: "© 2026 CRONCORE. Private network. Invitation only.",
+    footer_l2: "Information shared in the bot does not constitute investment, legal or tax advice."
+  },
+  de: {
+    meta_title: "CRONCORE — Der Investorenkreis",
+    meta_desc: "Ihr privater KI-Berater für Deals, Kapital, Strukturen und Zugang. Verfügbar in Telegram. Nur privater Zugang.",
+    nav_services: "Leistungen", nav_advisor: "Berater", nav_how: "So funktioniert's", nav_access: "Zugang",
+    hero_eyebrow: "Privater KI-Berater · Nur Telegram · Auf Einladung",
+    hero_h1: "Der Investoren-<br/><em>Kreis</em>.",
+    hero_lede: "Ihr privater KI-Berater für Deals, Kapital, Strukturen und Zugang.",
+    hero_sub: "Stellen Sie Fragen, prüfen Sie Investmentchancen, strukturieren Sie Deals und erreichen Sie vertrauenswürdige Partner — alles über eine private KI-Schnittstelle.",
+    btn_open_advisor: "KI-Berater öffnen",
+    btn_request_access: "Privaten Zugang anfragen",
+    btn_email: "Anfrage per E-Mail",
+    btn_ask_bot: "CRONCORE Bot fragen",
+    btn_open_telegram: "In Telegram öffnen",
+    btn_open_bot: "CRONCORE Bot öffnen",
+    cta_foot: "Verfügbar in Telegram · nur privater Zugang",
+    mark_status: "Status", mark_status_value: "ONLINE · 24/7",
+    mark_members: "Mitglieder", mark_members_value: "auf Einladung",
+    tick_uae: "SPV-bereit", tick_eu: "lizenzierte Strukturen", tick_global_label: "Global", tick_global: "Fintech-Schienen",
+    intro_eyebrow: "Ein Einstiegspunkt",
+    intro_h2: "Ein privater Zugang zu <em class=\"serif-em\">globalen</em> Möglichkeiten.",
+    intro_p: "CRONCORE hilft Investoren, Gründern und Family Offices, sich in Fintech, Kapitalmärkten, Rechtsstrukturierung, SPVs, Tokenisierung und Concierge-Anfragen über eine KI-gestützte Beratungsebene zu bewegen.",
+    pillar_deals: "Deals", pillar_capital: "Kapital", pillar_structure: "Struktur", pillar_access: "Zugang", pillar_network: "Netzwerk",
+    svc_eyebrow: "Leistungen · sechs Richtungen",
+    svc_h2: "Alles, was ein Investor <em class=\"serif-em\">wirklich</em> braucht.",
+    svc_p: "Sechs private Richtungen, eine Schnittstelle. Beginnen Sie mit einer beliebigen — CRONCORE leitet den Rest.",
+    svc1_title: "Zahlungen & Fintech", svc1_desc: "Zahlungsinfrastruktur, Acquiring, PSP, EMI, Krypto-Rails, Banking-Setup und globale Fintech-Lösungen.", svc1_tag: "Infrastruktur", svc1_cta: "Zahlungen besprechen",
+    svc2_title: "Investitionen & DeFi", svc2_desc: "Private Deals, Venture-Chancen, Secondaries, digitale Vermögenswerte, DeFi-Infrastruktur und alternative Investments.", svc2_tag: "Kapital", svc2_cta: "Investitionen erkunden",
+    svc3_title: "SPV & Tokenisierung", svc3_desc: "SPV-Erstellung, Tokenisierung, Syndikate, Investor-Onboarding, Cap-Table-Logik und digitale Eigentumsmodelle.", svc3_tag: "Struktur", svc3_cta: "Deal strukturieren",
+    svc4_title: "Recht & Corporate", svc4_desc: "Firmengründung, VAE- und europäische Strukturen, Compliance, Lizenzierung, Steuerkoordination und Corporate-Administration.", svc4_tag: "Jurisdiktion", svc4_cta: "Strukturierungshilfe",
+    svc5_title: "Concierge & Immobilien", svc5_desc: "Relocation, Immobiliensuche, Aufenthaltsbetreuung, Lifestyle-Services und privater Netzwerkzugang.", svc5_tag: "Lifestyle", svc5_cta: "Concierge anfragen",
+    svc6_title: "Privates Netzwerk", svc6_desc: "Kuratierter Zugang zu Partnern, Experten, Investoren, Operatoren und ausgewählten Möglichkeiten im Investorenkreis.", svc6_tag: "Zugang", svc6_cta: "Zugang anfragen",
+    advisor_eyebrow: "KI-Berater",
+    advisor_h2: "Beginnen Sie mit einer <em class=\"serif-em\">Frage</em>.",
+    advisor_p: "Statt manuell nach dem richtigen Experten, der richtigen Struktur oder dem richtigen Partner zu suchen, starten Sie ein privates Gespräch im CRONCORE Bot. Das System qualifiziert Ihre Anfrage und leitet sie weiter.",
+    ex1: "„Ich brauche eine Zahlungslösung für mein Unternehmen\"",
+    ex2: "„Ich suche nach Investmentmöglichkeiten\"",
+    ex3: "„Ich muss eine Firma in Europa oder den VAE registrieren\"",
+    ex4: "„Wie funktioniert Equity-Tokenisierung?\"",
+    ex5: "„Ich suche nach Immobilienmöglichkeiten\"",
+    term_title: "@CRONCORE_bot · live", term_private: "PRIVAT · VERSCHLÜSSELT",
+    msg_user1: "Ich suche Investmentmöglichkeiten im MENA-Fintech. Ticketgröße €250–500k, 12-Monats-Horizont.",
+    msg_bot1_l1: "→ Abgleich mit 47 aktiven Deals im <b style=\"color:var(--bone-50)\">MENA-Fintech</b>.",
+    msg_bot1_l2: "→ 6 Kandidaten in Ihrer Spanne. 2 im Investorenkreis (privat).",
+    msg_bot1_l3: "Weiter filtern:",
+    pillet1: "Zahlungen", pillet2: "Acquiring", pillet4: "Krypto-Rails",
+    msg_user2: "Zahlungen. Zeigen Sie mir die zwei privaten.",
+    msg_bot2_l1: "↳ Weiterleitung an den Dealflow-Desk. NDA + Akkreditierungsprüfung angefordert.",
+    msg_bot2_l2: "Geschätzte Zeit bis zum ersten Call: <b style=\"color:var(--bone-50)\">unter 48 Std.</b>.",
+    input_placeholder: "Frage eingeben oder Vorschlag wählen…",
+    how_eyebrow: "So funktioniert's · drei Schritte",
+    how_h2: "Von einer Nachricht <em class=\"serif-em\">zum richtigen Raum</em>.",
+    step1_num: "— SCHRITT 01", step1_title: "Bot öffnen", step1_desc: "Beginnen Sie ein privates Gespräch in Telegram. Kein Konto, kein Anmeldeformular — nur eine Nachricht.",
+    step2_num: "— SCHRITT 02", step2_title: "Kategorie wählen", step2_desc: "Fintech, Investitionen, SPV, Recht, Concierge, privates Netzwerk. Wählen Sie eine Richtung oder beschreiben Sie sie frei.",
+    step3_num: "— SCHRITT 03", step3_title: "Weiterleitung erhalten", step3_desc: "CRONCORE qualifiziert die Anfrage und leitet sie an den richtigen Experten, Partner oder die richtige Live-Chance weiter.",
+    trust_eyebrow: "Entwickelt für",
+    trust_h2: "Für private Investoren und <em class=\"serif-em\">grenzüberschreitende</em> Unternehmen.",
+    trust_p: "CRONCORE ist für Menschen konzipiert, die schnellen Zugang zu vertrauenswürdigen Informationen, Dealflow, Strukturierungshilfe und zuverlässigen Partnern brauchen — ohne das Rauschen öffentlicher Plattformen.",
+    aud1: "Für Investoren", aud2: "Für Gründer", aud3: "Für Family Offices", aud4: "Für Fintech-Unternehmen", aud5: "Internationale Unternehmer", aud6: "Für Privatkunden",
+    finale_h2: "Betreten Sie <em class=\"serif-em\">den Investorenkreis</em>.",
+    finale_p: "Beginnen Sie mit einer Frage. CRONCORE führt Sie in die richtige Richtung.",
+    footer_sub: "Der Investorenkreis",
+    footer_l1: "© 2026 CRONCORE. Privates Netzwerk. Nur auf Einladung.",
+    footer_l2: "Informationen aus dem Bot stellen keine Anlage-, Rechts- oder Steuerberatung dar."
+  },
+  ru: {
+    meta_title: "CRONCORE — Круг Инвесторов",
+    meta_desc: "Ваш частный AI-советник по сделкам, капиталу, структуре и доступу. Доступно в Telegram. Только частный доступ.",
+    nav_services: "Услуги", nav_advisor: "Советник", nav_how: "Как это работает", nav_access: "Доступ",
+    hero_eyebrow: "Частный AI-советник · Только Telegram · По приглашению",
+    hero_h1: "Круг <em>Инвесторов</em>.",
+    hero_lede: "Ваш частный AI-советник по сделкам, капиталу, структуре и доступу.",
+    hero_sub: "Задавайте вопросы, изучайте инвестиционные возможности, структурируйте сделки и получайте контакты с надёжными партнёрами — всё через один частный AI-интерфейс.",
+    btn_open_advisor: "Открыть AI-советника",
+    btn_request_access: "Запросить частный доступ",
+    btn_email: "Заявка по почте",
+    btn_ask_bot: "Спросить CRONCORE",
+    btn_open_telegram: "Открыть в Telegram",
+    btn_open_bot: "Открыть CRONCORE Bot",
+    cta_foot: "Доступно в Telegram · только частный доступ",
+    mark_status: "Статус", mark_status_value: "ONLINE · 24/7",
+    mark_members: "Участники", mark_members_value: "по приглашению",
+    tick_uae: "SPV готовы", tick_eu: "лицензии и структуры", tick_global_label: "Глобально", tick_global: "финтех-рельсы",
+    intro_eyebrow: "Одна точка входа",
+    intro_h2: "Одна частная точка входа к <em class=\"serif-em\">глобальным</em> возможностям.",
+    intro_p: "CRONCORE помогает инвесторам, основателям и family office ориентироваться в финтехе, рынках капитала, юридической структуре, SPV, токенизации и concierge-запросах через AI-консультационный слой.",
+    pillar_deals: "Сделки", pillar_capital: "Капитал", pillar_structure: "Структура", pillar_access: "Доступ", pillar_network: "Сеть",
+    svc_eyebrow: "Услуги · шесть направлений",
+    svc_h2: "Всё, что <em class=\"serif-em\">действительно</em> нужно инвестору.",
+    svc_p: "Шесть частных направлений, один интерфейс. Начните с любого — CRONCORE направит остальное.",
+    svc1_title: "Платежи и финтех", svc1_desc: "Платёжная инфраструктура, эквайринг, PSP, EMI, крипто-рельсы, банковский setup и глобальные финтех-решения.", svc1_tag: "Инфраструктура", svc1_cta: "Обсудить платежи",
+    svc2_title: "Инвестиции и DeFi", svc2_desc: "Частные сделки, венчурные возможности, secondaries, цифровые активы, инфраструктура DeFi и альтернативные инвестиции.", svc2_tag: "Капитал", svc2_cta: "Изучить инвестиции",
+    svc3_title: "SPV и токенизация", svc3_desc: "Создание SPV, токенизация, синдикаты, онбординг инвесторов, логика cap table и цифровые модели владения.", svc3_tag: "Структура", svc3_cta: "Структурировать сделку",
+    svc4_title: "Право и корпоративное", svc4_desc: "Регистрация компаний, структуры в ОАЭ и Европе, комплаенс, лицензирование, налоговая координация и корпоративное администрирование.", svc4_tag: "Юрисдикция", svc4_cta: "Получить структурирование",
+    svc5_title: "Concierge и недвижимость", svc5_desc: "Релокация, подбор недвижимости, ВНЖ, lifestyle-сервисы и доступ к частной сети.", svc5_tag: "Lifestyle", svc5_cta: "Запросить concierge",
+    svc6_title: "Частная сеть", svc6_desc: "Кураторский доступ к партнёрам, экспертам, инвесторам, операторам и избранным возможностям внутри Круга Инвесторов.", svc6_tag: "Доступ", svc6_cta: "Запросить доступ",
+    advisor_eyebrow: "AI-советник",
+    advisor_h2: "Начните с <em class=\"serif-em\">вопроса</em>.",
+    advisor_p: "Вместо ручного поиска нужного эксперта, структуры или партнёра начните частный диалог с CRONCORE Bot. Система квалифицирует запрос и направит его.",
+    ex1: "«Мне нужно платёжное решение для бизнеса»",
+    ex2: "«Ищу инвестиционные возможности»",
+    ex3: "«Нужно зарегистрировать компанию в Европе или ОАЭ»",
+    ex4: "«Как работает токенизация акционерного капитала?»",
+    ex5: "«Ищу возможности в недвижимости»",
+    term_title: "@CRONCORE_bot · live", term_private: "ЧАСТНОЕ · ЗАШИФРОВАНО",
+    msg_user1: "Ищу инвестиционные возможности в финтехе MENA. Тикет €250–500k, горизонт 12 месяцев.",
+    msg_bot1_l1: "→ Сравнение с 47 активными сделками в <b style=\"color:var(--bone-50)\">финтехе MENA</b>.",
+    msg_bot1_l2: "→ 6 кандидатов в вашем диапазоне. 2 — внутри Круга Инвесторов (частные).",
+    msg_bot1_l3: "Уточнить фильтр:",
+    pillet1: "платежи", pillet2: "эквайринг", pillet4: "крипто-рельсы",
+    msg_user2: "Платежи. Покажите две частных.",
+    msg_bot2_l1: "↳ Передаю в desk сделок. Запрошен NDA и проверка аккредитации.",
+    msg_bot2_l2: "Ориентировочное время до первого звонка: <b style=\"color:var(--bone-50)\">менее 48 ч</b>.",
+    input_placeholder: "Введите вопрос или выберите подсказку…",
+    how_eyebrow: "Как это работает · три шага",
+    how_h2: "От одного сообщения <em class=\"serif-em\">в нужную комнату</em>.",
+    step1_num: "— ШАГ 01", step1_title: "Откройте бота", step1_desc: "Начните частный диалог в Telegram. Без аккаунта, без анкеты — просто сообщение.",
+    step2_num: "— ШАГ 02", step2_title: "Выберите категорию", step2_desc: "Финтех, инвестиции, SPV, право, concierge, частная сеть. Выберите направление или опишите свободно.",
+    step3_num: "— ШАГ 03", step3_title: "Получите маршрутизацию", step3_desc: "CRONCORE квалифицирует запрос и направит к нужному эксперту, партнёру или живой возможности.",
+    trust_eyebrow: "Создано для",
+    trust_h2: "Для частных инвесторов и <em class=\"serif-em\">трансграничного</em> бизнеса.",
+    trust_p: "CRONCORE создан для тех, кому нужен быстрый доступ к проверенной информации, потоку сделок, поддержке в структурировании и надёжным партнёрам — без шума публичных платформ.",
+    aud1: "Для инвесторов", aud2: "Для основателей", aud3: "Для family offices", aud4: "Для финтех-компаний", aud5: "Международные предприниматели", aud6: "Для частных клиентов",
+    finale_h2: "Войдите в <em class=\"serif-em\">Круг Инвесторов</em>.",
+    finale_p: "Начните с одного вопроса. CRONCORE подскажет правильное направление.",
+    footer_sub: "Круг Инвесторов",
+    footer_l1: "© 2026 CRONCORE. Частная сеть. Только по приглашению.",
+    footer_l2: "Информация в боте не является инвестиционной, юридической или налоговой консультацией."
+  },
+  ar: {
+    meta_title: "CRONCORE — دائرة المستثمرين",
+    meta_desc: "مستشارك الخاص بالذكاء الاصطناعي للصفقات ورأس المال والهيكلة والوصول. متاح في تيليجرام. وصول خاص فقط.",
+    nav_services: "الخدمات", nav_advisor: "المستشار", nav_how: "كيف يعمل", nav_access: "الوصول",
+    hero_eyebrow: "مستشار ذكاء اصطناعي خاص · تيليجرام فقط · بالدعوة",
+    hero_h1: "دائرة <em>المستثمرين</em>.",
+    hero_lede: "مستشارك الخاص بالذكاء الاصطناعي للصفقات ورأس المال والهيكلة والوصول.",
+    hero_sub: "اطرح الأسئلة، استكشف فرص الاستثمار، هيكِّل الصفقات وتواصل مع شركاء موثوقين — كل ذلك عبر واجهة ذكاء اصطناعي خاصة واحدة.",
+    btn_open_advisor: "افتح المستشار",
+    btn_request_access: "اطلب الوصول الخاص",
+    btn_email: "تقدّم بطلب عبر البريد",
+    btn_ask_bot: "اسأل CRONCORE",
+    btn_open_telegram: "افتح في تيليجرام",
+    btn_open_bot: "افتح CRONCORE Bot",
+    cta_foot: "متاح في تيليجرام · وصول خاص فقط",
+    mark_status: "الحالة", mark_status_value: "متصل · ٢٤/٧",
+    mark_members: "الأعضاء", mark_members_value: "بالدعوة",
+    tick_uae: "SPV جاهز", tick_eu: "هياكل مرخصة", tick_global_label: "عالمي", tick_global: "بنية الفينتك",
+    intro_eyebrow: "نقطة دخول واحدة",
+    intro_h2: "نقطة دخول خاصة واحدة للفرص <em class=\"serif-em\">العالمية</em>.",
+    intro_p: "تساعد CRONCORE المستثمرين والمؤسسين والمكاتب العائلية في التنقل عبر التكنولوجيا المالية وأسواق رأس المال والهيكلة القانونية وSPVs والترميز وطلبات الكونسيرج من خلال طبقة استشارية مدعومة بالذكاء الاصطناعي.",
+    pillar_deals: "الصفقات", pillar_capital: "رأس المال", pillar_structure: "الهيكلة", pillar_access: "الوصول", pillar_network: "الشبكة",
+    svc_eyebrow: "الخدمات · ستة اتجاهات",
+    svc_h2: "كل ما يحتاجه المستثمر <em class=\"serif-em\">فعلاً</em>.",
+    svc_p: "ستة اتجاهات خاصة، واجهة واحدة. ابدأ بأيٍّ منها — وستوجّهك CRONCORE نحو الباقي.",
+    svc1_title: "المدفوعات والتكنولوجيا المالية", svc1_desc: "بنية المدفوعات، الاستحواذ، PSP، EMI، السكك الرقمية، إعداد المصارف والحلول المالية العالمية.", svc1_tag: "البنية التحتية", svc1_cta: "ناقش المدفوعات",
+    svc2_title: "الاستثمارات وDeFi", svc2_desc: "صفقات خاصة، فرص ناشئة، صفقات ثانوية، أصول رقمية، بنية DeFi واستثمارات بديلة.", svc2_tag: "رأس المال", svc2_cta: "استكشف الاستثمارات",
+    svc3_title: "SPV والترميز", svc3_desc: "إنشاء SPV، الترميز، الكونسورتيوم، إعداد المستثمرين، منطق جدول الأسهم ونماذج الملكية الرقمية.", svc3_tag: "الهيكلة", svc3_cta: "هيكِّل صفقة",
+    svc4_title: "القانون والشركات", svc4_desc: "تأسيس الشركات، هياكل الإمارات وأوروبا، الامتثال، الترخيص، التنسيق الضريبي وإدارة الشركات.", svc4_tag: "الاختصاص", svc4_cta: "احصل على مساعدة",
+    svc5_title: "الكونسيرج والعقارات", svc5_desc: "الانتقال، تحديد العقارات، دعم الإقامة، خدمات نمط الحياة والوصول إلى الشبكة الخاصة.", svc5_tag: "نمط الحياة", svc5_cta: "اطلب كونسيرج",
+    svc6_title: "الشبكة الخاصة", svc6_desc: "وصول منسّق إلى الشركاء والخبراء والمستثمرين والمشغلين والفرص المختارة داخل دائرة المستثمرين.", svc6_tag: "الوصول", svc6_cta: "اطلب الوصول",
+    advisor_eyebrow: "المستشار الذكي",
+    advisor_h2: "ابدأ بـ<em class=\"serif-em\">سؤال</em>.",
+    advisor_p: "بدلاً من البحث يدوياً عن الخبير أو الهيكل أو الشريك المناسب، ابدأ محادثة خاصة في CRONCORE Bot. يقوم النظام بتأهيل احتياجك وتوجيهه.",
+    ex1: "«أحتاج إلى حل دفع لأعمالي»",
+    ex2: "«أبحث عن فرص استثمارية»",
+    ex3: "«أحتاج إلى تسجيل شركة في أوروبا أو الإمارات»",
+    ex4: "«كيف يعمل ترميز الأسهم؟»",
+    ex5: "«أبحث عن فرص عقارية»",
+    term_title: "@CRONCORE_bot · مباشر", term_private: "خاص · مشفّر",
+    msg_user1: "أبحث عن فرص استثمارية في فينتك MENA. حجم التذكرة €250–500k، أفق 12 شهراً.",
+    msg_bot1_l1: "→ مطابقة مع 47 صفقة نشطة في <b style=\"color:var(--bone-50)\">فينتك MENA</b>.",
+    msg_bot1_l2: "→ 6 مرشحين ضمن نطاقك. 2 داخل دائرة المستثمرين (خاص).",
+    msg_bot1_l3: "تصفية إضافية:",
+    pillet1: "مدفوعات", pillet2: "استحواذ", pillet4: "سكك كريبتو",
+    msg_user2: "المدفوعات. أرني الاثنين الخاصين.",
+    msg_bot2_l1: "↳ يتم التوجيه إلى مكتب الصفقات. طُلب NDA وفحص الاعتماد.",
+    msg_bot2_l2: "الوقت المقدّر للمكالمة الأولى: <b style=\"color:var(--bone-50)\">أقل من 48 ساعة</b>.",
+    input_placeholder: "اكتب سؤالاً أو اختر اقتراحاً…",
+    how_eyebrow: "كيف يعمل · ثلاث خطوات",
+    how_h2: "من رسالة واحدة <em class=\"serif-em\">إلى الغرفة المناسبة</em>.",
+    step1_num: "— الخطوة 01", step1_title: "افتح البوت", step1_desc: "ابدأ محادثة خاصة في تيليجرام. بدون حساب، بدون تسجيل — فقط رسالة.",
+    step2_num: "— الخطوة 02", step2_title: "اختر فئة", step2_desc: "فينتك، استثمارات، SPV، قانوني، كونسيرج، شبكة خاصة. اختر اتجاهاً أو وصفه بحرية.",
+    step3_num: "— الخطوة 03", step3_title: "احصل على التوجيه", step3_desc: "تقوم CRONCORE بتأهيل الطلب وتوجيهه إلى الخبير أو الشريك أو الفرصة المناسبة.",
+    trust_eyebrow: "مصمَّم لـ",
+    trust_h2: "للمستثمرين الخاصين والأعمال <em class=\"serif-em\">عبر الحدود</em>.",
+    trust_p: "صُممت CRONCORE للأشخاص الذين يحتاجون إلى وصول سريع إلى معلومات موثوقة وتدفق صفقات ودعم في الهيكلة وشركاء موثوقين — دون ضوضاء المنصات العامة.",
+    aud1: "للمستثمرين", aud2: "للمؤسسين", aud3: "للمكاتب العائلية", aud4: "لشركات الفينتك", aud5: "لرواد الأعمال الدوليين", aud6: "للعملاء الخاصين",
+    finale_h2: "ادخل <em class=\"serif-em\">دائرة المستثمرين</em>.",
+    finale_p: "ابدأ بسؤال واحد. ستوجّهك CRONCORE في الاتجاه الصحيح.",
+    footer_sub: "دائرة المستثمرين",
+    footer_l1: "© 2026 CRONCORE. شبكة خاصة. بالدعوة فقط.",
+    footer_l2: "المعلومات المشاركة في البوت لا تشكّل استشارة استثمارية أو قانونية أو ضريبية."
+  },
+  he: {
+    meta_title: "CRONCORE — מעגל המשקיעים",
+    meta_desc: "יועץ ה-AI הפרטי שלך לעסקאות, הון, מבנה וגישה. זמין בטלגרם. גישה פרטית בלבד.",
+    nav_services: "שירותים", nav_advisor: "יועץ", nav_how: "איך זה עובד", nav_access: "גישה",
+    hero_eyebrow: "יועץ AI פרטי · בטלגרם בלבד · בהזמנה",
+    hero_h1: "מעגל <em>המשקיעים</em>.",
+    hero_lede: "יועץ ה-AI הפרטי שלך לעסקאות, הון, מבנה וגישה.",
+    hero_sub: "שאלו שאלות, חקרו הזדמנויות השקעה, בנו עסקאות וצרו קשר עם שותפים מהימנים — הכול דרך ממשק AI פרטי אחד.",
+    btn_open_advisor: "פתח יועץ AI",
+    btn_request_access: "בקש גישה פרטית",
+    btn_email: "שלח בקשה במייל",
+    btn_ask_bot: "שאל את CRONCORE",
+    btn_open_telegram: "פתח בטלגרם",
+    btn_open_bot: "פתח את CRONCORE Bot",
+    cta_foot: "זמין בטלגרם · גישה פרטית בלבד",
+    mark_status: "סטטוס", mark_status_value: "מקוון · 24/7",
+    mark_members: "חברים", mark_members_value: "בהזמנה",
+    tick_uae: "SPV מוכן", tick_eu: "מבנים מורשים", tick_global_label: "גלובלי", tick_global: "מסילות פינטק",
+    intro_eyebrow: "נקודת כניסה אחת",
+    intro_h2: "נקודת כניסה פרטית אחת להזדמנויות <em class=\"serif-em\">גלובליות</em>.",
+    intro_p: "CRONCORE מסייעת למשקיעים, מייסדים ומשפחות עתירות הון לנווט בפינטק, בשוקי הון, במבנה משפטי, ב-SPV, בטוקניזציה ובבקשות קונסיירז' דרך שכבת ייעוץ מבוססת AI.",
+    pillar_deals: "עסקאות", pillar_capital: "הון", pillar_structure: "מבנה", pillar_access: "גישה", pillar_network: "רשת",
+    svc_eyebrow: "שירותים · שישה כיוונים",
+    svc_h2: "כל מה שמשקיע <em class=\"serif-em\">באמת</em> צריך.",
+    svc_p: "שישה כיוונים פרטיים, ממשק אחד. התחילו מכל אחד — CRONCORE תנתב את השאר.",
+    svc1_title: "תשלומים ופינטק", svc1_desc: "תשתית תשלומים, אקווייירינג, PSP, EMI, מסילות קריפטו, הקמת בנקאות ופתרונות פינטק גלובליים.", svc1_tag: "תשתית", svc1_cta: "דונו בתשלומים",
+    svc2_title: "השקעות ו-DeFi", svc2_desc: "עסקאות פרטיות, הזדמנויות ונצ'ר, secondaries, נכסים דיגיטליים, תשתית DeFi והשקעות אלטרנטיביות.", svc2_tag: "הון", svc2_cta: "חקור השקעות",
+    svc3_title: "SPV וטוקניזציה", svc3_desc: "יצירת SPV, טוקניזציה, סינדיקטים, קליטת משקיעים, לוגיקת cap table ומודלי בעלות דיגיטליים.", svc3_tag: "מבנה", svc3_cta: "מבנה עסקה",
+    svc4_title: "משפט ותאגידי", svc4_desc: "הקמת חברות, מבנים באיחוד האמירויות ובאירופה, ציות, רישוי, תיאום מס וניהול תאגידי.", svc4_tag: "שיפוט", svc4_cta: "קבל סיוע בהבנייה",
+    svc5_title: "קונסיירז' ונדל\"ן", svc5_desc: "רילוקיישן, איתור נדל\"ן, תמיכה בתושבות, שירותי לייפסטייל וגישה לרשת פרטית.", svc5_tag: "לייפסטייל", svc5_cta: "בקש קונסיירז'",
+    svc6_title: "רשת פרטית", svc6_desc: "גישה מאוצרת לשותפים, מומחים, משקיעים, מפעילים והזדמנויות נבחרות בתוך מעגל המשקיעים.", svc6_tag: "גישה", svc6_cta: "בקש גישה",
+    advisor_eyebrow: "יועץ AI",
+    advisor_h2: "התחילו ב<em class=\"serif-em\">שאלה</em>.",
+    advisor_p: "במקום לחפש ידנית את המומחה, המבנה או השותף הנכון, התחילו שיחה פרטית ב-CRONCORE Bot. המערכת תכשיר את הצורך ותנתב אותו.",
+    ex1: "\"אני צריך פתרון תשלום לעסק שלי\"",
+    ex2: "\"אני מחפש הזדמנויות השקעה\"",
+    ex3: "\"אני צריך לרשום חברה באירופה או באיחוד האמירויות\"",
+    ex4: "\"איך טוקניזציה של אקוויטי עובדת?\"",
+    ex5: "\"אני מחפש הזדמנויות נדל\\\"ן\"",
+    term_title: "@CRONCORE_bot · חי", term_private: "פרטי · מוצפן",
+    msg_user1: "מחפש הזדמנויות השקעה בפינטק MENA. גודל טיקט €250–500k, אופק 12 חודשים.",
+    msg_bot1_l1: "→ התאמה מול 47 עסקאות פעילות ב<b style=\"color:var(--bone-50)\">פינטק MENA</b>.",
+    msg_bot1_l2: "→ 6 מועמדים בטווח שלך. 2 בתוך מעגל המשקיעים (פרטי).",
+    msg_bot1_l3: "סנן עוד:",
+    pillet1: "תשלומים", pillet2: "אקווייירינג", pillet4: "מסילות קריפטו",
+    msg_user2: "תשלומים. הראה לי את שתי הפרטיות.",
+    msg_bot2_l1: "↳ מעביר לדסק העסקאות. בוקש NDA + בדיקת הסמכה.",
+    msg_bot2_l2: "זמן משוער לשיחה הראשונה: <b style=\"color:var(--bone-50)\">פחות מ-48 שעות</b>.",
+    input_placeholder: "הקלידו שאלה או בחרו הצעה…",
+    how_eyebrow: "איך זה עובד · שלושה צעדים",
+    how_h2: "מהודעה אחת <em class=\"serif-em\">לחדר הנכון</em>.",
+    step1_num: "— צעד 01", step1_title: "פתחו את הבוט", step1_desc: "התחילו שיחה פרטית בטלגרם. ללא חשבון, ללא טופס — רק הודעה.",
+    step2_num: "— צעד 02", step2_title: "בחרו קטגוריה", step2_desc: "פינטק, השקעות, SPV, משפטי, קונסיירז', רשת פרטית. בחרו כיוון או תארו בחופשיות.",
+    step3_num: "— צעד 03", step3_title: "קבלו ניתוב", step3_desc: "CRONCORE תכשיר את הבקשה ותנתב למומחה, שותף או הזדמנות בזמן אמת.",
+    trust_eyebrow: "עוצב עבור",
+    trust_h2: "למשקיעים פרטיים ולעסקים <em class=\"serif-em\">חוצי גבולות</em>.",
+    trust_p: "CRONCORE עוצבה עבור אנשים שזקוקים לגישה מהירה למידע מהימן, זרימת עסקאות, סיוע בהבנייה ושותפים אמינים — בלי הרעש של פלטפורמות ציבוריות.",
+    aud1: "למשקיעים", aud2: "למייסדים", aud3: "למשרדי משפחה", aud4: "לחברות פינטק", aud5: "יזמים בינלאומיים", aud6: "ללקוחות פרטיים",
+    finale_h2: "היכנסו אל <em class=\"serif-em\">מעגל המשקיעים</em>.",
+    finale_p: "התחילו בשאלה אחת. CRONCORE תוביל אתכם לכיוון הנכון.",
+    footer_sub: "מעגל המשקיעים",
+    footer_l1: "© 2026 CRONCORE. רשת פרטית. בהזמנה בלבד.",
+    footer_l2: "מידע המשותף בבוט אינו מהווה ייעוץ השקעות, משפטי או מס."
+  },
+  es: {
+    meta_title: "CRONCORE — El Círculo del Inversor",
+    meta_desc: "Su asesor privado de IA para acuerdos, capital, estructura y acceso. Disponible en Telegram. Solo acceso privado.",
+    nav_services: "Servicios", nav_advisor: "Asesor", nav_how: "Cómo funciona", nav_access: "Acceso",
+    hero_eyebrow: "Asesor de IA privado · Solo Telegram · Por invitación",
+    hero_h1: "El Círculo del<br/><em>Inversor</em>.",
+    hero_lede: "Su asesor privado de IA para acuerdos, capital, estructura y acceso.",
+    hero_sub: "Haga preguntas, explore oportunidades de inversión, estructure operaciones y acceda a socios de confianza — todo a través de una única interfaz de IA privada.",
+    btn_open_advisor: "Abrir asesor IA",
+    btn_request_access: "Solicitar acceso privado",
+    btn_email: "Solicitar por email",
+    btn_ask_bot: "Preguntar a CRONCORE",
+    btn_open_telegram: "Abrir en Telegram",
+    btn_open_bot: "Abrir CRONCORE Bot",
+    cta_foot: "Disponible en Telegram · solo acceso privado",
+    mark_status: "Estado", mark_status_value: "EN LÍNEA · 24/7",
+    mark_members: "Miembros", mark_members_value: "por invitación",
+    tick_uae: "SPV listo", tick_eu: "estructuras con licencia", tick_global_label: "Global", tick_global: "rieles fintech",
+    intro_eyebrow: "Un punto de entrada",
+    intro_h2: "Un punto de entrada privado a las oportunidades <em class=\"serif-em\">globales</em>.",
+    intro_p: "CRONCORE ayuda a inversores, fundadores y family offices a navegar fintech, mercados de capital, estructuración legal, SPVs, tokenización y solicitudes de concierge a través de una capa de asesoramiento impulsada por IA.",
+    pillar_deals: "Operaciones", pillar_capital: "Capital", pillar_structure: "Estructura", pillar_access: "Acceso", pillar_network: "Red",
+    svc_eyebrow: "Servicios · seis direcciones",
+    svc_h2: "Todo lo que un inversor <em class=\"serif-em\">realmente</em> necesita.",
+    svc_p: "Seis direcciones privadas, una interfaz. Empiece por cualquiera — CRONCORE dirige el resto.",
+    svc1_title: "Pagos y Fintech", svc1_desc: "Infraestructura de pagos, adquiriente, PSP, EMI, rieles cripto, configuración bancaria y soluciones fintech globales.", svc1_tag: "Infraestructura", svc1_cta: "Hablar de pagos",
+    svc2_title: "Inversiones y DeFi", svc2_desc: "Operaciones privadas, oportunidades de venture, secundarios, activos digitales, infraestructura DeFi e inversiones alternativas.", svc2_tag: "Capital", svc2_cta: "Explorar inversiones",
+    svc3_title: "SPV y tokenización", svc3_desc: "Creación de SPV, tokenización, sindicatos, onboarding de inversores, lógica de cap table y modelos de propiedad digital.", svc3_tag: "Estructura", svc3_cta: "Estructurar operación",
+    svc4_title: "Legal y corporativo", svc4_desc: "Constitución de empresas, estructuras en EAU y Europa, compliance, licencias, coordinación fiscal y administración corporativa.", svc4_tag: "Jurisdicción", svc4_cta: "Obtener asesoría",
+    svc5_title: "Concierge e inmobiliario", svc5_desc: "Reubicación, búsqueda inmobiliaria, soporte de residencia, servicios lifestyle y acceso a red privada.", svc5_tag: "Lifestyle", svc5_cta: "Solicitar concierge",
+    svc6_title: "Red privada", svc6_desc: "Acceso curado a socios, expertos, inversores, operadores y oportunidades seleccionadas dentro del Círculo del Inversor.", svc6_tag: "Acceso", svc6_cta: "Solicitar acceso",
+    advisor_eyebrow: "Asesor IA",
+    advisor_h2: "Comience con una <em class=\"serif-em\">pregunta</em>.",
+    advisor_p: "En lugar de buscar manualmente al experto, estructura o socio adecuado, inicie una conversación privada en CRONCORE Bot. El sistema cualifica lo que necesita y lo dirige.",
+    ex1: "«Necesito una solución de pagos para mi negocio»",
+    ex2: "«Busco oportunidades de inversión»",
+    ex3: "«Necesito registrar una empresa en Europa o EAU»",
+    ex4: "«¿Cómo funciona la tokenización de equity?»",
+    ex5: "«Busco oportunidades inmobiliarias»",
+    term_title: "@CRONCORE_bot · en vivo", term_private: "PRIVADO · CIFRADO",
+    msg_user1: "Busco oportunidades de inversión en fintech MENA. Tamaño €250–500k, horizonte 12 meses.",
+    msg_bot1_l1: "→ Cruzando contra 47 operaciones activas en <b style=\"color:var(--bone-50)\">fintech MENA</b>.",
+    msg_bot1_l2: "→ 6 candidatos en su rango. 2 dentro del Círculo del Inversor (privado).",
+    msg_bot1_l3: "Filtrar más:",
+    pillet1: "pagos", pillet2: "adquiriente", pillet4: "rieles cripto",
+    msg_user2: "Pagos. Muéstreme las dos privadas.",
+    msg_bot2_l1: "↳ Reenviando al desk de dealflow. NDA + verificación de acreditación solicitada.",
+    msg_bot2_l2: "Tiempo estimado para la primera llamada: <b style=\"color:var(--bone-50)\">menos de 48h</b>.",
+    input_placeholder: "Escribe una pregunta o elige una sugerencia…",
+    how_eyebrow: "Cómo funciona · tres pasos",
+    how_h2: "De un solo mensaje <em class=\"serif-em\">a la sala correcta</em>.",
+    step1_num: "— PASO 01", step1_title: "Abre el bot", step1_desc: "Inicia una conversación privada en Telegram. Sin cuenta, sin formulario — solo un mensaje.",
+    step2_num: "— PASO 02", step2_title: "Elige una categoría", step2_desc: "Fintech, inversiones, SPV, legal, concierge, red privada. Elige una dirección o descríbela libremente.",
+    step3_num: "— PASO 03", step3_title: "Recibe dirección", step3_desc: "CRONCORE cualifica la solicitud y la dirige al experto, socio u oportunidad adecuada.",
+    trust_eyebrow: "Diseñado para",
+    trust_h2: "Para inversores privados y negocios <em class=\"serif-em\">transfronterizos</em>.",
+    trust_p: "CRONCORE está diseñado para personas que necesitan acceso rápido a información confiable, flujo de operaciones, soporte estructural y socios fiables — sin el ruido de las plataformas públicas.",
+    aud1: "Para inversores", aud2: "Para fundadores", aud3: "Para family offices", aud4: "Para empresas fintech", aud5: "Emprendedores internacionales", aud6: "Para clientes privados",
+    finale_h2: "Entre al <em class=\"serif-em\">Círculo del Inversor</em>.",
+    finale_p: "Comience con una pregunta. CRONCORE le orientará en la dirección correcta.",
+    footer_sub: "El Círculo del Inversor",
+    footer_l1: "© 2026 CRONCORE. Red privada. Solo por invitación.",
+    footer_l2: "La información compartida en el bot no constituye asesoramiento de inversión, legal o fiscal."
+  }
+};
+
+const RTL_LANGS = new Set(["ar", "he"]);
+const SUPPORTED = Object.keys(I18N);
+
+function applyLang(lang){
+  if(!I18N[lang]) lang = "en";
+  const dict = I18N[lang];
+
+  document.documentElement.lang = lang;
+  document.documentElement.dir = RTL_LANGS.has(lang) ? "rtl" : "ltr";
+
+  // text + html
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if(dict[key] !== undefined) el.textContent = dict[key];
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => {
+    const key = el.getAttribute("data-i18n-html");
+    if(dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  // placeholder
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if(dict[key] !== undefined) el.setAttribute("placeholder", dict[key]);
+  });
+  // meta title + description
+  if(dict.meta_title){
+    document.title = dict.meta_title;
+  }
+  const metaDesc = document.querySelector('meta[data-i18n-meta="meta_desc"]');
+  if(metaDesc && dict.meta_desc){
+    metaDesc.setAttribute("content", dict.meta_desc);
+  }
+
+  // language switcher active state
+  document.querySelectorAll(".lang button").forEach(b => {
+    b.classList.toggle("active", b.dataset.lang === lang);
+  });
+
+  try { localStorage.setItem("croncore_lang", lang); } catch(e){}
+}
+
+function detectInitialLang(){
+  try {
+    const saved = localStorage.getItem("croncore_lang");
+    if(saved && I18N[saved]) return saved;
+  } catch(e){}
+  const nav = (navigator.language || "en").slice(0,2).toLowerCase();
+  return SUPPORTED.includes(nav) ? nav : "en";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".lang button").forEach(b => {
+    b.addEventListener("click", () => applyLang(b.dataset.lang));
+  });
+  applyLang(detectInitialLang());
+
+  // Mobile hamburger — toggles the drawer above ≤900 px viewports.
+  const hamburger = document.querySelector(".hamburger");
+  const mainNav   = document.querySelector(".topbar nav.main-nav");
+  if (hamburger && mainNav){
+    const close = () => { mainNav.classList.remove("open"); hamburger.setAttribute("aria-expanded", "false"); };
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = mainNav.classList.toggle("open");
+      hamburger.setAttribute("aria-expanded", String(isOpen));
+    });
+    mainNav.addEventListener("click", (e) => { if (e.target.tagName === "A") close(); });
+    document.addEventListener("click", (e) => {
+      if (!mainNav.classList.contains("open")) return;
+      if (mainNav.contains(e.target) || hamburger.contains(e.target)) return;
+      close();
+    });
+    window.matchMedia("(min-width: 901px)").addEventListener("change", (ev) => { if (ev.matches) close(); });
+  }
+});
+</script>
+
+</body>
+</html>
