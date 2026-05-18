@@ -654,6 +654,166 @@ html[dir="rtl"] .field select{
   dialog.apply-modal[open], dialog.apply-modal[open]::backdrop{ animation: none; }
   .eyebrow::before{ animation: none; }
 }
+
+/* =========================================================
+   INTERACTIONS — cursor, spotlight, mouse-parallax,
+   on-load reveals. All gated on (hover: hover) +
+   prefers-reduced-motion.
+   ========================================================= */
+
+/* Mouse coordinates exposed by JS:
+   --mx / --my  — normalized -1..1 (0 = centre)
+   --mxp / --myp — raw px from top-left */
+:root{
+  --mx: 0;
+  --my: 0;
+  --mxp: 50vw;
+  --myp: 50vh;
+}
+
+/* --- Mouse parallax (subtle depth shift on hero) --- */
+@media (hover: hover) and (prefers-reduced-motion: no-preference){
+  .hero-crest{
+    transform: translate3d(calc(var(--mx) * 14px), calc(var(--my) * 14px), 0);
+  }
+  .hero h1{
+    transform: translate3d(calc(var(--mx) * 6px), calc(var(--my) * 6px), 0);
+  }
+  .hero .lede{
+    transform: translate3d(calc(var(--mx) * 3px), calc(var(--my) * 3px), 0);
+  }
+}
+
+/* --- Spotlight that follows the cursor --- */
+.spotlight{
+  position: fixed; left: 0; top: 0;
+  width: 640px; height: 640px;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate3d(var(--mxp), var(--myp), 0) translate(-50%, -50%);
+  background: radial-gradient(50% 50% at 50% 50%,
+    oklch(0.80 0.14 150 / .22),
+    oklch(0.78 0.12 90 / .10) 45%,
+    transparent 72%);
+  mix-blend-mode: screen;
+  filter: blur(12px);
+  will-change: transform;
+  opacity: 0;
+  transition: opacity .6s ease;
+}
+html.has-cursor .spotlight{ opacity: 1; }
+@media (hover: none), (pointer: coarse){ .spotlight{ display: none; } }
+@media (prefers-reduced-motion: reduce){ .spotlight{ display: none; } }
+
+/* --- Custom cursor (fine-pointer devices only) --- */
+@media (hover: hover) and (pointer: fine){
+  html.cursor-on, html.cursor-on body{ cursor: none; }
+  html.cursor-on a, html.cursor-on button,
+  html.cursor-on input, html.cursor-on select,
+  html.cursor-on textarea, html.cursor-on label{ cursor: none; }
+
+  /* Re-enable native cursor inside the form modal so inputs feel normal */
+  html.cursor-on dialog.apply-modal,
+  html.cursor-on dialog.apply-modal *{ cursor: auto; }
+  html.cursor-on dialog.apply-modal a,
+  html.cursor-on dialog.apply-modal button{ cursor: pointer; }
+  html.cursor-on dialog.apply-modal input,
+  html.cursor-on dialog.apply-modal textarea{ cursor: text; }
+  html.cursor-on dialog.apply-modal select{ cursor: pointer; }
+
+  .cursor-dot, .cursor-ring{
+    position: fixed; left: 0; top: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate3d(var(--mxp), var(--myp), 0) translate(-50%, -50%);
+    will-change: transform;
+  }
+  .cursor-dot{
+    width: 5px; height: 5px;
+    border-radius: 999px;
+    background: var(--bone-50);
+    box-shadow: 0 0 8px oklch(0.95 0.05 150 / .6);
+  }
+  .cursor-ring{
+    width: 34px; height: 34px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.40);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    transition: width .25s ease, height .25s ease,
+                border-color .25s ease, background .25s ease,
+                opacity .25s ease;
+  }
+  html.cursor-hover .cursor-ring{
+    width: 54px; height: 54px;
+    border-color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.05);
+  }
+  html.cursor-press .cursor-ring{
+    width: 28px; height: 28px;
+    background: rgba(255,255,255,0.12);
+  }
+  html.modal-open .cursor-dot,
+  html.modal-open .cursor-ring{ opacity: 0; }
+}
+@media (hover: none), (pointer: coarse){
+  .cursor-dot, .cursor-ring{ display: none; }
+}
+
+/* --- On-load entrance reveals ---
+   Two groups so entrance never collides with parallax on transform:
+   A) translateY + opacity — for elements without parallax
+   B) blur + opacity      — for hero parallax targets (crest / h1 / lede) */
+.topbar .brand-lock,
+.topbar .lang,
+.hero-crest,
+.hero h1,
+.hero .lede,
+.cta-row,
+.micro-footer span{ opacity: 0; }
+
+.topbar .brand-lock,
+.topbar .lang,
+.cta-row,
+.micro-footer span{
+  transform: translateY(12px);
+  transition: opacity .9s cubic-bezier(.2,.6,.2,1),
+              transform .9s cubic-bezier(.2,.6,.2,1);
+}
+
+.hero-crest,
+.hero h1,
+.hero .lede{
+  filter: blur(6px);
+  transition: opacity .9s cubic-bezier(.2,.6,.2,1),
+              transform .45s cubic-bezier(.2,.6,.2,1),
+              filter .9s ease;
+}
+.hero h1{ filter: blur(10px); }
+
+body.is-ready .topbar .brand-lock { opacity: 1; transform: none; transition-delay: 60ms; }
+body.is-ready .topbar .lang       { opacity: 1; transform: none; transition-delay: 140ms; }
+body.is-ready .hero-crest         { opacity: 1; filter: none;    transition-delay: 220ms; }
+body.is-ready .hero h1            { opacity: 1; filter: none;    transition-delay: 340ms; }
+body.is-ready .hero .lede         { opacity: 1; filter: none;    transition-delay: 480ms; }
+body.is-ready .cta-row            { opacity: 1; transform: none; transition-delay: 580ms; }
+body.is-ready .micro-footer span:nth-child(1){ opacity: 1; transform: none; transition-delay: 740ms; }
+body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; transition-delay: 820ms; }
+
+@media (prefers-reduced-motion: reduce){
+  .topbar .brand-lock, .topbar .lang,
+  .hero-crest, .hero h1, .hero .lede, .cta-row, .micro-footer span{
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
+/* Button micro-interaction — subtle scale + glow lift */
+.btn-primary{ transition: transform .15s ease, filter .15s ease, background .15s ease, box-shadow .25s ease; }
+.btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 12px 28px -10px oklch(0.55 0.14 150 / .55); }
+.btn-primary:active{ transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -661,6 +821,7 @@ html[dir="rtl"] .field select{
 <div class="atmosphere"></div>
 <div class="aurora" aria-hidden="true"></div>
 <div class="aurora-2" aria-hidden="true"></div>
+<div class="spotlight" aria-hidden="true"></div>
 
 <main class="slide">
 
@@ -840,6 +1001,10 @@ html[dir="rtl"] .field select{
 
   </div>
 </dialog>
+
+<!-- Custom cursor (fine-pointer devices only — hidden via CSS otherwise) -->
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
 
 <script>
 /* ============================================================
@@ -1387,6 +1552,79 @@ form.addEventListener("submit", async (e) => {
 function showSuccess(){
   modal.setAttribute("data-state", "success");
 }
+
+/* ============================================================
+   INTERACTIONS — custom cursor, spotlight, mouse-parallax,
+   on-load reveals. Single-slide friendly: no scroll listeners.
+   ============================================================ */
+(function(){
+  const html = document.documentElement;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fine    = matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  /* Reveals: flip body.is-ready on the next paint after DOM is ready,
+     so the entrance transitions actually animate (not snap on hard reload). */
+  function ready(){
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.body.classList.add("is-ready");
+      });
+    });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", ready, { once: true });
+  } else {
+    ready();
+  }
+
+  if (!fine || reduced) return; /* touch / reduced motion: skip cursor + parallax */
+
+  html.classList.add("cursor-on", "has-cursor");
+
+  let x = window.innerWidth / 2;
+  let y = window.innerHeight / 2;
+
+  function setVars(px, py){
+    const nx = (px / window.innerWidth  - 0.5) * 2;
+    const ny = (py / window.innerHeight - 0.5) * 2;
+    html.style.setProperty("--mx",  nx.toFixed(3));
+    html.style.setProperty("--my",  ny.toFixed(3));
+    html.style.setProperty("--mxp", px + "px");
+    html.style.setProperty("--myp", py + "px");
+  }
+  setVars(x, y);
+
+  /* rAF-throttled mousemove so we don't fight the browser */
+  let pending = false;
+  document.addEventListener("mousemove", (e) => {
+    x = e.clientX; y = e.clientY;
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(() => { setVars(x, y); pending = false; });
+  }, { passive: true });
+
+  document.addEventListener("mousedown", () => html.classList.add("cursor-press"));
+  document.addEventListener("mouseup",   () => html.classList.remove("cursor-press"));
+  window.addEventListener("blur",        () => html.classList.remove("cursor-press"));
+
+  /* Hover state on interactive elements (event delegation) */
+  const HOVER_SEL = 'a, button, [role="button"], input, select, textarea, label, [data-cursor="hover"]';
+  document.addEventListener("mouseover", (e) => {
+    if (e.target.closest(HOVER_SEL)) html.classList.add("cursor-hover");
+  });
+  document.addEventListener("mouseout", (e) => {
+    const left = e.target.closest(HOVER_SEL);
+    const enter = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(HOVER_SEL);
+    if (left && !enter) html.classList.remove("cursor-hover");
+  });
+
+  /* When the cursor leaves the window, retire the custom cursor smoothly */
+  document.addEventListener("mouseleave", () => html.classList.remove("has-cursor"));
+  document.addEventListener("mouseenter", () => html.classList.add("has-cursor"));
+
+  /* Recompute on resize so --mx/--my stay normalized correctly */
+  window.addEventListener("resize", () => setVars(x, y), { passive: true });
+})();
 
 /* ============================================================
    BOOT
