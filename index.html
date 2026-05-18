@@ -21,12 +21,14 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Hebrew:wght@400;500;600;700&family=Noto+Serif+Hebrew:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Hebrew:wght@400;500;600;700&family=Noto+Serif+Hebrew:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --f-950: oklch(0.13 0.03 150);
-  --f-900: oklch(0.18 0.04 150);
+  /* Forest — aligned with Design System v0.3 (slightly darker base) */
+  --f-950: oklch(0.12 0.025 150);
+  --f-900: oklch(0.16 0.035 150);
+  --f-850: oklch(0.20 0.045 150);
   --f-800: oklch(0.28 0.06 150);
   --f-700: oklch(0.36 0.06 150);
   --f-600: oklch(0.46 0.07 150);
@@ -35,25 +37,56 @@
   --f-300: oklch(0.80 0.05 150);
   --f-200: oklch(0.89 0.03 150);
   --f-100: oklch(0.94 0.018 150);
+  --f-50:  oklch(0.972 0.010 150);
 
-  --bone-50:  oklch(0.985 0.006 85);
-  --bone-100: oklch(0.96 0.008 85);
-  --bone-300: oklch(0.84 0.012 85);
-  --bone-400: oklch(0.72 0.012 85);
+  /* Cream — editorial warm whites (replaces bone-*) */
+  --cream-50:  oklch(0.97 0.015 85);
+  --cream-100: oklch(0.93 0.020 85);
+  --cream-200: oklch(0.86 0.022 85);
+  --cream-300: oklch(0.72 0.022 85);
+  --cream-400: oklch(0.55 0.018 85);
+  --cream-500: oklch(0.42 0.015 85);
 
+  /* Bone aliases — keep legacy names working */
+  --bone-50:  var(--cream-50);
+  --bone-100: var(--cream-100);
+  --bone-300: var(--cream-200);
+  --bone-400: var(--cream-300);
+
+  /* Clay accent */
   --clay-500: oklch(0.72 0.16 45);
+  --clay-400: oklch(0.80 0.13 45);
+  --clay-300: oklch(0.88 0.09 45);
   --gold-500: oklch(0.78 0.12 90);
 
-  --ink:   oklch(0.97 0.012 90);
-  --ink-2: oklch(0.78 0.015 90);
-  --ink-3: oklch(0.58 0.018 90);
-  --ink-4: oklch(0.45 0.020 90);
+  /* Page text — anchored on cream */
+  --ink:   var(--cream-50);
+  --ink-2: var(--cream-200);
+  --ink-3: var(--cream-300);
+  --ink-4: var(--cream-400);
 
   --rose-500: oklch(0.62 0.21 25);
+
+  /* Forest aliases for new code paths (mirrors design-system) */
+  --forest-950: var(--f-950);
+  --forest-900: var(--f-900);
+  --forest-850: var(--f-850);
+  --forest-800: var(--f-800);
+  --forest-700: var(--f-700);
+  --forest-600: var(--f-600);
+  --forest-500: var(--f-500);
+  --forest-400: var(--f-400);
+  --forest-300: var(--f-300);
+  --forest-200: var(--f-200);
+  --forest-100: var(--f-100);
+  --forest-50:  var(--f-50);
 
   --font-sans:  "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Newsreader", ui-serif, Georgia, serif;
   --font-mono:  "JetBrains Mono", ui-monospace, monospace;
+  --f-sans:  var(--font-sans);
+  --f-serif: var(--font-serif);
+  --f-mono:  var(--font-mono);
 
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
   --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px;
@@ -116,26 +149,25 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   position: fixed; inset: -10%;
   z-index: 0; pointer-events: none;
   background:
-    radial-gradient(50% 50% at 18% 12%, oklch(0.42 0.10 150 / .55), transparent 65%),
-    radial-gradient(45% 45% at 88% 15%, oklch(0.50 0.10 145 / .35), transparent 65%),
-    radial-gradient(55% 50% at 80% 80%, oklch(0.55 0.14 45 / .18), transparent 70%),
-    radial-gradient(70% 60% at 30% 80%, oklch(0.30 0.08 150 / .50), transparent 70%),
-    radial-gradient(120% 80% at 50% 50%, oklch(0.20 0.05 150 / .30), transparent 70%),
-    linear-gradient(180deg, oklch(0.15 0.035 150), oklch(0.12 0.025 150));
+    radial-gradient(55% 50% at 18% 12%, oklch(0.30 0.07 150 / .60), transparent 70%),
+    radial-gradient(45% 45% at 88% 22%, oklch(0.38 0.06 145 / .35), transparent 65%),
+    radial-gradient(60% 55% at 80% 80%, oklch(0.50 0.13 45 / .18), transparent 70%),
+    radial-gradient(70% 60% at 30% 80%, oklch(0.22 0.06 150 / .55), transparent 70%),
+    linear-gradient(180deg, oklch(0.13 0.025 150), oklch(0.10 0.020 150));
   filter: blur(40px) saturate(115%);
 }
 .atmosphere::after{
   content:""; position:absolute; inset:0;
   background-image:
-    radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-    radial-gradient(rgba(0,0,0,.20) 1px, transparent 1px);
+    radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,.22) 1px, transparent 1px);
   background-size: 3px 3px, 8px 8px;
   background-position: 0 0, 2px 3px;
-  mix-blend-mode: overlay; opacity: .9;
+  mix-blend-mode: overlay; opacity: .85;
 }
 .atmosphere::before{
   content:""; position:absolute; inset:0;
-  background: radial-gradient(120% 80% at 50% 50%, transparent 50%, oklch(0.10 0.03 150 / .65) 100%);
+  background: radial-gradient(110% 80% at 50% 50%, transparent 50%, oklch(0.07 0.02 150 / .75) 100%);
 }
 
 /* Aurora — two soft colour fields drifting on top of the base atmosphere
@@ -179,6 +211,72 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
 }
 @media (prefers-reduced-motion: reduce){
   .aurora, .aurora-2{ animation: none; }
+}
+
+/* =========================================================
+   PRELOADER — Hubtown-style 0% → 100%
+   Editorial counter that fades into the hero. Skipped on
+   prefers-reduced-motion (handled via JS + initial state).
+   ========================================================= */
+.preloader{
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--f-950);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  color: var(--cream-50);
+  transition: opacity .8s ease, visibility .8s ease;
+}
+.preloader.done{ opacity: 0; visibility: hidden; pointer-events: none; }
+.pre-inner{
+  width: min(720px, 92vw);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: var(--s-5);
+  padding: 0 var(--s-5);
+}
+.pre-num{
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(64px, 12vw, 140px);
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: var(--cream-50);
+}
+.pre-num .pct{ font-size: .45em; vertical-align: super; color: var(--cream-300); }
+.pre-bar{
+  width: clamp(120px, 18vw, 200px); height: 1px;
+  background: rgba(255,255,255,.15);
+  position: relative; overflow: hidden;
+}
+.pre-bar::after{
+  content:""; position:absolute; inset: 0;
+  background: var(--cream-50);
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: preFill 2.6s cubic-bezier(.65,.05,.2,1) forwards;
+}
+.pre-caption{
+  text-align: right;
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--cream-300);
+  line-height: 1.6;
+}
+.pre-caption b{ color: var(--cream-50); font-weight: 500; display: block; letter-spacing: .22em; }
+@keyframes preFill{ to { transform: scaleX(1); } }
+
+html[lang="ar"] .pre-caption,
+html[lang="he"] .pre-caption{ letter-spacing: .04em; text-transform: none; }
+
+@media (max-width: 600px){
+  .pre-inner{ grid-template-columns: 1fr; justify-items: center; gap: var(--s-4); }
+  .pre-bar{ width: 60vw; }
+  .pre-caption{ text-align: center; }
+}
+@media (prefers-reduced-motion: reduce){
+  .preloader{ display: none; }
 }
 
 /* =========================================================
@@ -702,6 +800,7 @@ html[dir="rtl"] .field select{
   transition: opacity .6s ease;
 }
 html.has-cursor .spotlight{ opacity: 1; }
+body:not(.is-ready) .spotlight{ opacity: 0 !important; }
 @media (hover: none), (pointer: coarse){ .spotlight{ display: none; } }
 @media (prefers-reduced-motion: reduce){ .spotlight{ display: none; } }
 
@@ -711,6 +810,10 @@ html.has-cursor .spotlight{ opacity: 1; }
   html.cursor-on a, html.cursor-on button,
   html.cursor-on input, html.cursor-on select,
   html.cursor-on textarea, html.cursor-on label{ cursor: none; }
+
+  /* During preloader (before .is-ready) keep the native cursor */
+  html.cursor-on body:not(.is-ready),
+  html.cursor-on body:not(.is-ready) *{ cursor: auto; }
 
   /* Re-enable native cursor inside the form modal so inputs feel normal */
   html.cursor-on dialog.apply-modal,
@@ -755,6 +858,9 @@ html.has-cursor .spotlight{ opacity: 1; }
   }
   html.modal-open .cursor-dot,
   html.modal-open .cursor-ring{ opacity: 0; }
+  body:not(.is-ready) .cursor-dot,
+  body:not(.is-ready) .cursor-ring{ opacity: 0; }
+  .cursor-dot{ transition: opacity .3s ease; }
 }
 @media (hover: none), (pointer: coarse){
   .cursor-dot, .cursor-ring{ display: none; }
@@ -817,6 +923,18 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
 </style>
 </head>
 <body>
+
+<!-- Preloader — Hubtown-style 0%→100% counter, fades into hero -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pre-inner">
+    <div class="pre-num"><span id="preNum">0</span><span class="pct">%</span></div>
+    <div class="pre-bar"></div>
+    <div class="pre-caption">
+      <span data-i18n="preload">Entering the circle</span>
+      <b>Croncore</b>
+    </div>
+  </div>
+</div>
 
 <div class="atmosphere"></div>
 <div class="aurora" aria-hidden="true"></div>
@@ -1014,6 +1132,7 @@ const I18N = {
   en: {
     meta_title: "CRONCORE — The Partners' Circle",
     meta_desc: "A private circle of partners — payments, investments, SPV, legal, concierge. By invitation.",
+    preload: "Entering the circle",
     brand_sub: "The Partners' Circle",
     hero_h1: "The Partners'<br/><em>Circle</em>.",
     hero_lede: "Payments, investments, SPV, legal, concierge — through one private channel.",
@@ -1077,6 +1196,7 @@ const I18N = {
   de: {
     meta_title: "CRONCORE — Der Partnerkreis",
     meta_desc: "Ein privater Kreis von Partnern — Zahlungen, Investitionen, SPV, Recht, Concierge. Auf Einladung.",
+    preload: "Eintritt in den Kreis",
     brand_sub: "Der Partnerkreis",
     hero_h1: "Der Partner-<br/><em>Kreis</em>.",
     hero_lede: "Zahlungen, Investitionen, SPV, Recht, Concierge — über einen privaten Kanal.",
@@ -1140,6 +1260,7 @@ const I18N = {
   ru: {
     meta_title: "CRONCORE — Круг партнёров",
     meta_desc: "Частный круг партнёров — платежи, инвестиции, SPV, право, concierge. По приглашению.",
+    preload: "Вход в круг",
     brand_sub: "Круг партнёров",
     hero_h1: "Круг <em>Партнёров</em>.",
     hero_lede: "Платежи, инвестиции, SPV, право, concierge — через один частный канал.",
@@ -1203,6 +1324,7 @@ const I18N = {
   ar: {
     meta_title: "CRONCORE — دائرة الشركاء",
     meta_desc: "دائرة شركاء خاصة — مدفوعات، استثمارات، SPV، قانون، كونسيرج. بالدعوة.",
+    preload: "الدخول إلى الدائرة",
     brand_sub: "دائرة الشركاء",
     hero_h1: "دائرة <em>الشركاء</em>.",
     hero_lede: "مدفوعات، استثمارات، SPV، قانون، كونسيرج — عبر قناة خاصة واحدة.",
@@ -1266,6 +1388,7 @@ const I18N = {
   he: {
     meta_title: "CRONCORE — מעגל השותפים",
     meta_desc: "מעגל פרטי של שותפים — תשלומים, השקעות, SPV, משפט, קונסיירז'. בהזמנה.",
+    preload: "כניסה למעגל",
     brand_sub: "מעגל השותפים",
     hero_h1: "מעגל <em>השותפים</em>.",
     hero_lede: "תשלומים, השקעות, SPV, משפט, קונסיירז' — דרך ערוץ פרטי אחד.",
@@ -1329,6 +1452,7 @@ const I18N = {
   es: {
     meta_title: "CRONCORE — El Círculo de Socios",
     meta_desc: "Un círculo privado de socios — pagos, inversiones, SPV, legal, concierge. Por invitación.",
+    preload: "Entrando al círculo",
     brand_sub: "El Círculo de Socios",
     hero_h1: "El Círculo de<br/><em>Socios</em>.",
     hero_lede: "Pagos, inversiones, SPV, legal, concierge — a través de un único canal privado.",
@@ -1562,19 +1686,40 @@ function showSuccess(){
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine    = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  /* Reveals: flip body.is-ready on the next paint after DOM is ready,
-     so the entrance transitions actually animate (not snap on hard reload). */
-  function ready(){
-    requestAnimationFrame(() => {
+  /* Preloader → entrance reveals. The 0%→100% counter runs for 2.6s,
+     then the .is-ready flip starts the staggered hero reveals while the
+     preloader itself fades out. Reduced motion skips both. */
+  function boot(){
+    const pre = document.getElementById("preloader");
+    const num = document.getElementById("preNum");
+
+    if (reduced || !pre || !num){
       requestAnimationFrame(() => {
-        document.body.classList.add("is-ready");
+        requestAnimationFrame(() => {
+          document.body.classList.add("is-ready");
+        });
       });
-    });
+      if (pre) pre.classList.add("done");
+      return;
+    }
+
+    const start = performance.now();
+    const DUR   = 2600;
+    function tick(now){
+      const p = Math.min(1, (now - start) / DUR);
+      num.textContent = Math.floor(p * 100);
+      if (p < 1) requestAnimationFrame(tick);
+      else {
+        document.body.classList.add("is-ready");
+        setTimeout(() => pre.classList.add("done"), 200);
+      }
+    }
+    requestAnimationFrame(tick);
   }
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", ready, { once: true });
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
   } else {
-    ready();
+    boot();
   }
 
   if (!fine || reduced) return; /* touch / reduced motion: skip cursor + parallax */
