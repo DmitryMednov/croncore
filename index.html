@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title data-i18n="meta_title">CRONCORE — The Investor's Circle</title>
-<meta name="description" data-i18n-meta="meta_desc" content="Private AI advisor for deals, capital, structure and access. Invitation only." />
+<title data-i18n="meta_title">CRONCORE — The Partners' Circle</title>
+<meta name="description" data-i18n-meta="meta_desc" content="A private circle of partners — payments, investments, SPV, legal, concierge. By invitation." />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="CRONCORE — The Investor's Circle" />
-<meta property="og:description" content="Private AI advisor for deals, capital, structure and access." />
+<meta property="og:title" content="CRONCORE — The Partners' Circle" />
+<meta property="og:description" content="A private circle of partners — payments, investments, SPV, legal, concierge. By invitation." />
 <meta property="og:image" content="assets/logo-croncore.png" />
 <meta name="theme-color" content="#0a1810" />
 
@@ -103,7 +103,6 @@ html[lang="he"] em.serif, html[lang="he"] .serif-em, html[lang="he"] .hero h1 em
 }
 html[dir="rtl"] .btn-arrow svg{ transform: scaleX(-1); }
 html[lang="ar"] .eyebrow, html[lang="he"] .eyebrow,
-html[lang="ar"] .cta-foot, html[lang="he"] .cta-foot,
 html[lang="ar"] .lang, html[lang="he"] .lang,
 html[lang="ar"] .topbar .wm, html[lang="he"] .topbar .wm,
 html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
@@ -335,30 +334,10 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   color: var(--ink-2);
   max-width: 56ch;
 }
-.hero .sub{
-  margin: 0;
-  font-size: clamp(13px, 1.3vw, 15px);
-  color: var(--ink-3);
-  max-width: 60ch;
-}
-
 .cta-row{
   display:flex; gap: var(--s-3); flex-wrap: wrap; align-items: center;
   margin-top: var(--s-3);
 }
-.cta-foot{
-  margin-top: var(--s-3);
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--ink-4);
-  display:flex; align-items:center; gap: var(--s-3);
-}
-.cta-foot::before{
-  content:""; width: 6px; height: 6px; border-radius: 999px;
-  background: oklch(0.72 0.16 150);
-  box-shadow: 0 0 10px oklch(0.72 0.16 150);
-}
-
 /* BUTTONS */
 .btn{
   display:inline-flex; align-items:center; justify-content:center; gap: 10px;
@@ -689,7 +668,7 @@ html[dir="rtl"] .field select{
     <a class="brand-lock" href="#" aria-label="CRONCORE">
       <img src="assets/logo-croncore.png" alt="" />
       <span class="wm">CRONCORE</span>
-      <span class="sub" data-i18n="brand_sub">The Investor's Circle</span>
+      <span class="sub" data-i18n="brand_sub">The Partners' Circle</span>
     </a>
     <div class="lang" role="group" aria-label="Language">
       <button class="active" data-lang="en">EN</button>
@@ -705,21 +684,18 @@ html[dir="rtl"] .field select{
     <div class="hero-crest" aria-hidden="true">
       <img src="assets/logo-croncore.png" alt="" />
     </div>
-    <span class="eyebrow" data-i18n="hero_eyebrow">Private network · by invitation</span>
-    <h1 data-i18n-html="hero_h1">The Investor's<br/><em>Circle</em>.</h1>
-    <p class="lede" data-i18n="hero_lede">Deals, capital, structure and access — through one private channel of trusted partners.</p>
-    <p class="sub" data-i18n="hero_sub">Submit a brief request. We route it to the right partner in the network — payments, investments, SPV, legal, concierge or private contacts.</p>
+    <h1 data-i18n-html="hero_h1">The Partners'<br/><em>Circle</em>.</h1>
+    <p class="lede" data-i18n="hero_lede">Payments, investments, SPV, legal, concierge — through one private channel.</p>
     <div class="cta-row">
       <button class="btn btn-primary btn-lg" type="button" id="open-apply">
         <span data-i18n="btn_apply">Request access</span>
         <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </button>
     </div>
-    <div class="cta-foot" data-i18n="cta_foot">Private access · response within 48 hours</div>
   </section>
 
   <div class="micro-footer">
-    <span data-i18n="footer_l1">© 2026 CRONCORE · Private network · Invitation only</span>
+    <span data-i18n="footer_l1">© 2026 CRONCORE · By invitation only</span>
     <span data-i18n="footer_l2">Information shared is not investment, legal or tax advice</span>
   </div>
 
@@ -859,7 +835,7 @@ html[dir="rtl"] .field select{
       <div class="cta-row" style="margin-top: var(--s-4); justify-content: center;">
         <button class="btn btn-secondary" type="button" data-close data-i18n="form_success_close">Close</button>
       </div>
-      <div class="micro">CRONCORE · <span class="dot">·</span> The Investor's Circle</div>
+      <div class="micro">CRONCORE · <span class="dot">·</span> The Partners' Circle</div>
     </div>
 
   </div>
@@ -871,16 +847,13 @@ html[dir="rtl"] .field select{
    ============================================================ */
 const I18N = {
   en: {
-    meta_title: "CRONCORE — The Investor's Circle",
-    meta_desc: "Private network for deals, capital, structure and access. Invitation only.",
-    brand_sub: "The Investor's Circle",
-    hero_eyebrow: "Private network · by invitation",
-    hero_h1: "The Investor's<br/><em>Circle</em>.",
-    hero_lede: "Deals, capital, structure and access — through one private channel of trusted partners.",
-    hero_sub: "Submit a brief request. We route it to the right partner in the network — payments, investments, SPV, legal, concierge or private contacts.",
+    meta_title: "CRONCORE — The Partners' Circle",
+    meta_desc: "A private circle of partners — payments, investments, SPV, legal, concierge. By invitation.",
+    brand_sub: "The Partners' Circle",
+    hero_h1: "The Partners'<br/><em>Circle</em>.",
+    hero_lede: "Payments, investments, SPV, legal, concierge — through one private channel.",
     btn_apply: "Request access",
-    cta_foot: "Private access · response within 48 hours",
-    footer_l1: "© 2026 CRONCORE · Private network · Invitation only",
+    footer_l1: "© 2026 CRONCORE · By invitation only",
     footer_l2: "Information shared is not investment, legal or tax advice",
     form_eyebrow: "Private request",
     form_title: "Tell us <em>what you need</em>.",
@@ -937,16 +910,13 @@ const I18N = {
     form_success_close: "Close",
   },
   de: {
-    meta_title: "CRONCORE — Der Investorenkreis",
-    meta_desc: "Privates Netzwerk für Deals, Kapital, Strukturen und Zugang. Nur auf Einladung.",
-    brand_sub: "Der Investorenkreis",
-    hero_eyebrow: "Privates Netzwerk · auf Einladung",
-    hero_h1: "Der Investoren-<br/><em>Kreis</em>.",
-    hero_lede: "Deals, Kapital, Strukturen und Zugang — über einen privaten Kanal vertrauenswürdiger Partner.",
-    hero_sub: "Senden Sie eine kurze Anfrage. Wir leiten sie an den richtigen Partner im Netzwerk weiter — Zahlungen, Investitionen, SPV, Recht, Concierge oder private Kontakte.",
+    meta_title: "CRONCORE — Der Partnerkreis",
+    meta_desc: "Ein privater Kreis von Partnern — Zahlungen, Investitionen, SPV, Recht, Concierge. Auf Einladung.",
+    brand_sub: "Der Partnerkreis",
+    hero_h1: "Der Partner-<br/><em>Kreis</em>.",
+    hero_lede: "Zahlungen, Investitionen, SPV, Recht, Concierge — über einen privaten Kanal.",
     btn_apply: "Zugang anfragen",
-    cta_foot: "Privater Zugang · Antwort innerhalb von 48 Stunden",
-    footer_l1: "© 2026 CRONCORE · Privates Netzwerk · Nur auf Einladung",
+    footer_l1: "© 2026 CRONCORE · Nur auf Einladung",
     footer_l2: "Geteilte Informationen sind keine Anlage-, Rechts- oder Steuerberatung",
     form_eyebrow: "Private Anfrage",
     form_title: "Sagen Sie uns, <em>was Sie brauchen</em>.",
@@ -1003,16 +973,13 @@ const I18N = {
     form_success_close: "Schließen",
   },
   ru: {
-    meta_title: "CRONCORE — Круг Инвесторов",
-    meta_desc: "Частная сеть для сделок, капитала, структуры и доступа. Только по приглашению.",
-    brand_sub: "Круг Инвесторов",
-    hero_eyebrow: "Частная сеть · по приглашению",
-    hero_h1: "Круг <em>Инвесторов</em>.",
-    hero_lede: "Сделки, капитал, структура и доступ — через один частный канал доверенных партнёров.",
-    hero_sub: "Оставьте короткую заявку. Мы передадим её нужному партнёру сети — платежи, инвестиции, SPV, право, concierge или личные контакты.",
+    meta_title: "CRONCORE — Круг партнёров",
+    meta_desc: "Частный круг партнёров — платежи, инвестиции, SPV, право, concierge. По приглашению.",
+    brand_sub: "Круг партнёров",
+    hero_h1: "Круг <em>Партнёров</em>.",
+    hero_lede: "Платежи, инвестиции, SPV, право, concierge — через один частный канал.",
     btn_apply: "Оставить заявку",
-    cta_foot: "Частный доступ · ответ в течение 48 часов",
-    footer_l1: "© 2026 CRONCORE · Частная сеть · Только по приглашению",
+    footer_l1: "© 2026 CRONCORE · Только по приглашению",
     footer_l2: "Информация в заявке не является инвестиционной, юридической или налоговой консультацией",
     form_eyebrow: "Частная заявка",
     form_title: "Расскажите, <em>что нужно</em>.",
@@ -1069,16 +1036,13 @@ const I18N = {
     form_success_close: "Закрыть",
   },
   ar: {
-    meta_title: "CRONCORE — دائرة المستثمرين",
-    meta_desc: "شبكة خاصة للصفقات ورأس المال والهيكلة والوصول. بالدعوة فقط.",
-    brand_sub: "دائرة المستثمرين",
-    hero_eyebrow: "شبكة خاصة · بالدعوة",
-    hero_h1: "دائرة <em>المستثمرين</em>.",
-    hero_lede: "الصفقات ورأس المال والهيكلة والوصول — عبر قناة خاصة واحدة من شركاء موثوقين.",
-    hero_sub: "أرسل طلباً موجزاً. نوجّهه إلى الشريك المناسب في الشبكة — مدفوعات، استثمارات، SPV، قانون، كونسيرج أو علاقات خاصة.",
+    meta_title: "CRONCORE — دائرة الشركاء",
+    meta_desc: "دائرة شركاء خاصة — مدفوعات، استثمارات، SPV، قانون، كونسيرج. بالدعوة.",
+    brand_sub: "دائرة الشركاء",
+    hero_h1: "دائرة <em>الشركاء</em>.",
+    hero_lede: "مدفوعات، استثمارات، SPV، قانون، كونسيرج — عبر قناة خاصة واحدة.",
     btn_apply: "اطلب الوصول",
-    cta_foot: "وصول خاص · رد خلال 48 ساعة",
-    footer_l1: "© 2026 CRONCORE · شبكة خاصة · بالدعوة فقط",
+    footer_l1: "© 2026 CRONCORE · بالدعوة فقط",
     footer_l2: "المعلومات المقدمة لا تشكّل استشارة استثمارية أو قانونية أو ضريبية",
     form_eyebrow: "طلب خاص",
     form_title: "أخبرنا <em>بما تحتاجه</em>.",
@@ -1135,16 +1099,13 @@ const I18N = {
     form_success_close: "إغلاق",
   },
   he: {
-    meta_title: "CRONCORE — מעגל המשקיעים",
-    meta_desc: "רשת פרטית לעסקאות, הון, מבנה וגישה. בהזמנה בלבד.",
-    brand_sub: "מעגל המשקיעים",
-    hero_eyebrow: "רשת פרטית · בהזמנה",
-    hero_h1: "מעגל <em>המשקיעים</em>.",
-    hero_lede: "עסקאות, הון, מבנה וגישה — דרך ערוץ פרטי אחד של שותפים מהימנים.",
-    hero_sub: "שלחו בקשה קצרה. ננתב אותה לשותף המתאים ברשת — תשלומים, השקעות, SPV, משפט, קונסיירז' או קשרים פרטיים.",
+    meta_title: "CRONCORE — מעגל השותפים",
+    meta_desc: "מעגל פרטי של שותפים — תשלומים, השקעות, SPV, משפט, קונסיירז'. בהזמנה.",
+    brand_sub: "מעגל השותפים",
+    hero_h1: "מעגל <em>השותפים</em>.",
+    hero_lede: "תשלומים, השקעות, SPV, משפט, קונסיירז' — דרך ערוץ פרטי אחד.",
     btn_apply: "בקשו גישה",
-    cta_foot: "גישה פרטית · מענה תוך 48 שעות",
-    footer_l1: "© 2026 CRONCORE · רשת פרטית · בהזמנה בלבד",
+    footer_l1: "© 2026 CRONCORE · בהזמנה בלבד",
     footer_l2: "המידע אינו מהווה ייעוץ השקעות, משפטי או מס",
     form_eyebrow: "בקשה פרטית",
     form_title: "ספרו לנו <em>מה צריך</em>.",
@@ -1201,16 +1162,13 @@ const I18N = {
     form_success_close: "סגור",
   },
   es: {
-    meta_title: "CRONCORE — El Círculo del Inversor",
-    meta_desc: "Red privada para operaciones, capital, estructura y acceso. Solo por invitación.",
-    brand_sub: "El Círculo del Inversor",
-    hero_eyebrow: "Red privada · por invitación",
-    hero_h1: "El Círculo del<br/><em>Inversor</em>.",
-    hero_lede: "Operaciones, capital, estructura y acceso — a través de un único canal privado de socios de confianza.",
-    hero_sub: "Envíe una solicitud breve. La canalizamos al socio adecuado en la red — pagos, inversiones, SPV, legal, concierge o contactos privados.",
+    meta_title: "CRONCORE — El Círculo de Socios",
+    meta_desc: "Un círculo privado de socios — pagos, inversiones, SPV, legal, concierge. Por invitación.",
+    brand_sub: "El Círculo de Socios",
+    hero_h1: "El Círculo de<br/><em>Socios</em>.",
+    hero_lede: "Pagos, inversiones, SPV, legal, concierge — a través de un único canal privado.",
     btn_apply: "Solicitar acceso",
-    cta_foot: "Acceso privado · respuesta en 48 horas",
-    footer_l1: "© 2026 CRONCORE · Red privada · Solo por invitación",
+    footer_l1: "© 2026 CRONCORE · Solo por invitación",
     footer_l2: "La información compartida no constituye asesoramiento de inversión, legal o fiscal",
     form_eyebrow: "Solicitud privada",
     form_title: "Cuéntanos <em>qué necesitas</em>.",
