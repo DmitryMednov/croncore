@@ -33,16 +33,23 @@ This bot is purely a notifier — it doesn't need to be the same as your eventua
 
 ### 2 · Add the bot to your partner group
 
-1. Open the Telegram group with your partners.
+Partner group invite (this is the one inquiries land in):
+**https://t.me/+LKvrheCHrUdjZDBi**
+
+The Bot API needs a numeric `chat_id`, not the invite link — the invite link only lets humans join. To get the id:
+
+1. Open the group from the link above and make sure you're an admin.
 2. Add the new bot as a member (Group → Add member → search by username).
-3. Send any message in the group so the bot can see at least one update.
-4. Get the group's `chat_id` by opening in a browser:
+3. Send any message in the group so the bot has at least one update to read.
+4. Open in a browser:
 
    ```
    https://api.telegram.org/bot<TOKEN>/getUpdates
    ```
 
-   Look for `"chat":{"id":-1001234567890,...}`. **Save the negative number** — that's your `CHAT_ID`. (Supergroups start with `-100`.)
+   Look for `"chat":{"id":-1001234567890,…}`. **Save the negative number** — that's your `CHAT_ID`. (Supergroups always start with `-100`.)
+
+If `getUpdates` returns an empty `result`, the bot hasn't seen anything yet — send another message in the group and refresh. If you've previously set a webhook on this bot you'll need to remove it first (`/deleteWebhook`), since webhooks and `getUpdates` are mutually exclusive.
 
 ### 3 · Deploy the Worker
 
