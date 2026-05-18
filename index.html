@@ -139,6 +139,49 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   background: radial-gradient(120% 80% at 50% 50%, transparent 50%, oklch(0.10 0.03 150 / .65) 100%);
 }
 
+/* Aurora — two soft colour fields drifting on top of the base atmosphere
+   so the backdrop never sits still. `screen` blend over the dark base
+   gives an additive-light feel; the layers move in opposite directions
+   on different schedules, with a slow scale-pulse on top of that. */
+.aurora, .aurora-2{
+  position: fixed; inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(70px) saturate(140%);
+  will-change: transform, opacity;
+}
+.aurora{
+  background:
+    radial-gradient(46% 38% at 30% 35%, oklch(0.58 0.18 150 / .55), transparent 60%),
+    radial-gradient(38% 30% at 72% 60%, oklch(0.66 0.14 130 / .42), transparent 70%);
+  opacity: .9;
+  animation: aurora-drift 32s ease-in-out infinite alternate;
+}
+.aurora-2{
+  background:
+    radial-gradient(40% 32% at 80% 22%, oklch(0.78 0.12 90 / .42), transparent 65%),
+    radial-gradient(32% 26% at 18% 82%, oklch(0.66 0.20 25 / .35), transparent 70%);
+  opacity: .8;
+  animation: aurora-drift-2 44s ease-in-out infinite alternate-reverse;
+  animation-delay: -12s;
+}
+@keyframes aurora-drift{
+  0%   { transform: translate3d(-3%, -2%, 0) scale(1);    }
+  35%  { transform: translate3d( 6%, -6%, 0) scale(1.12); }
+  70%  { transform: translate3d( 2%,  7%, 0) scale(.94);  }
+  100% { transform: translate3d(-5%,  4%, 0) scale(1.06); }
+}
+@keyframes aurora-drift-2{
+  0%   { transform: translate3d( 4%,  3%, 0) scale(1.05); }
+  40%  { transform: translate3d(-6%,  5%, 0) scale(.92);  }
+  75%  { transform: translate3d( 3%, -4%, 0) scale(1.18); }
+  100% { transform: translate3d( 7%,  1%, 0) scale(.98);  }
+}
+@media (prefers-reduced-motion: reduce){
+  .aurora, .aurora-2{ animation: none; }
+}
+
 /* =========================================================
    LAYOUT — single 100svh slide, never scrolls
    ========================================================= */
@@ -226,6 +269,37 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   margin: 0 auto;
   width: 100%;
 }
+.hero-crest{
+  position: relative;
+  width: clamp(72px, 9vw, 116px);
+  aspect-ratio: 1 / 1;
+  margin-bottom: clamp(2px, 1vh, 10px);
+  isolation: isolate;
+}
+.hero-crest img{
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  display: block;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 18px 30px rgba(0,0,0,.55))
+    drop-shadow(0 2px 0 rgba(255,255,255,.04));
+}
+.hero-crest::after{
+  content:""; position: absolute; inset: -28%;
+  z-index: 0;
+  background: radial-gradient(58% 58% at 50% 50%, oklch(0.58 0.16 150 / .55), transparent 70%);
+  filter: blur(22px);
+  animation: crest-glow 4.2s ease-in-out infinite alternate;
+}
+@keyframes crest-glow{
+  from{ opacity: .55; transform: scale(.95); }
+  to  { opacity: 1;   transform: scale(1.05); }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-crest::after{ animation: none; opacity: .8; transform: none; }
+}
+
 .eyebrow{
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
@@ -576,6 +650,8 @@ html[dir="rtl"] .field select{
 <body>
 
 <div class="atmosphere"></div>
+<div class="aurora" aria-hidden="true"></div>
+<div class="aurora-2" aria-hidden="true"></div>
 
 <main class="slide">
 
@@ -596,6 +672,9 @@ html[dir="rtl"] .field select{
   </header>
 
   <section class="hero">
+    <div class="hero-crest" aria-hidden="true">
+      <img src="assets/logo-croncore.png" alt="" />
+    </div>
     <span class="eyebrow" data-i18n="hero_eyebrow">Private network · by invitation</span>
     <h1 data-i18n-html="hero_h1">The Investor's<br/><em>Circle</em>.</h1>
     <p class="lede" data-i18n="hero_lede">Deals, capital, structure and access — through one private channel of trusted partners.</p>
