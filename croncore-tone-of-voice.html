@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Croncore — Tone of Voice · Partners only</title>
+<style>
+/* ========================================
+   CRONCORE TONE OF VOICE
+   Glass design system · v0.1
+   ======================================== */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Forest scale */
+  --forest-950: oklch(0.14 0.04 150);
+  --forest-900: oklch(0.18 0.05 150);
+  --forest-800: oklch(0.28 0.06 150);
+  --forest-700: oklch(0.38 0.06 150);
+  --forest-600: oklch(0.48 0.06 150);
+  --forest-500: oklch(0.58 0.05 150);
+  --forest-400: oklch(0.68 0.05 150);
+  --forest-300: oklch(0.78 0.05 150);
+  --forest-200: oklch(0.88 0.04 150);
+  --forest-100: oklch(0.94 0.025 150);
+  --forest-50:  oklch(0.97 0.015 150);
+
+  /* Clay — accent */
+  --clay-700: oklch(0.40 0.13 45);
+  --clay-600: oklch(0.55 0.14 45);
+  --clay-500: oklch(0.70 0.16 45);
+  --clay-400: oklch(0.78 0.14 45);
+  --clay-300: oklch(0.86 0.10 45);
+
+  /* Atmosphere */
+  --moss: oklch(0.78 0.13 150);
+  --sun:  oklch(0.85 0.11 90);
+  --clay-spot: oklch(0.72 0.16 45);
+  --sky:  oklch(0.60 0.14 200);
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Geist', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Newsreader', 'Charter', 'Georgia', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Radii */
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+  --r-2xl: 44px;
+}
+
+/* Dark theme (default) */
+[data-theme="dark"] {
+  --bg-base: var(--forest-950);
+  --bg-elev: rgba(255, 255, 255, 0.04);
+  --bg-elev-2: rgba(255, 255, 255, 0.06);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-border-strong: rgba(255, 255, 255, 0.16);
+  --text-primary: oklch(0.96 0.01 150);
+  --text-secondary: oklch(0.78 0.02 150);
+  --text-muted: oklch(0.58 0.02 150);
+  --text-accent: var(--clay-400);
+  --hairline: rgba(255, 255, 255, 0.08);
+  --code-bg: rgba(255, 255, 255, 0.06);
+  --bad-bg: rgba(220, 140, 90, 0.08);
+  --bad-text: oklch(0.82 0.08 45);
+  --good-bg: rgba(180, 210, 160, 0.08);
+  --good-text: oklch(0.92 0.04 150);
+}
+
+[data-theme="light"] {
+  --bg-base: oklch(0.97 0.015 150);
+  --bg-elev: rgba(255, 255, 255, 0.55);
+  --bg-elev-2: rgba(255, 255, 255, 0.70);
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(31, 61, 44, 0.10);
+  --glass-border-strong: rgba(31, 61, 44, 0.18);
+  --text-primary: var(--forest-900);
+  --text-secondary: var(--forest-700);
+  --text-muted: var(--forest-600);
+  --text-accent: var(--clay-600);
+  --hairline: rgba(31, 61, 44, 0.10);
+  --code-bg: rgba(31, 61, 44, 0.05);
+  --bad-bg: rgba(185, 106, 58, 0.06);
+  --bad-text: oklch(0.42 0.10 45);
+  --good-bg: rgba(45, 90, 62, 0.06);
+  --good-text: var(--forest-800);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.4s ease, color 0.3s ease;
+}
+
+/* Atmosphere — radial wash behind everything */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20% -10%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 18%, var(--moss) 0%, transparent 35%),
+    radial-gradient(circle at 85% 22%, var(--sun) 0%, transparent 38%),
+    radial-gradient(circle at 75% 80%, var(--clay-spot) 0%, transparent 40%),
+    radial-gradient(circle at 18% 85%, var(--sky) 0%, transparent 38%);
+  opacity: 0.35;
+  filter: blur(80px);
+  transition: opacity 0.4s ease;
+}
+
+[data-theme="light"] body::before { opacity: 0.55; }
+
+/* ============ CHROME ============ */
+.chrome {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.chrome-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.brand-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 50%),
+    var(--forest-800);
+  border: 1px solid var(--glass-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: oklch(0.92 0.04 150);
+}
+
+.brand-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--hairline);
+}
+
+.brand-context {
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.chrome-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.chrome-nav a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  transition: color 0.2s, background 0.2s;
+}
+
+.chrome-nav a:hover {
+  color: var(--text-primary);
+  background: var(--bg-elev);
+}
+
+.chrome-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.pill:hover {
+  border-color: var(--glass-border-strong);
+  color: var(--text-primary);
+}
+
+.pill.active {
+  background: var(--bg-elev-2);
+  color: var(--text-primary);
+}
+
+.lang-toggle {
+  display: flex;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+}
+
+.lang-toggle button {
+  background: transparent;
+  border: 0;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  transition: color 0.2s, background 0.2s;
+}
+
+.lang-toggle button.active {
+  background: var(--bg-elev-2);
+  color: var(--text-primary);
+}
+
+.lang-toggle button:hover:not(.active) {
+  color: var(--text-secondary);
+}
+
+/* ============ LAYOUT ============ */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px 120px;
+}
+
+section {
+  padding: 96px 0 32px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+section:last-of-type {
+  border-bottom: 0;
+}
+
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+h1.hero {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  margin-bottom: 32px;
+  max-width: 900px;
+}
+
+h2.section-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  margin-bottom: 24px;
+  max-width: 800px;
+}
+
+h3.subsection-title {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  margin: 32px 0 12px;
+  color: var(--text-primary);
+}
+
+.serif-em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--text-accent);
+}
+
+.lede {
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.55;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 720px;
+  margin-bottom: 40px;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 64px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.meta-row strong {
+  display: block;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-top: 4px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+p { margin-bottom: 14px; color: var(--text-secondary); }
+p em { font-family: var(--font-serif); font-style: italic; color: var(--text-primary); }
+
+ul, ol { margin: 0 0 18px 20px; }
+li { margin-bottom: 8px; color: var(--text-secondary); }
+
+a { color: var(--text-accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+a:hover { opacity: 0.7; }
+
+code, .mono {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+
+/* ============ PRINCIPLES ============ */
+.principles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.principle {
+  padding: 32px;
+  border-radius: var(--r-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.principle:hover {
+  border-color: var(--glass-border-strong);
+  transform: translateY(-2px);
+}
+
+.principle-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-accent);
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+}
+
+.principle-title {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.principle-body {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* ============ ATTRIBUTES TABLE ============ */
+.attr-table {
+  margin-top: 40px;
+  border-top: 1px solid var(--hairline);
+}
+
+.attr-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 140px;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--hairline);
+  align-items: start;
+}
+
+.attr-name {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.005em;
+}
+
+.attr-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.attr-dose {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-align: right;
+}
+
+.attr-dose-bar {
+  display: inline-block;
+  width: 90px;
+  height: 4px;
+  background: var(--hairline);
+  border-radius: 2px;
+  position: relative;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.attr-dose-bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--text-accent);
+  border-radius: 2px;
+  width: var(--dose, 50%);
+}
+
+/* ============ LEXICON GRID ============ */
+.lex-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 40px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  backdrop-filter: blur(28px);
+}
+
+.lex-header {
+  padding: 14px 24px;
+  background: var(--bg-elev-2);
+  color: var(--text-primary);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.lex-header:first-child { border-right: 1px solid var(--hairline); }
+
+.lex-cell {
+  padding: 14px 24px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.lex-cell.use {
+  border-right: 1px solid var(--hairline);
+  background: var(--good-bg);
+}
+
+.lex-cell.avoid {
+  color: var(--text-muted);
+  background: var(--bad-bg);
+  font-style: italic;
+}
+
+.lex-grid > .lex-cell:nth-last-child(-n+2) { border-bottom: 0; }
+
+/* ============ EXPANDABLE EXAMPLE ============ */
+.example {
+  margin: 20px 0;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  transition: border-color 0.3s;
+}
+
+.example:hover { border-color: var(--glass-border-strong); }
+
+.example-toggle {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 16px 24px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  transition: background 0.2s;
+}
+
+.example-toggle:hover { background: var(--bg-elev); }
+
+.example-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.example-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.example-title {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.example-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.example.open .example-icon { transform: rotate(45deg); }
+
+.example-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.example.open .example-content { max-height: 600px; }
+
+.example-bad, .example-good {
+  padding: 18px 24px;
+  font-size: 14px;
+  line-height: 1.55;
+  border-top: 1px solid var(--hairline);
+  position: relative;
+}
+
+.example-bad {
+  background: var(--bad-bg);
+  color: var(--bad-text);
+  font-style: italic;
+}
+
+.example-good {
+  background: var(--good-bg);
+  color: var(--good-text);
+}
+
+.example-bad::before, .example-good::before {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 600;
+  margin-right: 10px;
+  letter-spacing: 0.05em;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.example-bad::before {
+  content: 'AVOID';
+  background: rgba(185, 106, 58, 0.18);
+  color: var(--clay-500);
+}
+
+.example-good::before {
+  content: 'USE';
+  background: rgba(120, 170, 120, 0.18);
+  color: oklch(0.65 0.13 150);
+}
+
+/* ============ CHANNEL BLOCK ============ */
+.channel {
+  padding-top: 40px;
+  margin-top: 40px;
+  border-top: 1px solid var(--hairline);
+}
+
+.channel:first-of-type {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: 0;
+}
+
+.channel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.channel-title {
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+}
+
+.channel-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.channel-intro {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+
+/* ============ TWO-COL DO/DONT ============ */
+.do-dont {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.do-dont-col {
+  padding: 28px 32px;
+  border-radius: var(--r-lg);
+  backdrop-filter: blur(20px);
+}
+
+.do-col {
+  background: var(--good-bg);
+  border: 1px solid rgba(120, 170, 120, 0.20);
+}
+
+.dont-col {
+  background: var(--bad-bg);
+  border: 1px solid rgba(220, 140, 90, 0.20);
+}
+
+.do-dont-col h4 {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.do-col h4 { color: oklch(0.65 0.13 150); }
+.dont-col h4 { color: var(--clay-500); }
+
+.do-dont-col ul {
+  margin-left: 18px;
+  margin-bottom: 0;
+}
+
+.do-dont-col li {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ============ CALLOUT ============ */
+.callout {
+  margin: 56px 0 32px;
+  padding: 40px 44px;
+  border-radius: var(--r-xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border-strong);
+  backdrop-filter: blur(28px) saturate(160%);
+  position: relative;
+  overflow: hidden;
+}
+
+.callout::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 50%, var(--clay-spot) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, var(--moss) 0%, transparent 50%);
+  opacity: 0.15;
+  z-index: -1;
+}
+
+.callout-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-accent);
+  margin-bottom: 14px;
+}
+
+.callout-text {
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+/* ============ TOC ============ */
+.toc {
+  margin-top: 40px;
+}
+
+.toc-item {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--hairline);
+  text-decoration: none;
+  color: var(--text-primary);
+  border-bottom-style: solid;
+  transition: padding-left 0.2s;
+}
+
+.toc-item:hover { padding-left: 8px; }
+
+.toc-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  flex: 0 0 40px;
+}
+
+.toc-title {
+  font-size: 16px;
+  font-weight: 400;
+  flex: 1;
+}
+
+/* ============ HERO MARK ============ */
+.hero-section {
+  padding-top: 80px;
+}
+
+.hero-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-meta-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--clay-500);
+  box-shadow: 0 0 12px var(--clay-500);
+}
+
+/* ============ FOOTER ============ */
+footer {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+footer .closing-line {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+footer .closing-line em {
+  font-family: var(--font-serif);
+  color: var(--text-accent);
+}
+
+/* ============ LANG SWITCHING ============ */
+[data-lang="en"] [lang="ru"] { display: none; }
+[data-lang="ru"] [lang="en"] { display: none; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .chrome-nav { display: none; }
+  .chrome-inner { padding: 12px 20px; }
+  main { padding: 0 20px 80px; }
+  section { padding: 64px 0 24px; }
+  .meta-row { gap: 20px; }
+  .attr-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .attr-dose { text-align: left; }
+  .lex-grid { grid-template-columns: 1fr; }
+  .lex-cell.use { border-right: 0; }
+  .do-dont { grid-template-columns: 1fr; }
+  .callout { padding: 28px 24px; }
+  .callout-text { font-size: 18px; }
+  .principle { padding: 24px; }
+  .brand-context { display: none; }
+}
+
+/* Selection */
+::selection {
+  background: var(--clay-500);
+  color: var(--forest-950);
+}
+</style>
+</head>
+<body>
+
+<!-- ============ CHROME ============ -->
+<header class="chrome">
+  <div class="chrome-inner">
+    <div class="brand">
+      <div class="brand-mark">C</div>
+      <span lang="en">Croncore</span>
+      <span lang="ru">Croncore</span>
+      <div class="brand-divider"></div>
+      <span class="brand-context" lang="en">Tone of Voice · Partners</span>
+      <span class="brand-context" lang="ru">Голос бренда · Партнёры</span>
+    </div>
+
+    <nav class="chrome-nav">
+      <a href="#principles" lang="en">Principles</a>
+      <a href="#principles" lang="ru">Принципы</a>
+      <a href="#character" lang="en">Character</a>
+      <a href="#character" lang="ru">Характер</a>
+      <a href="#lexicon" lang="en">Lexicon</a>
+      <a href="#lexicon" lang="ru">Лексикон</a>
+      <a href="#channels" lang="en">Channels</a>
+      <a href="#channels" lang="ru">Каналы</a>
+      <a href="#checklist" lang="en">Checklist</a>
+      <a href="#checklist" lang="ru">Чек-лист</a>
+    </nav>
+
+    <div class="chrome-controls">
+      <div class="lang-toggle" role="tablist" aria-label="Language">
+        <button type="button" data-lang-btn="en" class="active">EN</button>
+        <button type="button" data-lang-btn="ru">RU</button>
+      </div>
+      <button type="button" class="pill" id="themeToggle" aria-label="Toggle theme">
+        <span id="themeIcon">◐</span>
+        <span lang="en" id="themeLabelEn">Light</span>
+        <span lang="ru" id="themeLabelRu">Свет</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MAIN ============ -->
+<main>
+
+<!-- HERO -->
+<section class="hero-section" id="top">
+  <div class="hero-meta">
+    <span class="hero-meta-dot"></span>
+    <span lang="en">Tone of Voice · v0.1 · May 2026 · Working draft</span>
+    <span lang="ru">Голос бренда · v0.1 · Май 2026 · Рабочая версия</span>
+  </div>
+
+  <h1 class="hero" lang="en">A voice that <span class="serif-em">holds</span><br>the circle together.</h1>
+  <h1 class="hero" lang="ru">Голос, <span class="serif-em">сшивающий</span><br>круг.</h1>
+
+  <p class="lede" lang="en">
+    How Croncore speaks to partners, investors, and those entering the circle for the first time — on the landing, in correspondence, inside the product, and in public.
+  </p>
+  <p class="lede" lang="ru">
+    Как Croncore говорит с партнёрами, инвесторами и теми, кто заходит в круг впервые — на лендинге, в письме, внутри продукта и в публичном поле.
+  </p>
+
+  <div class="meta-row">
+    <div lang="en">Audience<strong>Partners · Investors</strong></div>
+    <div lang="en">Surfaces<strong>Web · Mail · UI · Social</strong></div>
+    <div lang="en">Posture<strong>Soft, recursive, exact</strong></div>
+    <div lang="en">Status<strong>Working draft</strong></div>
+
+    <div lang="ru">Аудитория<strong>Партнёры · Инвесторы</strong></div>
+    <div lang="ru">Поверхности<strong>Веб · Почта · UI · Соцсети</strong></div>
+    <div lang="ru">Постура<strong>Мягко, рекурсивно, точно</strong></div>
+    <div lang="ru">Статус<strong>Рабочая версия</strong></div>
+  </div>
+
+  <div class="toc">
+    <a class="toc-item" href="#audience">
+      <span class="toc-num">01</span>
+      <span class="toc-title" lang="en">Who we are and <span class="serif-em">who</span> we speak to</span>
+      <span class="toc-title" lang="ru">Кто мы и <span class="serif-em">с кем</span> говорим</span>
+    </a>
+    <a class="toc-item" href="#principles">
+      <span class="toc-num">02</span>
+      <span class="toc-title" lang="en">Three <span class="serif-em">principles</span> of voice</span>
+      <span class="toc-title" lang="ru">Три <span class="serif-em">принципа</span> голоса</span>
+    </a>
+    <a class="toc-item" href="#character">
+      <span class="toc-num">03</span>
+      <span class="toc-title" lang="en">Character: seven <span class="serif-em">attributes</span></span>
+      <span class="toc-title" lang="ru">Характер: семь <span class="serif-em">атрибутов</span></span>
+    </a>
+    <a class="toc-item" href="#lexicon">
+      <span class="toc-num">04</span>
+      <span class="toc-title" lang="en">Lexicon: <span class="serif-em">what</span> we say, <span class="serif-em">what</span> we avoid</span>
+      <span class="toc-title" lang="ru">Лексикон: <span class="serif-em">что</span> говорим, <span class="serif-em">чего</span> избегаем</span>
+    </a>
+    <a class="toc-item" href="#channels">
+      <span class="toc-num">05</span>
+      <span class="toc-title" lang="en">Channels: landing, mail, UI, <span class="serif-em">social</span></span>
+      <span class="toc-title" lang="ru">Каналы: лендинг, письма, UI, <span class="serif-em">соцсети</span></span>
+    </a>
+    <a class="toc-item" href="#situations">
+      <span class="toc-num">06</span>
+      <span class="toc-title" lang="en">Voice in <span class="serif-em">difficult</span> moments</span>
+      <span class="toc-title" lang="ru">Голос в сложных <span class="serif-em">моментах</span></span>
+    </a>
+    <a class="toc-item" href="#checklist">
+      <span class="toc-num">07</span>
+      <span class="toc-title" lang="en"><span class="serif-em">Checklist</span> before you send</span>
+      <span class="toc-title" lang="ru"><span class="serif-em">Чек-лист</span> перед отправкой</span>
+    </a>
+  </div>
+</section>
+
+<!-- 01 AUDIENCE -->
+<section id="audience">
+  <div class="section-num">— 01 · <span lang="en">Who and whom</span><span lang="ru">Кто и с кем</span></div>
+
+  <h2 class="section-title" lang="en">A closed network speaking as <span class="serif-em">one</span> person.</h2>
+  <h2 class="section-title" lang="ru">Закрытая сеть, говорящая <span class="serif-em">как</span> один человек.</h2>
+
+  <p class="lede" lang="en">
+    Croncore is a private channel of access: deals, capital, structures, contacts. Inside — partners across payments, investments, SPV, legal, concierge. Outside — those who arrived by invitation with a concrete request. Between them — our voice.
+  </p>
+  <p class="lede" lang="ru">
+    Croncore — частный канал доступа: сделки, капитал, структуры, контакты. Внутри — партнёры по фронтам payments, investments, SPV, legal, concierge. Снаружи — те, кто пришёл по приглашению с конкретным запросом. Между ними — наш голос.
+  </p>
+
+  <h3 class="subsection-title" lang="en">Who we're speaking with</h3>
+  <h3 class="subsection-title" lang="ru">Кто наш собеседник</h3>
+
+  <p lang="en">
+    Not a "lead" and not a "client." Someone who already has capital, experience, and a network — and who came for what they're missing: the <em>right</em> partner, the <em>right</em> structure, the <em>right</em> contact. They value time over money, and silence over noise.
+  </p>
+  <p lang="ru">
+    Это не «лид» и не «клиент». Это человек, у которого уже есть капитал, опыт и сеть — и который пришёл за тем, чего ему не хватает: за <em>правильным</em> партнёром, <em>правильной</em> структурой, <em>правильным</em> контактом. Он ценит время больше денег и тишину больше шума.
+  </p>
+
+  <h3 class="subsection-title" lang="en">What they respond to</h3>
+  <h3 class="subsection-title" lang="ru">На что он реагирует</h3>
+
+  <ul lang="en">
+    <li>Specifics instead of promises. "Response within 48 hours" instead of "we'll be in touch soon."</li>
+    <li>Restraint instead of enthusiasm. Exclamation marks and emoji read as a signal of "wrong circle."</li>
+    <li>Respect for their context. We don't explain SPV or DeFi to them — they know.</li>
+    <li>Honest limits. "Not our profile" carries more weight than trying to take any task.</li>
+  </ul>
+  <ul lang="ru">
+    <li>Конкретику вместо обещаний. «Ответ в течение 48 часов» вместо «свяжемся в ближайшее время».</li>
+    <li>Сдержанность вместо энтузиазма. Восклицательные знаки и эмодзи — сигнал «не наш круг».</li>
+    <li>Уважение к контексту. Мы не объясняем, что такое SPV или DeFi — он знает.</li>
+    <li>Честные границы. «Это не наш профиль» весит больше, чем попытка взять любую задачу.</li>
+  </ul>
+
+  <h3 class="subsection-title" lang="en">What they should never feel</h3>
+  <h3 class="subsection-title" lang="ru">Что он не должен почувствовать</h3>
+
+  <ul lang="en">
+    <li>That they're being "processed." No funnels, no follow-ups, no selling phrases.</li>
+    <li>That we're rushing to close. Speed lives in execution, not rhetoric.</li>
+    <li>That they're one of many. Even a templated reply should sound like it was written to them.</li>
+  </ul>
+  <ul lang="ru">
+    <li>Что его «обрабатывают». Никаких воронок, follow-up'ов и продающих формулировок.</li>
+    <li>Что мы спешим закрыть сделку. Скорость — в исполнении, не в риторике.</li>
+    <li>Что он один из многих. Даже шаблонное письмо должно звучать так, будто написано ему.</li>
+  </ul>
+</section>
+
+<!-- 02 PRINCIPLES -->
+<section id="principles">
+  <div class="section-num">— 02 · <span lang="en">Principles</span><span lang="ru">Принципы</span></div>
+
+  <h2 class="section-title" lang="en">Three things our voice <span class="serif-em">always</span> does.</h2>
+  <h2 class="section-title" lang="ru">Три вещи, которые наш голос <span class="serif-em">делает всегда</span>.</h2>
+
+  <p class="lede" lang="en">
+    When tokens don't decide how to write — these are the tie-breakers. They mirror the brand's three principles: <em>soft form, exact meaning</em>; <em>light through material</em>; <em>quiet by default</em>.
+  </p>
+  <p class="lede" lang="ru">
+    Когда непонятно, как написать — это три тай-брейкера. Они зеркалят принципы бренда: <em>soft form, exact meaning</em>; <em>light through material</em>; <em>quiet by default</em>.
+  </p>
+
+  <div class="principles">
+    <div class="principle">
+      <div class="principle-num">— 01</div>
+      <div class="principle-title" lang="en">Soft form, <span class="serif-em">exact</span> meaning.</div>
+      <div class="principle-title" lang="ru">Мягкая форма, <span class="serif-em">точный</span> смысл.</div>
+      <div class="principle-body" lang="en">
+        Sentences sound calm — no pressure, no sales jargon. But behind each one: a number, a deadline, a direction, a jurisdiction. No "synergies," no "scaling," no "breakthrough solutions." If you can remove a noun and the meaning stays the same — that noun was unnecessary.
+      </div>
+      <div class="principle-body" lang="ru">
+        Фразы звучат спокойно, без давления и без жаргона продавца. Но за каждой — конкретика: цифра, срок, имя направления, юрисдикция. Никаких «синергий», «масштабирования» и «прорывных решений». Если из предложения убрать одно существительное и смысл не изменится — это существительное лишнее.
+      </div>
+    </div>
+
+    <div class="principle">
+      <div class="principle-num">— 02</div>
+      <div class="principle-title" lang="en">Light <span class="serif-em">through</span> material.</div>
+      <div class="principle-title" lang="ru">Свет <span class="serif-em">сквозь</span> материал.</div>
+      <div class="principle-body" lang="en">
+        The voice doesn't shine on itself — it illuminates the other person and their task. We rarely say "we"; more often "you," "your request," "a partner in the network." Croncore is a channel, not a stage. In an email, the partner should see their task reflected — not our facade.
+      </div>
+      <div class="principle-body" lang="ru">
+        Голос не светит сам — он подсвечивает собеседника и его задачу. Мы редко говорим «мы»; чаще — «вы», «ваш запрос», «партнёр в сети». Croncore выступает каналом, не сценой. В письме партнёр должен увидеть отражение своей задачи, а не наш фасад.
+      </div>
+    </div>
+
+    <div class="principle">
+      <div class="principle-num">— 03</div>
+      <div class="principle-title" lang="en">Quiet by <span class="serif-em">default</span>.</div>
+      <div class="principle-title" lang="ru">Тихо <span class="serif-em">по умолчанию</span>.</div>
+      <div class="principle-body" lang="en">
+        No caps lock, no exclamation marks, no emoji, no "unique," "exclusive," or "revolutionary." Exclusivity is proven by form: a short email, calm typography, the absence of rush — never by saying so. The voice gets loud only when something has broken and needs intervention. We borrowed this rule from the design system: Clay only appears on errors.
+      </div>
+      <div class="principle-body" lang="ru">
+        Никаких капслоков, восклицательных знаков, эмодзи и слов вроде «уникальный», «эксклюзивный», «революционный». Эксклюзивность доказывается не словом, а формой: коротким письмом, спокойной типографикой, отсутствием спешки. Громко становится только тогда, когда что-то сломалось и требует вмешательства — это правило мы взяли из дизайн-системы (Clay появляется только на ошибках).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 CHARACTER -->
+<section id="character">
+  <div class="section-num">— 03 · <span lang="en">Character</span><span lang="ru">Характер</span></div>
+
+  <h2 class="section-title" lang="en">Seven <span class="serif-em">attributes</span> the voice is known by.</h2>
+  <h2 class="section-title" lang="ru">Семь <span class="serif-em">атрибутов</span>, по которым узнаётся голос.</h2>
+
+  <p class="lede" lang="en">
+    Not marketing adjectives — levers. Each comes with a "dose": not just "friendly," but "friendly at 3 out of 10." Overdo any one of them and the voice breaks.
+  </p>
+  <p class="lede" lang="ru">
+    Это не прилагательные для маркетинга — это рычаги. Каждый из них имеет «дозу»: не «дружелюбный», а «дружелюбный на 3 из 10». Перебор по любому из них ломает голос.
+  </p>
+
+  <div class="attr-table">
+    <div class="attr-row">
+      <div class="attr-name" lang="en">Restrained</div>
+      <div class="attr-name" lang="ru">Сдержанный</div>
+      <div class="attr-desc" lang="en">Not cold — restrained. We're glad to hear from them, but we don't show it with exclamation. A short warm greeting, then straight to the matter.</div>
+      <div class="attr-desc" lang="ru">Не холодный — именно сдержанный. Мы рады собеседнику, но не показываем это восклицанием. Тёплое короткое приветствие, дальше — по делу.</div>
+      <div class="attr-dose">
+        <div class="attr-dose-bar" style="--dose: 80%;"></div>
+        8/10
+      </div>
+    </div>
+
+    <div class="attr-row">
+      <div class="attr-name" lang="en">Precise</div>
+      <div class="attr-name" lang="ru">Точный</div>
+      <div class="attr-desc" lang="en">Numbers, deadlines, jurisdictions, direction names — wherever they exist. No "soon," "shortly," "possibly." If no deadline exists, say so: "the timing depends on the partner, we'll tell you when we know."</div>
+      <div class="attr-desc" lang="ru">Цифры, сроки, юрисдикции, имена направлений — там, где они есть. Никаких «вскоре», «в ближайшее время», «возможно». Если срока нет — так и пишем: «срок зависит от партнёра, ответим, когда узнаем».</div>
+      <div class="attr-dose">
+        <div class="attr-dose-bar" style="--dose: 100%;"></div>
+        10/10
+      </div>
+    </div>
+
+    <div class="attr-row">
+      <div class="attr-name" lang="en">Confident</div>
+      <div class="attr-name" lang="ru">Уверенный</div>
+      <div class="attr-desc" lang="en">Statements, not guesses. "Passing this to our payments partner" instead of "we'll try to find someone." Confidence is in the clarity of the process — not in promising outcomes.</div>
+      <div class="attr-desc" lang="ru">Утверждения, а не предположения. «Передадим партнёру в payments» вместо «попробуем найти кого-нибудь». Уверенность — не в обещаниях результата, а в чёткости процесса.</div>
+      <div class="attr-dose">
+        <div class="attr-dose-bar" style="--dose: 90%;"></div>
+        9/10
+      </div>
+    </div>
+
+    <div class="attr-row">
+      <div class="attr-name" lang="en">Respectful</div>
+      <div class="attr-name" lang="ru">Уважительный</div>
+      <div class="attr-desc" lang="en">Formal address by default. We don't explain the obvious. We don't apologise where apology isn't required. We don't thank for every message — gratitude loses weight if repeated.</div>
+      <div class="attr-desc" lang="ru">Обращение на «вы» по умолчанию. Не объясняем очевидное. Не извиняемся за то, что не требует извинений. Не благодарим за каждое сообщение — благодарность теряет вес.</div>
+      <div class="attr-dose">
+        <div class="attr-dose-bar" style="--dose: 90%;"></div>
+        9/10
+      </div>
+    </div>
+
+    <div class="attr-row">
+      <div class="attr-name" lang="en">Concise</div>
+      <div class="attr-name" lang="ru">Лаконичный</div>
+      <div class="attr-desc" lang="en">A three-paragraph email beats a five-paragraph one. A five-word headline beats a ten-word one. One idea per landing block. One action per button.</div>
+      <div class="attr-desc" lang="ru">Письмо в три абзаца лучше письма в пять. Заголовок в пять слов лучше заголовка в десять. На лендинге одна мысль на блок. В UI — одно действие на кнопку.</div>
+      <div class="attr-dose">
+        <div class="attr-dose-bar" style="--dose: 90%;"></div>
+        9/10
+      </div>
+    </div>
+
+    <div class="attr-row">
+      <div class="attr-name" lang="en">Warm</div>
+      <div class="attr-name" lang="ru">Тёплый</div>
+      <div class="attr-desc" lang="en">Warmth is background, not foreground. It lives in word choice, in one personal line at the start or end, in the willingness to call things by their names — not in smileys or compliments.</div>
+      <div class="attr-desc" lang="ru">Тепло — фоновое, не основное. Оно в выборе слов, в одной личной фразе в начале или конце, в готовности назвать вещи своими именами. Не в смайликах и не в комплиментах.</div>
+      <div class="attr-dose">
+        <div class="attr-dose-bar" style="--dose: 40%;"></div>
+        4/10
+      </div>
+    </div>
+
+    <div class="attr-row">
+      <div class="attr-name" lang="en">Occasionally <span class="serif-em">witty</span></div>
+      <div class="attr-name" lang="ru">Иногда <span class="serif-em">остроумный</span></div>
+      <div class="attr-desc" lang="en">Very rarely — in public posts or on the landing — a dry observation or clever turn of phrase is allowed. Never in partner correspondence. Never in system messages. Wit that has to be explained is no longer wit.</div>
+      <div class="attr-desc" lang="ru">Очень редко — в публичных постах или на лендинге — допустимо сухое наблюдение или умная игра слов. Никогда — в письме партнёру и никогда — в системных сообщениях. Остроумие, которое нужно объяснять, — уже не остроумие.</div>
+      <div class="attr-dose">
+        <div class="attr-dose-bar" style="--dose: 20%;"></div>
+        2/10
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 LEXICON -->
+<section id="lexicon">
+  <div class="section-num">— 04 · <span lang="en">Lexicon</span><span lang="ru">Лексикон</span></div>
+
+  <h2 class="section-title" lang="en">What we say, what we <span class="serif-em">avoid</span>.</h2>
+  <h2 class="section-title" lang="ru">Что говорим и <span class="serif-em">чего</span> избегаем.</h2>
+
+  <p class="lede" lang="en">
+    Words shape expectations. One wrong verb in the first email — and the reader already sees a mass-mailing in front of them, not a personal note.
+  </p>
+  <p class="lede" lang="ru">
+    Слова формируют ожидания. Один неправильный глагол в первом письме — и собеседник уже видит перед собой массовую рассылку, а не личное обращение.
+  </p>
+
+  <!-- EN lexicon -->
+  <div class="lex-grid" lang="en">
+    <div class="lex-header">Use</div>
+    <div class="lex-header">Avoid</div>
+
+    <div class="lex-cell use">circle, network, channel, partner</div>
+    <div class="lex-cell avoid">team, we're glad, our clients, users</div>
+
+    <div class="lex-cell use">request, direction, jurisdiction</div>
+    <div class="lex-cell avoid">application, ticket, inquiry, case</div>
+
+    <div class="lex-cell use">pass to a partner, connect with</div>
+    <div class="lex-cell avoid">process the request, add to the funnel</div>
+
+    <div class="lex-cell use">response within 48 hours</div>
+    <div class="lex-cell avoid">we'll be in touch shortly, soon</div>
+
+    <div class="lex-cell use">by invitation, private</div>
+    <div class="lex-cell avoid">exclusive, elite, premium, VIP</div>
+
+    <div class="lex-cell use">structure, deal, instrument</div>
+    <div class="lex-cell avoid">product, solution, offer, package</div>
+
+    <div class="lex-cell use">not our profile</div>
+    <div class="lex-cell avoid">unfortunately, we cannot help</div>
+
+    <div class="lex-cell use">quietly, precisely, simply</div>
+    <div class="lex-cell avoid">revolutionary, groundbreaking, unique</div>
+
+    <div class="lex-cell use">partner in payments / in legal</div>
+    <div class="lex-cell avoid">specialist, expert, manager</div>
+
+    <div class="lex-cell use">thanks for the context</div>
+    <div class="lex-cell avoid">thank you for contacting our company</div>
+  </div>
+
+  <!-- RU lexicon -->
+  <div class="lex-grid" lang="ru">
+    <div class="lex-header">Используем</div>
+    <div class="lex-header">Избегаем</div>
+
+    <div class="lex-cell use">круг, сеть, канал, партнёр</div>
+    <div class="lex-cell avoid">команда, мы рады, наши клиенты, юзеры</div>
+
+    <div class="lex-cell use">запрос, направление, юрисдикция</div>
+    <div class="lex-cell avoid">заявка, тикет, обращение, кейс</div>
+
+    <div class="lex-cell use">передать партнёру, свести с</div>
+    <div class="lex-cell avoid">обработать запрос, подключить к воронке</div>
+
+    <div class="lex-cell use">ответим в течение 48 часов</div>
+    <div class="lex-cell avoid">свяжемся в ближайшее время, скоро</div>
+
+    <div class="lex-cell use">по приглашению, закрытый</div>
+    <div class="lex-cell avoid">эксклюзивный, элитный, премиальный, VIP</div>
+
+    <div class="lex-cell use">структура, сделка, инструмент</div>
+    <div class="lex-cell avoid">продукт, решение, оффер, пакет</div>
+
+    <div class="lex-cell use">это не наш профиль</div>
+    <div class="lex-cell avoid">к сожалению, мы не сможем помочь</div>
+
+    <div class="lex-cell use">просто, точно, тихо</div>
+    <div class="lex-cell avoid">революционный, прорывной, уникальный</div>
+
+    <div class="lex-cell use">партнёр в payments / в legal</div>
+    <div class="lex-cell avoid">специалист, эксперт, менеджер</div>
+
+    <div class="lex-cell use">спасибо за контекст</div>
+    <div class="lex-cell avoid">благодарим за обращение в нашу компанию</div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label" lang="en">— The one-word rule</div>
+    <div class="callout-label" lang="ru">— Правило одного слова</div>
+    <div class="callout-text" lang="en">If a word can be removed and the meaning stays — <span class="serif-em">remove it</span>. This is the most common way to bring any text into Croncore's voice.</div>
+    <div class="callout-text" lang="ru">Если можно убрать слово и смысл не изменится — <span class="serif-em">убираем</span>. Это самый частый способ привести любой текст к голосу Croncore.</div>
+  </div>
+</section>
+
+<!-- 05 CHANNELS -->
+<section id="channels">
+  <div class="section-num">— 05 · <span lang="en">Channels</span><span lang="ru">Каналы</span></div>
+
+  <h2 class="section-title" lang="en">One voice, four <span class="serif-em">registers</span>.</h2>
+  <h2 class="section-title" lang="ru">Один голос, четыре <span class="serif-em">регистра</span>.</h2>
+
+  <p class="lede" lang="en">
+    The voice stays the same — only the volume and length shift. Email is closest to a one-on-one. The landing is a handshake. UI is the caption under a number. Social is the rare remark in a shared room.
+  </p>
+  <p class="lede" lang="ru">
+    Голос остаётся тем же — меняется только громкость и длина фразы. Письмо ближе всего к разговору один на один. Лендинг — к рукопожатию. UI — к подписи под цифрой. Соцсети — к редкой реплике в общей комнате.
+  </p>
+
+  <!-- LANDING -->
+  <div class="channel">
+    <div class="channel-head">
+      <div class="channel-title" lang="en">Landing and <span class="serif-em">marketing</span></div>
+      <div class="channel-title" lang="ru">Лендинг и <span class="serif-em">маркетинг</span></div>
+      <div class="channel-tag">surface · web</div>
+    </div>
+    <p class="channel-intro" lang="en">
+      The landing has three to five seconds before the visitor decides whether they're "in" or not. So the first screen is one statement, one action, and not a word more. Headline style follows the design system: one italic word per phrase, the rest upright.
+    </p>
+    <p class="channel-intro" lang="ru">
+      На лендинге у нас есть три-пять секунд до того, как человек решит — наш он или нет. Поэтому первый экран — это одно утверждение, одно действие и ни одного лишнего слова. Стиль заголовков следует дизайн-системе: одно курсивное слово на фразу, остальное — прямое начертание.
+    </p>
+
+    <h3 class="subsection-title" lang="en">What works</h3>
+    <h3 class="subsection-title" lang="ru">Что работает</h3>
+    <ul lang="en">
+      <li>A headline as a statement, not a question. "The Investor's <em>Circle</em>" — not "Want to join the circle of investors?"</li>
+      <li>A subhead that completes the thought in one line, no lists.</li>
+      <li>One button with an action verb. "Request access" — not "Learn more."</li>
+      <li>Numbers and timeframes visible: "48 hours," "private network · invitation only."</li>
+    </ul>
+    <ul lang="ru">
+      <li>Заголовок-утверждение, не вопрос. «The Investor's <em>Circle</em>» — а не «Хотите попасть в круг инвесторов?».</li>
+      <li>Подзаголовок, который договаривает мысль одной строкой, без перечислений.</li>
+      <li>Одна кнопка с глаголом действия. «Request access» — а не «Узнать больше».</li>
+      <li>Цифры и сроки в видимом месте: «48 hours», «private network · invitation only».</li>
+    </ul>
+
+    <div class="example" data-example>
+      <button class="example-toggle" type="button">
+        <span class="example-toggle-label">
+          <span class="example-tag" lang="en">example</span>
+          <span class="example-tag" lang="ru">пример</span>
+          <span class="example-title" lang="en">First-screen copy</span>
+          <span class="example-title" lang="ru">Первый экран</span>
+        </span>
+        <span class="example-icon">+</span>
+      </button>
+      <div class="example-content">
+        <div class="example-bad" lang="en">Discover unique investment opportunities with our exclusive platform! Join a community of leaders today.</div>
+        <div class="example-bad" lang="ru">Откройте для себя уникальные инвестиционные возможности с нашей эксклюзивной платформой! Присоединяйтесь к сообществу лидеров.</div>
+        <div class="example-good" lang="en">The Investor's Circle. Deals, capital, structure and access — through one private channel. By invitation.</div>
+        <div class="example-good" lang="ru">Круг инвесторов. Сделки, капитал, структуры и доступ — через один канал. По приглашению.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL -->
+  <div class="channel">
+    <div class="channel-head">
+      <div class="channel-title" lang="en">Mail and <span class="serif-em">correspondence</span></div>
+      <div class="channel-title" lang="ru">Письма и <span class="serif-em">переписка</span></div>
+      <div class="channel-tag">surface · mail · telegram</div>
+    </div>
+    <p class="channel-intro" lang="en">
+      The main channel of the circle. Here the voice is closest to a one-on-one. Every email follows the same shape: context in one line → substance in one or two short paragraphs → next step with a concrete deadline.
+    </p>
+    <p class="channel-intro" lang="ru">
+      Это главный канал круга. Здесь голос звучит ближе всего к разговору один на один. Любое письмо строится по схеме: контекст в одну строку → суть в один-два абзаца → следующий шаг с конкретным сроком.
+    </p>
+
+    <h3 class="subsection-title" lang="en">Email structure</h3>
+    <h3 class="subsection-title" lang="ru">Структура письма</h3>
+
+    <ul lang="en">
+      <li><strong>Subject.</strong> 3–6 words, no "Re:" and no emoji. The subject is direction + topic: "Payments · UAE · your request."</li>
+      <li><strong>Opening.</strong> By name. No "Dear" — too formal. No "Hey!" — too familiar. Just "Name,".</li>
+      <li><strong>First line.</strong> Returns the context. "Passing your SPV-in-Dubai request to our partner in structuring."</li>
+      <li><strong>Body.</strong> One or two short paragraphs. No bulleted lists over three items.</li>
+      <li><strong>Next step.</strong> What will happen and when. "The partner will write you within 48 hours with clarifying questions."</li>
+      <li><strong>Signature.</strong> Name · Croncore. No titles, no taglines, no disclaimers below.</li>
+    </ul>
+    <ul lang="ru">
+      <li><strong>Тема.</strong> 3–6 слов, без «Re:» и без эмодзи. Тема — это направление и предмет: «Payments · UAE · ваш запрос».</li>
+      <li><strong>Обращение.</strong> По имени. Без «Уважаемый» — слишком казённо. Без «Привет!» — слишком фамильярно. Просто «Имя,».</li>
+      <li><strong>Первая строка.</strong> Возвращает контекст. «Передаю ваш запрос по SPV в Дубае нашему партнёру по structuring».</li>
+      <li><strong>Тело.</strong> Один-два коротких абзаца. Никаких маркированных списков длиннее трёх пунктов.</li>
+      <li><strong>Следующий шаг.</strong> Что произойдёт и когда. «Партнёр напишет в течение 48 часов с уточняющими вопросами».</li>
+      <li><strong>Подпись.</strong> Имя · Croncore. Без должностей, без слоганов, без disclaim'еров под подписью.</li>
+    </ul>
+
+    <div class="example" data-example>
+      <button class="example-toggle" type="button">
+        <span class="example-toggle-label">
+          <span class="example-tag" lang="en">example</span>
+          <span class="example-tag" lang="ru">пример</span>
+          <span class="example-title" lang="en">Reply to a first request</span>
+          <span class="example-title" lang="ru">Ответ на первый запрос</span>
+        </span>
+        <span class="example-icon">+</span>
+      </button>
+      <div class="example-content">
+        <div class="example-bad" lang="en">Hello Michael! Thank you so much for reaching out to our company! We're delighted you chose us. Our team has already taken your request into work and one of our specialists will be in touch with you very shortly to select the optimal solution for your needs. Have a great day!</div>
+        <div class="example-bad" lang="ru">Здравствуйте, Михаил! Спасибо большое за ваше обращение в нашу компанию! Мы очень рады, что вы выбрали именно нас. Наша команда уже взяла ваш запрос в работу и в самое ближайшее время с вами обязательно свяжется наш специалист, который подберёт оптимальное решение под ваши задачи. Хорошего дня!</div>
+        <div class="example-good" lang="en">Michael, passing your SPV-in-UAE request to our partner in structuring. He'll write within 48 hours — to confirm jurisdiction and target size. If anything in the brief shifts before then, let us know.</div>
+        <div class="example-good" lang="ru">Михаил, передаю ваш запрос по SPV в UAE партнёру в structuring. Он напишет в течение 48 часов — уточнит юрисдикцию и target размер. Если что-то поменяется в вводных — дайте знать до этого.</div>
+      </div>
+    </div>
+
+    <h3 class="subsection-title" lang="en">When we decline</h3>
+    <h3 class="subsection-title" lang="ru">Когда отказываем</h3>
+
+    <p lang="en">A decline is also a gesture of respect. We don't bury it in apologies, and we don't leave the door half-open out of politeness.</p>
+    <p lang="ru">Отказ — это тоже жест уважения. Мы не размазываем его извинениями и не оставляем дверь приоткрытой из вежливости.</p>
+
+    <div class="example" data-example>
+      <button class="example-toggle" type="button">
+        <span class="example-toggle-label">
+          <span class="example-tag" lang="en">example</span>
+          <span class="example-tag" lang="ru">пример</span>
+          <span class="example-title" lang="en">Declining a request</span>
+          <span class="example-title" lang="ru">Отказ</span>
+        </span>
+        <span class="example-icon">+</span>
+      </button>
+      <div class="example-content">
+        <div class="example-bad" lang="en">Unfortunately, at this moment we won't be able to help with this question, as it falls slightly outside our main scope of activity. Perhaps in the future we will be able to consider such requests.</div>
+        <div class="example-bad" lang="ru">К сожалению, на данный момент мы не сможем помочь вам с этим вопросом, так как это немного выходит за рамки нашей основной деятельности. Возможно, в будущем мы сможем рассмотреть подобные запросы.</div>
+        <div class="example-good" lang="en">Michael, not our profile — we don't work with retail trade. For adjacent directions, if they come up later, write again.</div>
+        <div class="example-good" lang="ru">Михаил, это не наш профиль — мы не работаем с розничной торговлей. По смежным направлениям, если они появятся, напишите снова.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UI -->
+  <div class="channel">
+    <div class="channel-head">
+      <div class="channel-title" lang="en">Interface and system <span class="serif-em">messages</span></div>
+      <div class="channel-title" lang="ru">Интерфейс и системные <span class="serif-em">сообщения</span></div>
+      <div class="channel-tag">surface · product · ui</div>
+    </div>
+    <p class="channel-intro" lang="en">
+      In UI the voice becomes the caption under a number. No character, no humour, no long phrases. The rule is simple: microcopy should read as though the system itself wrote it — calmly and without emotion. The exception is error state, where the voice becomes short and direct (mirroring how Clay only appears on retry / error in the design system).
+    </p>
+    <p class="channel-intro" lang="ru">
+      В UI голос становится подписью под цифрой. Никакого характера, никакого юмора, никаких длинных формулировок. Правило простое: микротекст должен читаться так, будто его написала сама система — спокойно и без эмоций. Исключение — состояние ошибки, где голос становится коротким и прямым (по аналогии с тем, как Clay в дизайн-системе появляется только на retry/error).
+    </p>
+
+    <h3 class="subsection-title" lang="en">Microcopy principles</h3>
+    <h3 class="subsection-title" lang="ru">Принципы микротекста</h3>
+
+    <ul lang="en">
+      <li>Verb + object. "Send request," not "Sending of request."</li>
+      <li>States in one word. "Received," "In progress," "Completed," "Cancelled."</li>
+      <li>Errors — what happened and what to do. No "Oops!" and no "Unfortunately."</li>
+      <li>Empty states — what will be here, not an apology that nothing is.</li>
+    </ul>
+    <ul lang="ru">
+      <li>Глагол + объект. «Отправить запрос», не «Отправка запроса».</li>
+      <li>Состояния — одним словом. «Принят», «В работе», «Завершён», «Отменён».</li>
+      <li>Ошибки — что случилось и что делать. Без «Упс!» и без «К сожалению».</li>
+      <li>Пустые состояния — что здесь будет, а не извинение, что ничего нет.</li>
+    </ul>
+
+    <div class="example" data-example>
+      <button class="example-toggle" type="button">
+        <span class="example-toggle-label">
+          <span class="example-tag" lang="en">example</span>
+          <span class="example-tag" lang="ru">пример</span>
+          <span class="example-title" lang="en">Buttons</span>
+          <span class="example-title" lang="ru">Кнопки</span>
+        </span>
+        <span class="example-icon">+</span>
+      </button>
+      <div class="example-content">
+        <div class="example-bad" lang="en">Submit my application for review by a manager</div>
+        <div class="example-bad" lang="ru">Отправить мою заявку на рассмотрение менеджеру</div>
+        <div class="example-good" lang="en">Send request</div>
+        <div class="example-good" lang="ru">Отправить запрос</div>
+      </div>
+    </div>
+
+    <div class="example" data-example>
+      <button class="example-toggle" type="button">
+        <span class="example-toggle-label">
+          <span class="example-tag" lang="en">example</span>
+          <span class="example-tag" lang="ru">пример</span>
+          <span class="example-title" lang="en">Error state</span>
+          <span class="example-title" lang="ru">Состояние ошибки</span>
+        </span>
+        <span class="example-icon">+</span>
+      </button>
+      <div class="example-content">
+        <div class="example-bad" lang="en">Oops! Something went wrong. Please try again later or contact our support service.</div>
+        <div class="example-bad" lang="ru">Упс! Что-то пошло не так. Пожалуйста, попробуйте ещё раз позже или свяжитесь с нашей службой поддержки.</div>
+        <div class="example-good" lang="en">Request not sent. Check the connection and try again — or write to hello@croncore.com.</div>
+        <div class="example-good" lang="ru">Запрос не отправлен. Проверьте соединение и попробуйте снова — или напишите на hello@croncore.com.</div>
+      </div>
+    </div>
+
+    <div class="example" data-example>
+      <button class="example-toggle" type="button">
+        <span class="example-toggle-label">
+          <span class="example-tag" lang="en">example</span>
+          <span class="example-tag" lang="ru">пример</span>
+          <span class="example-title" lang="en">Confirmation</span>
+          <span class="example-title" lang="ru">Подтверждение</span>
+        </span>
+        <span class="example-icon">+</span>
+      </button>
+      <div class="example-content">
+        <div class="example-bad" lang="en">Congratulations! Your application has been successfully submitted and accepted into processing by our system!</div>
+        <div class="example-bad" lang="ru">Поздравляем! Ваша заявка была успешно отправлена и принята в обработку нашей системой!</div>
+        <div class="example-good" lang="en">Request received. The partner will reply within 48 hours.</div>
+        <div class="example-good" lang="ru">Запрос принят. Партнёр ответит в течение 48 часов.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="channel">
+    <div class="channel-head">
+      <div class="channel-title" lang="en">Social and public <span class="serif-em">posts</span></div>
+      <div class="channel-title" lang="ru">Соцсети и публичные <span class="serif-em">посты</span></div>
+      <div class="channel-tag">surface · linkedin · x · telegram</div>
+    </div>
+    <p class="channel-intro" lang="en">
+      Croncore doesn't do content marketing. We publish rarely and only when we have something to say: a new direction, a market observation, an event inside the circle. The goal of a post isn't reach — it's clarifying our position for those already watching us.
+    </p>
+    <p class="channel-intro" lang="ru">
+      Croncore не делает контент-маркетинг. Мы публикуемся редко и только тогда, когда есть что сказать: запуск направления, наблюдение по рынку, событие в круге. Цель публикации — не охват, а уточнение позиции для тех, кто уже на нас смотрит.
+    </p>
+
+    <h3 class="subsection-title" lang="en">Formats that fit</h3>
+    <h3 class="subsection-title" lang="ru">Форматы, которые подходят</h3>
+
+    <ul lang="en">
+      <li><strong>One-thought observation.</strong> 2–4 sentences ending in a statement, not a question to the audience.</li>
+      <li><strong>Dry update.</strong> "We've opened concierge in the UAE. Requests through the site." Full stop.</li>
+      <li><strong>Partner quote.</strong> No "sharing the opinion of our expert" preamble. Name, one line, that's it.</li>
+    </ul>
+    <ul lang="ru">
+      <li><strong>Наблюдение в одну мысль.</strong> 2–4 предложения, заканчивающихся утверждением, а не вопросом аудитории.</li>
+      <li><strong>Сухой апдейт.</strong> «Открыли направление concierge в UAE. По запросам — через сайт.» Точка.</li>
+      <li><strong>Цитата партнёра.</strong> Без подводки «делимся мнением нашего эксперта». Имя, одна фраза, всё.</li>
+    </ul>
+
+    <h3 class="subsection-title" lang="en">What we don't do</h3>
+    <h3 class="subsection-title" lang="ru">Чего не делаем</h3>
+
+    <ul lang="en">
+      <li>Twelve-tweet threads with an emoji at the start of each line.</li>
+      <li>Polls and "What do you think?" questions.</li>
+      <li>Holiday and "Happy Friday" greetings.</li>
+      <li>Reposts of someone else's content without our own thought attached.</li>
+      <li>Hashtags inside the body. If used at all — two or three at the end.</li>
+    </ul>
+    <ul lang="ru">
+      <li>Треды на 12 пунктов с эмодзи в начале каждого.</li>
+      <li>Опросы и вопросы в духе «А что вы думаете?».</li>
+      <li>Поздравления с праздниками и днями недели.</li>
+      <li>Репосты чужого контента без своей мысли в комментарии.</li>
+      <li>Хэштеги в теле поста. Если нужны — два-три в самом конце.</li>
+    </ul>
+
+    <div class="example" data-example>
+      <button class="example-toggle" type="button">
+        <span class="example-toggle-label">
+          <span class="example-tag" lang="en">example</span>
+          <span class="example-tag" lang="ru">пример</span>
+          <span class="example-title" lang="en">Post about a new direction</span>
+          <span class="example-title" lang="ru">Пост о новом направлении</span>
+        </span>
+        <span class="example-icon">+</span>
+      </button>
+      <div class="example-content">
+        <div class="example-bad" lang="en">🚀 Big news! We're thrilled to announce we're launching a brand-new direction — concierge in the UAE! 🇦🇪 Now our clients can access even more exclusive opportunities! Details in the comments 👇 #investments #UAE #premium</div>
+        <div class="example-bad" lang="ru">🚀 Большие новости! Мы рады сообщить, что запускаем абсолютно новое направление — concierge в UAE! 🇦🇪 Теперь наши клиенты могут получить ещё больше эксклюзивных возможностей! Подробности в комментариях 👇 #investments #UAE #premium</div>
+        <div class="example-good" lang="en">We've opened concierge in the UAE — real estate, schools, private aviation, medical references. For those already in the circle — through the usual channel. New requests — through the site.</div>
+        <div class="example-good" lang="ru">Открыли направление concierge в UAE — недвижимость, школы, частные перелёты, медицинские референсы. Для тех, кто уже в круге — через привычный канал. Новые запросы — через сайт.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 SITUATIONS -->
+<section id="situations">
+  <div class="section-num">— 06 · <span lang="en">Difficult moments</span><span lang="ru">Сложные моменты</span></div>
+
+  <h2 class="section-title" lang="en">Voice when something <span class="serif-em">breaks</span>.</h2>
+  <h2 class="section-title" lang="ru">Голос, когда <span class="serif-em">что-то</span> идёт не так.</h2>
+
+  <p class="lede" lang="en">
+    In hard moments the voice gets tested. Here the "quiet by default" rule matters most: the more anxious the situation, the calmer the wording. Panic on the partner's side is our job to absorb — not our intonation to mirror.
+  </p>
+  <p class="lede" lang="ru">
+    В сложных моментах голос проверяется на прочность. Здесь особенно важно правило «quiet by default»: чем тревожнее ситуация, тем спокойнее формулировка. Паника партнёров — наша работа, а не наша интонация.
+  </p>
+
+  <h3 class="subsection-title" lang="en">When there's a delay</h3>
+  <h3 class="subsection-title" lang="ru">Когда задержка</h3>
+  <p lang="en">We don't pile on apologies. We state the fact, the new ETA, and the reason — if it can be named.</p>
+  <p lang="ru">Не извиняемся обильно. Сообщаем факт, новую оценку срока и причину — если её можно назвать.</p>
+
+  <div class="example" data-example>
+    <button class="example-toggle" type="button">
+      <span class="example-toggle-label">
+        <span class="example-tag" lang="en">example</span>
+        <span class="example-tag" lang="ru">пример</span>
+        <span class="example-title" lang="en">Communicating a delay</span>
+        <span class="example-title" lang="ru">Сообщение о задержке</span>
+      </span>
+      <span class="example-icon">+</span>
+    </button>
+    <div class="example-content">
+      <div class="example-bad" lang="en">Huge apologies for the delay! We understand how unpleasant this is, and we are doing everything in our power!</div>
+      <div class="example-bad" lang="ru">Огромные извинения за задержку! Мы понимаем, как это неприятно, и делаем всё возможное!</div>
+      <div class="example-good" lang="en">The legal partner was held up by UAE holidays. New ETA — Thursday. If this is time-critical, say so and we'll run a second partner in parallel.</div>
+      <div class="example-good" lang="ru">Партнёр в legal задержал ответ из-за праздников в UAE. Ожидаемый новый срок — четверг. Если это критично — скажите, передадим параллельно второму партнёру.</div>
+    </div>
+  </div>
+
+  <h3 class="subsection-title" lang="en">When there's frustration or a complaint</h3>
+  <h3 class="subsection-title" lang="ru">Когда жалоба или раздражение</h3>
+  <p lang="en">We don't get defensive. We acknowledge what happened and name the step we're taking.</p>
+  <p lang="ru">Не оправдываемся и не уходим в защиту. Признаём, что произошло, называем шаг, который делаем.</p>
+
+  <div class="example" data-example>
+    <button class="example-toggle" type="button">
+      <span class="example-toggle-label">
+        <span class="example-tag" lang="en">example</span>
+        <span class="example-tag" lang="ru">пример</span>
+        <span class="example-title" lang="en">Responding to frustration</span>
+        <span class="example-title" lang="ru">Ответ на раздражение</span>
+      </span>
+      <span class="example-icon">+</span>
+    </button>
+    <div class="example-content">
+      <div class="example-bad" lang="en">We're very sorry it turned out this way. This is not at all our usual level of service. We will definitely look into it!</div>
+      <div class="example-bad" lang="ru">Нам очень жаль, что так получилось. Это совсем не похоже на наш обычный уровень сервиса. Мы обязательно разберёмся!</div>
+      <div class="example-good" lang="en">Michael, you're right — three weeks on a request like this is too long. Closing this thread, moving you to a different partner. He'll write you by end of day.</div>
+      <div class="example-good" lang="ru">Михаил, согласен — три недели на такой запрос это слишком. Закрываю эту цепочку, перевожу к другому партнёру. Он напишет сегодня до конца дня.</div>
+    </div>
+  </div>
+
+  <h3 class="subsection-title" lang="en">When the request is outside the circle</h3>
+  <h3 class="subsection-title" lang="ru">Когда вопрос за пределами круга</h3>
+  <p lang="en">We don't stretch to cover a request that isn't ours. A direct, respectful "no" is stronger than a vague "let's try."</p>
+  <p lang="ru">Не пытаемся «дотянуться» до запроса, который нам не подходит. Прямой отказ с уважением сильнее, чем размытое «давайте попробуем».</p>
+
+  <h3 class="subsection-title" lang="en">When we talk about money</h3>
+  <h3 class="subsection-title" lang="ru">Когда говорим о деньгах</h3>
+  <p lang="en">Concretely, no euphemisms. Not "investment from" — "minimum ticket $250k." Not "commission" — "success fee 2% of the closed deal." If a number can't be public, write "depends on the structure, discussed individually" — never "affordable" or similar.</p>
+  <p lang="ru">Конкретно, без эвфемизмов. Не «инвестиция от» — а «минимальный тикет $250k». Не «комиссия» — а «success fee 2% от закрытой сделки». Если цифру нельзя назвать публично — пишем «зависит от структуры, обсуждаем индивидуально», без «доступной цены» и подобных формулировок.</p>
+
+  <h3 class="subsection-title" lang="en">When we talk about confidentiality</h3>
+  <h3 class="subsection-title" lang="ru">Когда говорим о конфиденциальности</h3>
+  <p lang="en">Once, without repetition. "Private network · invitation only" on the landing is enough — no need to repeat "this is confidential" in every email. The form of communication itself says it louder than words.</p>
+  <p lang="ru">Однажды и без повторов. «Private network · invitation only» на лендинге достаточно — не нужно повторять в каждом письме «это конфиденциально». Сама форма коммуникации говорит об этом громче слов.</p>
+</section>
+
+<!-- 07 CHECKLIST -->
+<section id="checklist">
+  <div class="section-num">— 07 · <span lang="en">Checklist</span><span lang="ru">Чек-лист</span></div>
+
+  <h2 class="section-title" lang="en">Seven questions <span class="serif-em">before</span> you send.</h2>
+  <h2 class="section-title" lang="ru">Семь вопросов <span class="serif-em">перед</span> отправкой.</h2>
+
+  <p class="lede" lang="en">
+    Applies to anything — from a tweet to an email chain. If even one answer is "no," it's worth going back and reassembling.
+  </p>
+  <p class="lede" lang="ru">
+    Применимо ко всему — от твита до email-цепочки. Если хотя бы на один вопрос ответ «нет», стоит вернуться и пересобрать.
+  </p>
+
+  <div class="do-dont">
+    <div class="do-dont-col do-col">
+      <h4 lang="en">Check</h4>
+      <h4 lang="ru">Проверьте</h4>
+      <ul lang="en">
+        <li>Is there at least one specific: a number, a deadline, a direction name?</li>
+        <li>Can one adjective be cut without loss?</li>
+        <li>Does it sound like it's written to this person, not to an "audience"?</li>
+        <li>No exclamation marks, no emoji, no caps lock?</li>
+        <li>Is the next step named — with a timeframe?</li>
+        <li>Words from the "use" column, not the "avoid" one?</li>
+        <li>If you removed the Croncore logo — would the voice still be recognisable?</li>
+      </ul>
+      <ul lang="ru">
+        <li>Есть ли в тексте хотя бы одна конкретика: цифра, срок, имя направления?</li>
+        <li>Можно ли убрать одно прилагательное и ничего не потерять?</li>
+        <li>Звучит ли это так, будто написано лично собеседнику, а не «аудитории»?</li>
+        <li>Нет ли восклицательных знаков, эмодзи и капслока?</li>
+        <li>Назван ли следующий шаг и срок?</li>
+        <li>Использованы ли слова из колонки «используем», а не из «избегаем»?</li>
+        <li>Если убрать логотип Croncore — узнаётся ли голос?</li>
+      </ul>
+    </div>
+    <div class="do-dont-col dont-col">
+      <h4 lang="en">Red flags</h4>
+      <h4 lang="ru">Красные флаги</h4>
+      <ul lang="en">
+        <li>Phrases like "we're glad," "our team," "unique solution."</li>
+        <li>Apologies where none was asked for.</li>
+        <li>Words: "exclusive," "premium," "elite," "VIP."</li>
+        <li>Vague timelines: "soon," "shortly," "as soon as possible."</li>
+        <li>Longer than it needs to be.</li>
+        <li>Anything that any other brand could have sent.</li>
+        <li>Emoji. Any. Unless the partner sent one first.</li>
+      </ul>
+      <ul lang="ru">
+        <li>Фразы «мы рады», «наша команда», «уникальное решение».</li>
+        <li>Извинения там, где их не просили.</li>
+        <li>Слова «эксклюзивный», «премиальный», «элитный», «VIP».</li>
+        <li>Размытые сроки: «скоро», «в ближайшее время», «как только».</li>
+        <li>Длиннее, чем должно быть.</li>
+        <li>Любой текст, который мог бы прислать любой другой бренд.</li>
+        <li>Эмодзи. Любые. Кроме случаев, когда партнёр первый прислал.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label" lang="en">— Final test</div>
+    <div class="callout-label" lang="ru">— Финальный тест</div>
+    <div class="callout-text" lang="en">Read it aloud. If at any point you feel like you're <span class="serif-em">selling</span> — rewrite it. The circle isn't sold. The circle is <span class="serif-em">offered</span>.</div>
+    <div class="callout-text" lang="ru">Перечитайте вслух. Если в любой момент возникает ощущение, что вы <span class="serif-em">продаёте</span>, — переписывайте. Круг не продают. Круг <span class="serif-em">предлагают</span>.</div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div lang="en">Croncore · Tone of Voice · v0.1 · May 2026</div>
+  <div lang="ru">Croncore · Голос бренда · v0.1 · Май 2026</div>
+
+  <div class="closing-line" lang="en">
+    Soft form, exact meaning. Light through material. <em>Quiet by default</em>.
+  </div>
+  <div class="closing-line" lang="ru">
+    Мягкая форма, точный смысл. Свет сквозь материал. <em>Тихо по умолчанию</em>.
+  </div>
+
+  <div>hello@croncore.com</div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  var html = document.documentElement;
+
+  // ===== Language toggle =====
+  var langButtons = document.querySelectorAll('[data-lang-btn]');
+  var savedLang = null;
+  try { savedLang = localStorage.getItem('croncore-tov-lang'); } catch(e) {}
+  if (savedLang === 'ru' || savedLang === 'en') {
+    html.setAttribute('data-lang', savedLang);
+    langButtons.forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-lang-btn') === savedLang);
+    });
+  }
+
+  langButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var lang = btn.getAttribute('data-lang-btn');
+      html.setAttribute('data-lang', lang);
+      langButtons.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      try { localStorage.setItem('croncore-tov-lang', lang); } catch(e) {}
+    });
+  });
+
+  // ===== Theme toggle =====
+  var themeBtn = document.getElementById('themeToggle');
+  var themeIcon = document.getElementById('themeIcon');
+  var themeLabelEn = document.getElementById('themeLabelEn');
+  var themeLabelRu = document.getElementById('themeLabelRu');
+
+  function applyTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    if (theme === 'dark') {
+      themeIcon.textContent = '◐';
+      themeLabelEn.textContent = 'Light';
+      themeLabelRu.textContent = 'Свет';
+    } else {
+      themeIcon.textContent = '◑';
+      themeLabelEn.textContent = 'Dark';
+      themeLabelRu.textContent = 'Тьма';
+    }
+  }
+
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem('croncore-tov-theme'); } catch(e) {}
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    applyTheme(savedTheme);
+  }
+
+  themeBtn.addEventListener('click', function() {
+    var current = html.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('croncore-tov-theme', next); } catch(e) {}
+  });
+
+  // ===== Expandable examples =====
+  document.querySelectorAll('[data-example]').forEach(function(ex) {
+    var toggle = ex.querySelector('.example-toggle');
+    toggle.addEventListener('click', function() {
+      ex.classList.toggle('open');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
