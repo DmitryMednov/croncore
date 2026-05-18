@@ -1,0 +1,7 @@
+name = "croncore-apply"
+main = "apply-worker.js"
+compatibility_date = "2024-12-01"
+workers_dev = true
+
+[vars]
+ALLOW_ORIGIN = "https://croncore.io"
