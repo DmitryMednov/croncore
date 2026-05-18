@@ -446,6 +446,14 @@ dialog.apply-modal[open]::backdrop{ animation: dlg-fade .25s ease-out both; }
 .apply-shell{
   display: grid; grid-template-rows: auto 1fr auto;
   max-height: inherit; height: 100%;
+  min-height: 0;
+}
+.apply-shell > *{ min-height: 0; }
+#apply-form{
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 0;
+  overflow: hidden;
 }
 .apply-head{
   padding: 22px 28px 14px;
@@ -482,7 +490,10 @@ dialog.apply-modal[open]::backdrop{ animation: dlg-fade .25s ease-out both; }
 
 .apply-body{
   padding: 18px 28px 10px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.18) transparent;
 }
@@ -640,6 +651,25 @@ html[dir="rtl"] .field select{
   margin-bottom: 10px;
 }
 .apply-modal[data-error="1"] .apply-error{ display: block; }
+
+@media (max-width: 600px){
+  .apply-head{ padding: 16px 18px 12px; }
+  .apply-head h2{ font-size: 22px; }
+  .apply-head p{ font-size: 13px; }
+  .apply-body{ padding: 14px 18px 8px; }
+  .apply-foot{
+    padding: 12px 18px 16px;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .apply-foot .meta{ text-align: center; font-size: 10.5px; }
+  .apply-foot .btn-primary{ width: 100%; min-width: 0; }
+  fieldset.apply-group{ margin-bottom: 14px; }
+  .field input,
+  .field select,
+  .field textarea{ font-size: 16px; }
+}
 
 @media (prefers-reduced-motion: reduce){
   dialog.apply-modal[open], dialog.apply-modal[open]::backdrop{ animation: none; }
