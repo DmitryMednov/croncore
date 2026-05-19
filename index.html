@@ -246,7 +246,7 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
 .pre-mark{
   width: 36px; height: 36px;
   opacity: 0; transform: scale(.92);
-  animation: preMark .65s cubic-bezier(.2,.6,.2,1) .15s forwards;
+  animation: preMark .8s cubic-bezier(.2,.6,.2,1) .2s forwards;
 }
 .pre-mark img{
   width: 100%; height: 100%; display: block; object-fit: contain;
@@ -279,7 +279,7 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   font-size: clamp(15px, 1.5vw, 19px);
   color: var(--cream-200);
   opacity: 0; transform: translateY(8px);
-  animation: preFadeUp .8s cubic-bezier(.2,.6,.2,1) 1.25s forwards;
+  animation: preFadeUp 1.0s cubic-bezier(.2,.6,.2,1) 2.1s forwards;
   letter-spacing: 0;
 }
 
@@ -290,14 +290,14 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   margin-top: var(--s-3);
   overflow: hidden;
   opacity: 0;
-  animation: preFadeIn .5s ease 1.0s forwards;
+  animation: preFadeIn .6s ease 1.4s forwards;
 }
 .pre-fill{
   position: absolute; left: 0; top: 0; bottom: 0; width: 100%;
   background: var(--cream-50);
   transform-origin: left;
   transform: scaleX(0);
-  animation: preFill 1.4s cubic-bezier(.65,.05,.2,1) 1.05s forwards;
+  animation: preFill 2.0s cubic-bezier(.65,.05,.2,1) 1.4s forwards;
 }
 
 @keyframes preMark   { to { opacity: 1; transform: none; } }
@@ -407,17 +407,19 @@ html[lang="he"] .pre-sub{ letter-spacing: 0; }
   .lang button{ padding: 4px 6px; font-size: 9px; }
 }
 
-/* HERO */
+/* HERO — centered editorial layout */
 .hero{
   display:flex; flex-direction: column; justify-content: center;
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
+  text-align: center;
   gap: clamp(var(--s-3), 1.4vh, var(--s-5));
   padding: var(--s-5) 0;
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
 }
+.hero .lede{ margin-left: auto; margin-right: auto; }
+.cta-row{ justify-content: center; }
 .hero-crest{
   position: relative;
   width: clamp(72px, 9vw, 116px);
@@ -553,6 +555,57 @@ html[lang="he"] .pre-sub{ letter-spacing: 0; }
 .btn-lg{ padding: 17px 26px; font-size: 15.5px; }
 .btn-arrow svg{ width: 14px; height: 14px; opacity: .85; transition: transform .15s; }
 .btn:hover .btn-arrow svg{ transform: translateX(2px); }
+
+/* CHROMATIC GLITCH — lifted from the design system. RGB-split ghosts
+   appear on hover; scanlines overlay sells the CRT/cyber vibe. */
+.btn-glitch{
+  background: rgba(20,40,30,0.82);
+  color: var(--cream-50);
+  border-color: rgba(255,255,255,0.14);
+  font-family: var(--font-mono);
+  font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+  font-size: 13.5px;
+  padding: 14px 24px;
+  overflow: hidden;
+}
+.btn-glitch:hover{ background: rgba(20,40,30,0.92); }
+.btn-glitch::after{
+  content:""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(255,255,255,0.05) 3px 4px);
+  pointer-events: none; z-index: 2; mix-blend-mode: overlay;
+}
+.glitch-text{ position: relative; display: inline-block; z-index: 3; }
+.glitch-text::before,
+.glitch-text::after{
+  content: attr(data-text);
+  position: absolute; top: 0; left: 0; width: 100%;
+  pointer-events: none; opacity: 0; mix-blend-mode: screen;
+}
+.btn-glitch:hover .glitch-text::before{
+  color: oklch(0.72 0.28 25); opacity: .95;
+  animation: glitchA .42s steps(2) infinite;
+}
+.btn-glitch:hover .glitch-text::after{
+  color: oklch(0.74 0.22 200); opacity: .95;
+  animation: glitchB .42s steps(2) infinite;
+}
+@keyframes glitchA{
+  0%,100% { clip-path: inset(0 0 0 0); transform: translate(-2px,-1px); }
+  20% { clip-path: inset(20% 0 50% 0); transform: translate(-3px,-1px); }
+  40% { clip-path: inset(60% 0 10% 0); transform: translate(-1px, 1px); }
+  60% { clip-path: inset(10% 0 70% 0); transform: translate(-4px, 0); }
+  80% { clip-path: inset(40% 0 30% 0); transform: translate(-2px,-2px); }
+}
+@keyframes glitchB{
+  0%,100% { clip-path: inset(0 0 0 0); transform: translate(2px,1px); }
+  25% { clip-path: inset(50% 0 20% 0); transform: translate(3px, 0); }
+  50% { clip-path: inset(10% 0 60% 0); transform: translate(1px, 2px); }
+  75% { clip-path: inset(70% 0 10% 0); transform: translate(4px,-1px); }
+}
+@media (prefers-reduced-motion: reduce){
+  .btn-glitch:hover .glitch-text::before,
+  .btn-glitch:hover .glitch-text::after{ animation: none; opacity: 0; }
+}
 
 /* MICRO FOOTER */
 .micro-footer{
@@ -1028,9 +1081,8 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
     <h1 data-i18n-html="hero_h1">The Partners' <em>Circle</em>.</h1>
     <p class="lede" data-i18n="hero_lede">Payments, investments, SPV, legal, concierge — through one private channel.</p>
     <div class="cta-row">
-      <button class="btn btn-primary btn-lg" type="button" id="open-apply">
-        <span data-i18n="btn_apply">Request access</span>
-        <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <button class="btn btn-glitch" type="button" id="open-apply">
+        <span class="glitch-text" data-i18n="btn_apply" data-text="Request access">Request access</span>
       </button>
     </div>
   </section>
@@ -1861,13 +1913,14 @@ function convergeReveal(scope, opts){
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine    = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  /* Preloader timeline:
-       0.15s  mark fades in (CSS)
-       0.35s  CRONCORE letters glitch-reveal (JS, ~1.7s end-to-end)
-       1.0s   progress track fades in
-       1.05s  progress bar fills (1.4s)
-       2.0s   serif subline rises in
-       2.45s  preloader fades, hero entrance starts (overlap 150ms) */
+  /* Preloader timeline (slowed so the glitch reveal reads clearly):
+       0.20s  mark fades in (CSS, 0.8s)
+       0.50s  CRONCORE letters glitch-reveal (220ms stagger, 14 cycles)
+       1.40s  progress track fades in
+       1.40s  progress bar fills (2.0s)
+       2.10s  serif subline rises in (1.0s)
+       3.20s  hero entrance starts
+       3.40s  preloader fades out */
   function boot(){
     const pre = document.getElementById("preloader");
     const word = pre && pre.querySelector(".pre-word");
@@ -1883,10 +1936,10 @@ function convergeReveal(scope, opts){
       return;
     }
 
-    if (word) glitchReveal(word, { startDelay: 350, perChar: 180, cycles: 12, cycleMs: 30 });
+    if (word) glitchReveal(word, { startDelay: 500, perChar: 220, cycles: 14, cycleMs: 32 });
 
-    setTimeout(() => document.body.classList.add("is-ready"), 2300);
-    setTimeout(() => pre.classList.add("done"), 2500);
+    setTimeout(() => document.body.classList.add("is-ready"), 3200);
+    setTimeout(() => pre.classList.add("done"), 3400);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot, { once: true });
@@ -1953,8 +2006,17 @@ function refreshHeroChars(){
   }
 }
 
+/* Keep [data-text] (RGB-ghost source for the chromatic glitch) in
+   sync with the localised textContent. */
+function syncGlitchText(){
+  document.querySelectorAll(".glitch-text[data-text]").forEach(el => {
+    el.setAttribute("data-text", el.textContent.trim());
+  });
+}
+
 function setLang(lang){
   applyLang(lang);
+  syncGlitchText();
   refreshHeroChars();
 }
 

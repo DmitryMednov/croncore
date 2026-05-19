@@ -986,6 +986,97 @@ footer .foot-links a:hover {
   opacity: 1;
 }
 
+/* ============ PRELOADER — same as the landing ============ */
+.preloader{
+  position: fixed; inset: 0; z-index: 200;
+  display: grid; place-items: center;
+  font-family: var(--font-sans);
+  color: var(--cream-50);
+  pointer-events: auto;
+  transition: opacity .9s cubic-bezier(.2,.6,.2,1), visibility .9s ease;
+}
+.preloader::before{
+  content:""; position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(65% 55% at 50% 50%, oklch(0.10 0.02 150 / .55), oklch(0.07 0.015 150 / .92) 75%),
+    linear-gradient(180deg, oklch(0.11 0.02 150 / .75), oklch(0.08 0.015 150 / .92));
+}
+.preloader.done{ opacity: 0; visibility: hidden; pointer-events: none; }
+
+.pre-stage{
+  position: relative; z-index: 1;
+  display: grid; gap: 24px; justify-items: center;
+  width: min(680px, 90vw);
+  text-align: center;
+  padding: 0 24px;
+}
+.pre-mark{
+  width: 36px; height: 36px;
+  opacity: 0; transform: scale(.92);
+  animation: preMark .8s cubic-bezier(.2,.6,.2,1) .2s forwards;
+}
+.pre-mark img{
+  width: 100%; height: 100%; display: block; object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.55));
+}
+.pre-word{
+  display: flex;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: clamp(40px, 7.5vw, 84px);
+  letter-spacing: clamp(.18em, .8vw, .42em);
+  line-height: 1;
+  white-space: nowrap;
+  padding-left: clamp(.18em, .8vw, .42em);
+  color: var(--cream-50);
+}
+.pre-word .char{
+  display: inline-block;
+  opacity: 0;
+  font-variant-numeric: tabular-nums;
+  min-width: .55em;
+  text-align: center;
+}
+.pre-sub{
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(15px, 1.5vw, 19px);
+  color: var(--cream-200);
+  opacity: 0; transform: translateY(8px);
+  animation: preFadeUp 1.0s cubic-bezier(.2,.6,.2,1) 2.1s forwards;
+}
+.pre-track{
+  position: relative;
+  width: clamp(160px, 22vw, 240px); height: 1px;
+  background: rgba(255,255,255,.10);
+  margin-top: 12px;
+  overflow: hidden;
+  opacity: 0;
+  animation: preFadeIn .6s ease 1.4s forwards;
+}
+.pre-fill{
+  position: absolute; left: 0; top: 0; bottom: 0; width: 100%;
+  background: var(--cream-50);
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: preFill 2.0s cubic-bezier(.65,.05,.2,1) 1.4s forwards;
+}
+@keyframes preMark   { to { opacity: 1; transform: none; } }
+@keyframes preFadeIn { to { opacity: 1; } }
+@keyframes preFadeUp { to { opacity: 1; transform: none; } }
+@keyframes preFill   { to { transform: scaleX(1); } }
+@media (max-width: 600px){
+  .pre-stage{ gap: 18px; }
+  .pre-word{ font-size: clamp(34px, 11vw, 56px); letter-spacing: clamp(.14em, .6vw, .26em); padding-left: clamp(.14em, .6vw, .26em); }
+  .pre-sub{ font-size: 14px; }
+  .pre-mark{ width: 32px; height: 32px; }
+  .pre-track{ width: clamp(140px, 38vw, 220px); }
+}
+@media (prefers-reduced-motion: reduce){
+  .preloader{ display: none; }
+}
+
 /* ============ LANG SWITCHING ============ */
 [data-lang="en"] [lang="ru"] { display: none; }
 [data-lang="ru"] [lang="en"] { display: none; }
@@ -1042,6 +1133,21 @@ footer .foot-links a:hover {
 </style>
 </head>
 <body>
+
+<!-- Preloader — shared across landing / tone-of-voice / design-system -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pre-stage">
+    <div class="pre-mark">
+      <img src="../assets/logo-croncore.png" alt="" width="36" height="36" />
+    </div>
+    <div class="pre-word" aria-label="Croncore">
+      <span class="char">C</span><span class="char">R</span><span class="char">O</span><span class="char">N</span><span class="char">C</span><span class="char">O</span><span class="char">R</span><span class="char">E</span>
+    </div>
+    <div class="pre-sub" lang="en">Entering the circle</div>
+    <div class="pre-sub" lang="ru">Вход в круг</div>
+    <div class="pre-track"><span class="pre-fill"></span></div>
+  </div>
+</div>
 
 <div class="atmosphere" aria-hidden="true"></div>
 <div class="aurora" aria-hidden="true"></div>
@@ -1977,6 +2083,38 @@ footer .foot-links a:hover {
       ex.classList.toggle('open');
     });
   });
+
+  // ===== Preloader — same glitch reveal as the landing =====
+  (function preloader(){
+    var pre = document.getElementById('preloader');
+    if (!pre) return;
+    var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var word = pre.querySelector('.pre-word');
+    var chars = word ? word.querySelectorAll('.char') : [];
+
+    if (reduced){
+      Array.prototype.forEach.call(chars, function(c){ c.style.opacity = '1'; });
+      pre.classList.add('done');
+      return;
+    }
+
+    var SYM = 'abcdefghijklmnopqrstuvwxyz!@#$%^&*-_+=;:<>,';
+    Array.prototype.forEach.call(chars, function(c, i){
+      var original = c.textContent;
+      c.style.opacity = '0';
+      setTimeout(function(){
+        c.style.opacity = '1';
+        var n = 0;
+        var tick = setInterval(function(){
+          c.textContent = SYM[Math.floor(Math.random() * SYM.length)];
+          n++;
+          if (n >= 14){ clearInterval(tick); c.textContent = original; }
+        }, 32);
+      }, 500 + i * 220);
+    });
+
+    setTimeout(function(){ pre.classList.add('done'); }, 3400);
+  })();
 })();
 </script>
 
