@@ -283,11 +283,16 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   letter-spacing: 0;
 }
 
+.pre-track-row{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: var(--s-3);
+}
 .pre-track{
   position: relative;
   width: clamp(160px, 22vw, 240px); height: 1px;
   background: rgba(255,255,255,.10);
-  margin-top: var(--s-3);
   overflow: hidden;
   opacity: 0;
   animation: preFadeIn .6s ease 1.4s forwards;
@@ -299,6 +304,18 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   transform: scaleX(0);
   animation: preFill 2.0s cubic-bezier(.65,.05,.2,1) 1.4s forwards;
 }
+.pre-num{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--cream-300);
+  font-variant-numeric: tabular-nums;
+  min-width: 3em;
+  text-align: left;
+  opacity: 0;
+  animation: preFadeIn .6s ease 1.4s forwards;
+}
+.pre-num span{ color: var(--cream-50); }
 
 @keyframes preMark   { to { opacity: 1; transform: none; } }
 @keyframes preFadeIn { to { opacity: 1; } }
@@ -607,6 +624,41 @@ html[lang="he"] .pre-sub{ letter-spacing: 0; }
   .btn-glitch:hover .glitch-text::after{ animation: none; opacity: 0; }
 }
 
+/* PIXELATED 8-BIT — chamfered clip-path + raised 3D stack. Stacks
+   onto .btn-glitch so the CTA gets RGB-split ghosts AND the arcade
+   button silhouette/press. */
+.btn-pixel{
+  font-family: var(--font-mono);
+  font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  font-size: 12.5px;
+  background: linear-gradient(180deg, var(--f-500), var(--f-800));
+  color: var(--cream-50);
+  border-radius: 0 !important;
+  border: 0;
+  padding: 14px 24px;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.30),
+    inset 0 -3px 0 rgba(0,0,0,0.40),
+    0 6px 0 oklch(0.14 0.04 150),
+    0 14px 26px rgba(0,0,0,.35);
+  clip-path: polygon(
+    0 4px, 4px 4px, 4px 0,
+    calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px),
+    calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px),
+    0 calc(100% - 4px)
+  );
+}
+.btn-pixel:hover{ filter: brightness(1.10); }
+.btn-pixel:active{
+  transform: translateY(4px);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.18),
+    inset 0 -2px 0 rgba(0,0,0,0.35),
+    0 2px 0 oklch(0.14 0.04 150),
+    0 6px 14px rgba(0,0,0,.30);
+}
+
 /* MICRO FOOTER */
 .micro-footer{
   display:flex; justify-content: space-between; align-items: center;
@@ -802,7 +854,7 @@ html[dir="rtl"] .field select{
   flex: 1;
 }
 .apply-foot .meta b{ color: var(--bone-100); font-weight: 500; }
-.apply-foot .btn-primary{ min-width: 200px; }
+.apply-foot button[type="submit"]{ min-width: 200px; }
 
 /* spinner inside the submit button */
 .btn .spin{
@@ -871,7 +923,7 @@ html[dir="rtl"] .field select{
     gap: 10px;
   }
   .apply-foot .meta{ text-align: center; font-size: 10.5px; }
-  .apply-foot .btn-primary{ width: 100%; min-width: 0; }
+  .apply-foot button[type="submit"]{ width: 100%; min-width: 0; }
   fieldset.apply-group{ margin-bottom: 14px; }
   .field input,
   .field select,
@@ -1047,7 +1099,10 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
       <span class="char">C</span><span class="char">R</span><span class="char">O</span><span class="char">N</span><span class="char">C</span><span class="char">O</span><span class="char">R</span><span class="char">E</span>
     </div>
     <div class="pre-sub" data-i18n="preload">Entering the circle</div>
-    <div class="pre-track"><span class="pre-fill"></span></div>
+    <div class="pre-track-row">
+      <div class="pre-track"><span class="pre-fill"></span></div>
+      <div class="pre-num"><span id="preNum">0</span>%</div>
+    </div>
   </div>
 </div>
 
@@ -1081,7 +1136,7 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
     <h1 data-i18n-html="hero_h1">The Partners' <em>Circle</em>.</h1>
     <p class="lede" data-i18n="hero_lede">Payments, investments, SPV, legal, concierge — through one private channel.</p>
     <div class="cta-row">
-      <button class="btn btn-glitch" type="button" id="open-apply">
+      <button class="btn btn-glitch btn-pixel" type="button" id="open-apply">
         <span class="glitch-text" data-i18n="btn_apply" data-text="Request access">Request access</span>
       </button>
     </div>
@@ -1213,8 +1268,8 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
         <div class="meta">
           <span data-i18n="form_privacy">Private · not stored beyond delivery to the partner network.</span>
         </div>
-        <button class="btn btn-primary" type="submit" id="submit-btn">
-          <span class="label" data-i18n="form_submit">Send request</span>
+        <button class="btn btn-glitch btn-pixel" type="submit" id="submit-btn">
+          <span class="glitch-text label" data-i18n="form_submit" data-text="Send request">Send request</span>
         </button>
       </footer>
     </form>
@@ -1703,7 +1758,10 @@ function setSubmitting(on){
   const lang = document.documentElement.lang || "en";
   const d = I18N[lang] || I18N.en;
   submitBtn.disabled = on;
-  submitBtn.querySelector(".label").textContent = on ? d.form_submitting : d.form_submit;
+  const label = submitBtn.querySelector(".label");
+  const text = on ? d.form_submitting : d.form_submit;
+  label.textContent = text;
+  if (label.classList.contains("glitch-text")) label.setAttribute("data-text", text);
 }
 
 function normalizeTelegram(v){
@@ -1937,6 +1995,18 @@ function convergeReveal(scope, opts){
     }
 
     if (word) glitchReveal(word, { startDelay: 500, perChar: 220, cycles: 14, cycleMs: 32 });
+
+    /* 0% → 100% counter, paced to match the preloader timeline */
+    const num = pre.querySelector("#preNum");
+    if (num){
+      const start = performance.now();
+      const DUR = 3200;
+      (function tick(now){
+        const p = Math.min(1, ((now || performance.now()) - start) / DUR);
+        num.textContent = Math.floor(p * 100);
+        if (p < 1) requestAnimationFrame(tick);
+      })();
+    }
 
     setTimeout(() => document.body.classList.add("is-ready"), 3200);
     setTimeout(() => pre.classList.add("done"), 3400);

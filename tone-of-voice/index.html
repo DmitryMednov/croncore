@@ -1046,11 +1046,14 @@ footer .foot-links a:hover {
   opacity: 0; transform: translateY(8px);
   animation: preFadeUp 1.0s cubic-bezier(.2,.6,.2,1) 2.1s forwards;
 }
+.pre-track-row{
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 12px;
+}
 .pre-track{
   position: relative;
   width: clamp(160px, 22vw, 240px); height: 1px;
   background: rgba(255,255,255,.10);
-  margin-top: 12px;
   overflow: hidden;
   opacity: 0;
   animation: preFadeIn .6s ease 1.4s forwards;
@@ -1062,6 +1065,18 @@ footer .foot-links a:hover {
   transform: scaleX(0);
   animation: preFill 2.0s cubic-bezier(.65,.05,.2,1) 1.4s forwards;
 }
+.pre-num{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--cream-300);
+  font-variant-numeric: tabular-nums;
+  min-width: 3em;
+  text-align: left;
+  opacity: 0;
+  animation: preFadeIn .6s ease 1.4s forwards;
+}
+.pre-num span{ color: var(--cream-50); }
 @keyframes preMark   { to { opacity: 1; transform: none; } }
 @keyframes preFadeIn { to { opacity: 1; } }
 @keyframes preFadeUp { to { opacity: 1; transform: none; } }
@@ -1145,7 +1160,10 @@ footer .foot-links a:hover {
     </div>
     <div class="pre-sub" lang="en">Entering the circle</div>
     <div class="pre-sub" lang="ru">Вход в круг</div>
-    <div class="pre-track"><span class="pre-fill"></span></div>
+    <div class="pre-track-row">
+      <div class="pre-track"><span class="pre-fill"></span></div>
+      <div class="pre-num"><span id="preNum">0</span>%</div>
+    </div>
   </div>
 </div>
 
@@ -2112,6 +2130,17 @@ footer .foot-links a:hover {
         }, 32);
       }, 500 + i * 220);
     });
+
+    var num = document.getElementById('preNum');
+    if (num){
+      var start = performance.now();
+      var DUR = 3200;
+      (function tick(now){
+        var p = Math.min(1, ((now || performance.now()) - start) / DUR);
+        num.textContent = Math.floor(p * 100);
+        if (p < 1) requestAnimationFrame(tick);
+      })();
+    }
 
     setTimeout(function(){ pre.classList.add('done'); }, 3400);
   })();
