@@ -255,30 +255,22 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
 
 .pre-word{
   display: flex;
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-weight: 500;
   font-size: clamp(40px, 7.5vw, 84px);
   letter-spacing: clamp(.18em, .8vw, .42em);
   line-height: 1;
   white-space: nowrap;
-  padding-left: clamp(.18em, .8vw, .42em); /* offset trailing letter-spacing */
+  padding-left: clamp(.18em, .8vw, .42em);
   color: var(--cream-50);
 }
-.pre-word span{
+.pre-word .char{
   display: inline-block;
-  opacity: 0;
-  transform: translateY(.45em);
-  filter: blur(8px);
-  animation: preLetter .85s cubic-bezier(.2,.6,.2,1) forwards;
+  opacity: 0;        /* JS reveals during glitch */
+  font-variant-numeric: tabular-nums;
+  min-width: .55em;  /* keep width stable as glitch swaps in narrow chars */
+  text-align: center;
 }
-.pre-word span:nth-child(1){ animation-delay: .35s; }
-.pre-word span:nth-child(2){ animation-delay: .43s; }
-.pre-word span:nth-child(3){ animation-delay: .51s; }
-.pre-word span:nth-child(4){ animation-delay: .59s; }
-.pre-word span:nth-child(5){ animation-delay: .67s; }
-.pre-word span:nth-child(6){ animation-delay: .75s; }
-.pre-word span:nth-child(7){ animation-delay: .83s; }
-.pre-word span:nth-child(8){ animation-delay: .91s; }
 
 .pre-sub{
   font-family: var(--font-serif);
@@ -309,7 +301,6 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
 }
 
 @keyframes preMark   { to { opacity: 1; transform: none; } }
-@keyframes preLetter { to { opacity: 1; transform: none; filter: none; } }
 @keyframes preFadeIn { to { opacity: 1; } }
 @keyframes preFadeUp { to { opacity: 1; transform: none; } }
 @keyframes preFill   { to { transform: scaleX(1); } }
@@ -483,6 +474,15 @@ html[lang="he"] .pre-sub{ letter-spacing: 0; }
   letter-spacing: -0.035em;
   text-wrap: balance;
 }
+.hero h1 .char{
+  display: inline-block;
+  will-change: transform, opacity;
+}
+.hero h1 .char-space{ white-space: pre; }
+/* Initial state — chars are scattered horizontally + invisible.
+   JS overrides these inline once split; this just prevents flash
+   on the brief window before JS sets per-char positions. */
+.hero h1.fx-pending .char{ opacity: 0; }
 .hero h1 em{
   font-family: var(--font-serif);
   font-style: italic; font-weight: 400;
@@ -934,10 +934,10 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
 .topbar .brand-lock,
 .topbar .lang,
 .hero-crest,
-.hero h1,
 .hero .lede,
 .cta-row,
 .micro-footer span{ opacity: 0; }
+/* H1 itself stays visible — its .char children control visibility */
 
 .topbar .brand-lock,
 .topbar .lang,
@@ -949,18 +949,18 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
 }
 
 .hero-crest,
-.hero h1,
 .hero .lede{
   filter: blur(6px);
   transition: opacity .9s cubic-bezier(.2,.6,.2,1),
               filter .9s ease;
 }
-.hero h1{ filter: blur(10px); }
+/* H1 container stays visible — its individual chars handle their own
+   reveal via the converge effect (see JS convergeReveal). */
+.hero h1{ opacity: 1; }
 
 body.is-ready .topbar .brand-lock { opacity: 1; transform: none; transition-delay: 60ms; }
 body.is-ready .topbar .lang       { opacity: 1; transform: none; transition-delay: 140ms; }
 body.is-ready .hero-crest         { opacity: 1; filter: none;    transition-delay: 220ms; }
-body.is-ready .hero h1            { opacity: 1; filter: none;    transition-delay: 340ms; }
 body.is-ready .hero .lede         { opacity: 1; filter: none;    transition-delay: 480ms; }
 body.is-ready .cta-row            { opacity: 1; transform: none; transition-delay: 580ms; }
 body.is-ready .micro-footer span:nth-child(1){ opacity: 1; transform: none; transition-delay: 740ms; }
@@ -991,7 +991,7 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
       <img src="assets/logo-croncore.png" alt="" width="36" height="36" />
     </div>
     <div class="pre-word" aria-label="Croncore">
-      <span>C</span><span>R</span><span>O</span><span>N</span><span>C</span><span>O</span><span>R</span><span>E</span>
+      <span class="char">C</span><span class="char">R</span><span class="char">O</span><span class="char">N</span><span class="char">C</span><span class="char">O</span><span class="char">R</span><span class="char">E</span>
     </div>
     <div class="pre-sub" data-i18n="preload">Entering the circle</div>
     <div class="pre-track"><span class="pre-fill"></span></div>
@@ -1740,27 +1740,140 @@ function showSuccess(){
 }
 
 /* ============================================================
-   INTERACTIONS — custom cursor, spotlight, mouse-parallax,
-   on-load reveals. Single-slide friendly: no scroll listeners.
+   TEXT FX — Codrops on-scroll typography animations, adapted
+   to single-slide.
+     • Effect 8 (glitch reveal) → preloader CRONCORE wordmark
+     • Effect 4 (chars converge to centre) → hero H1
+   GSAP-free; runs on initial reveal + on language switch.
+   ============================================================ */
+const GLITCH_SYMBOLS = "abcdefghijklmnopqrstuvwxyz!@#$%^&*-_+=;:<>,";
+
+/* Walk text nodes inside `el`, wrap each grapheme in <span class="char">.
+   Preserves inline structure (<em>, etc). Idempotent — re-runs after
+   data-i18n-html replaces innerHTML on language switch. */
+function splitChars(el){
+  if (el.querySelector(".char")) return;
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+  const texts = [];
+  let t; while ((t = walker.nextNode())) texts.push(t);
+  texts.forEach(node => {
+    const text = node.textContent;
+    if (!text) return;
+    const frag = document.createDocumentFragment();
+    for (const ch of text){
+      const s = document.createElement("span");
+      s.className = (ch === " " || ch === " ") ? "char char-space" : "char";
+      s.textContent = ch === " " ? " " : ch;
+      frag.appendChild(s);
+    }
+    node.parentNode.replaceChild(frag, node);
+  });
+}
+
+/* Effect 8 — glitch reveal. Each char appears with a stagger, cycles
+   through random symbols for ~360ms, then settles. */
+function glitchReveal(scope, opts){
+  const chars = scope.querySelectorAll(".char");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const o = Object.assign({ startDelay: 0, perChar: 90, cycles: 12, cycleMs: 30 }, opts || {});
+  chars.forEach((c, i) => {
+    const original = c.textContent;
+    c.style.opacity = "0";
+    if (c.classList.contains("char-space")){
+      setTimeout(() => { c.style.opacity = "1"; }, o.startDelay + i * o.perChar);
+      return;
+    }
+    if (reduced){
+      c.style.opacity = "1";
+      return;
+    }
+    setTimeout(() => {
+      c.style.opacity = "1";
+      let n = 0;
+      const tick = setInterval(() => {
+        c.textContent = GLITCH_SYMBOLS[Math.floor(Math.random() * GLITCH_SYMBOLS.length)];
+        n++;
+        if (n >= o.cycles){
+          clearInterval(tick);
+          c.textContent = original;
+        }
+      }, o.cycleMs);
+    }, o.startDelay + i * o.perChar);
+  });
+}
+
+/* Effect 4 — chars converge to centre from offset positions.
+   Stagger runs from centre outward (centre chars first). */
+function convergeReveal(scope, opts){
+  const chars = Array.from(scope.querySelectorAll(".char"));
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const vp = window.innerWidth || 1024;
+  const o = Object.assign({
+    /* viewport-aware so narrow phones don't fling chars off-screen */
+    spreadPerChar: Math.min(60, vp * 0.045),
+    maxSpread:     Math.min(280, vp * 0.35),
+    duration: 1100,        /* ms */
+    perCharDelay: 55,      /* ms, applied to distance from centre */
+    ease: "cubic-bezier(.4,0,.2,1)",
+    startDelay: 0,
+  }, opts || {});
+  if (!chars.length) return;
+  const n = chars.length;
+  const centre = (n - 1) / 2;
+
+  /* 1) initial scattered state — fly in from horizontal offsets */
+  chars.forEach((c, i) => {
+    if (reduced){
+      c.style.opacity = "1";
+      c.style.transform = "";
+      return;
+    }
+    const offset = Math.max(-o.maxSpread, Math.min(o.maxSpread, (i - centre) * o.spreadPerChar));
+    c.style.transition = "none";
+    c.style.transform = `translateX(${offset}px)`;
+    c.style.opacity = "0";
+  });
+  scope.classList.remove("fx-pending");
+
+  if (reduced) return;
+
+  /* 2) on next frame, transition each char to its resting position.
+     Stagger from centre — middle chars arrive first. */
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      chars.forEach((c, i) => {
+        const dist = Math.abs(i - centre);
+        const delay = o.startDelay + dist * o.perCharDelay;
+        c.style.transition = `transform ${o.duration}ms ${o.ease} ${delay}ms, opacity ${o.duration * 0.7}ms ease ${delay}ms`;
+        c.style.transform = "";
+        c.style.opacity = "1";
+      });
+    });
+  });
+}
+
+/* ============================================================
+   INTERACTIONS — custom cursor, spotlight, on-load reveals.
+   Single-slide friendly: no scroll listeners.
    ============================================================ */
 (function(){
   const html = document.documentElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine    = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  /* Preloader timeline (pure CSS):
-       0.15s  mark fades in
-       0.35s  CRONCORE letters reveal one by one (~0.85s total)
+  /* Preloader timeline:
+       0.15s  mark fades in (CSS)
+       0.35s  CRONCORE letters glitch-reveal (JS, ~1.7s end-to-end)
        1.0s   progress track fades in
        1.05s  progress bar fills (1.4s)
-       1.25s  serif subline rises in
-       2.45s  CSS animations done
-     We start the hero reveals 150ms before that so the entrance
-     overlaps with the preloader fade. Reduced motion skips it all. */
+       2.0s   serif subline rises in
+       2.45s  preloader fades, hero entrance starts (overlap 150ms) */
   function boot(){
     const pre = document.getElementById("preloader");
+    const word = pre && pre.querySelector(".pre-word");
 
     if (reduced || !pre){
+      if (word) word.querySelectorAll(".char").forEach(c => c.style.opacity = "1");
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           document.body.classList.add("is-ready");
@@ -1769,6 +1882,8 @@ function showSuccess(){
       if (pre) pre.classList.add("done");
       return;
     }
+
+    if (word) glitchReveal(word, { startDelay: 350, perChar: 180, cycles: 12, cycleMs: 30 });
 
     setTimeout(() => document.body.classList.add("is-ready"), 2300);
     setTimeout(() => pre.classList.add("done"), 2500);
@@ -1825,11 +1940,39 @@ function showSuccess(){
 /* ============================================================
    BOOT
    ============================================================ */
+const heroH1 = document.querySelector(".hero h1");
+
+function refreshHeroChars(){
+  if (!heroH1) return;
+  heroH1.classList.add("fx-pending");
+  splitChars(heroH1);
+  /* If hero is already revealed (post-preloader), run converge now;
+     otherwise wait — the is-ready watcher below triggers it. */
+  if (document.body.classList.contains("is-ready")){
+    convergeReveal(heroH1);
+  }
+}
+
+function setLang(lang){
+  applyLang(lang);
+  refreshHeroChars();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".lang button").forEach(b => {
-    b.addEventListener("click", () => applyLang(b.dataset.lang));
+    b.addEventListener("click", () => setLang(b.dataset.lang));
   });
-  applyLang(detectInitialLang());
+  setLang(detectInitialLang());
+
+  /* Watch for the is-ready flip (set by the preloader) and fire the
+     hero H1 converge once chars are in place. */
+  const mo = new MutationObserver(() => {
+    if (document.body.classList.contains("is-ready") && heroH1){
+      mo.disconnect();
+      convergeReveal(heroH1);
+    }
+  });
+  mo.observe(document.body, { attributes: true, attributeFilter: ["class"] });
 });
 </script>
 
