@@ -214,67 +214,117 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
 }
 
 /* =========================================================
-   PRELOADER — Hubtown-style 0% → 100%
-   Editorial counter that fades into the hero. Skipped on
-   prefers-reduced-motion (handled via JS + initial state).
+   PRELOADER — editorial wordmark reveal over the live atmosphere
+   Atmosphere + aurora keep animating behind a translucent
+   vignette so the curtain never feels static. Skipped on
+   prefers-reduced-motion.
    ========================================================= */
 .preloader{
   position: fixed; inset: 0; z-index: 100;
-  background: var(--f-950);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono);
+  display: grid; place-items: center;
+  font-family: var(--font-sans);
   color: var(--cream-50);
-  transition: opacity .8s ease, visibility .8s ease;
+  pointer-events: auto;
+  transition: opacity .9s cubic-bezier(.2,.6,.2,1), visibility .9s ease;
+}
+.preloader::before{
+  content:""; position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(65% 55% at 50% 50%, oklch(0.10 0.02 150 / .35), oklch(0.07 0.015 150 / .82) 75%),
+    linear-gradient(180deg, oklch(0.11 0.02 150 / .55), oklch(0.08 0.015 150 / .75));
 }
 .preloader.done{ opacity: 0; visibility: hidden; pointer-events: none; }
-.pre-inner{
-  width: min(720px, 92vw);
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center; gap: var(--s-5);
+
+.pre-stage{
+  position: relative; z-index: 1;
+  display: grid; gap: var(--s-5); justify-items: center;
+  width: min(680px, 90vw);
+  text-align: center;
   padding: 0 var(--s-5);
 }
-.pre-num{
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 300;
-  font-size: clamp(64px, 12vw, 140px);
+
+.pre-mark{
+  width: 36px; height: 36px;
+  opacity: 0; transform: scale(.92);
+  animation: preMark .65s cubic-bezier(.2,.6,.2,1) .15s forwards;
+}
+.pre-mark img{
+  width: 100%; height: 100%; display: block; object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.55));
+}
+
+.pre-word{
+  display: flex;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: clamp(40px, 7.5vw, 84px);
+  letter-spacing: clamp(.18em, .8vw, .42em);
   line-height: 1;
-  letter-spacing: -.04em;
+  white-space: nowrap;
+  padding-left: clamp(.18em, .8vw, .42em); /* offset trailing letter-spacing */
   color: var(--cream-50);
 }
-.pre-num .pct{ font-size: .45em; vertical-align: super; color: var(--cream-300); }
-.pre-bar{
-  width: clamp(120px, 18vw, 200px); height: 1px;
-  background: rgba(255,255,255,.15);
-  position: relative; overflow: hidden;
+.pre-word span{
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(.45em);
+  filter: blur(8px);
+  animation: preLetter .85s cubic-bezier(.2,.6,.2,1) forwards;
 }
-.pre-bar::after{
-  content:""; position:absolute; inset: 0;
+.pre-word span:nth-child(1){ animation-delay: .35s; }
+.pre-word span:nth-child(2){ animation-delay: .43s; }
+.pre-word span:nth-child(3){ animation-delay: .51s; }
+.pre-word span:nth-child(4){ animation-delay: .59s; }
+.pre-word span:nth-child(5){ animation-delay: .67s; }
+.pre-word span:nth-child(6){ animation-delay: .75s; }
+.pre-word span:nth-child(7){ animation-delay: .83s; }
+.pre-word span:nth-child(8){ animation-delay: .91s; }
+
+.pre-sub{
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(15px, 1.5vw, 19px);
+  color: var(--cream-200);
+  opacity: 0; transform: translateY(8px);
+  animation: preFadeUp .8s cubic-bezier(.2,.6,.2,1) 1.25s forwards;
+  letter-spacing: 0;
+}
+
+.pre-track{
+  position: relative;
+  width: clamp(160px, 22vw, 240px); height: 1px;
+  background: rgba(255,255,255,.10);
+  margin-top: var(--s-3);
+  overflow: hidden;
+  opacity: 0;
+  animation: preFadeIn .5s ease 1.0s forwards;
+}
+.pre-fill{
+  position: absolute; left: 0; top: 0; bottom: 0; width: 100%;
   background: var(--cream-50);
   transform-origin: left;
   transform: scaleX(0);
-  animation: preFill 2.6s cubic-bezier(.65,.05,.2,1) forwards;
+  animation: preFill 1.4s cubic-bezier(.65,.05,.2,1) 1.05s forwards;
 }
-.pre-caption{
-  text-align: right;
-  font-size: 11px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--cream-300);
-  line-height: 1.6;
-}
-.pre-caption b{ color: var(--cream-50); font-weight: 500; display: block; letter-spacing: .22em; }
-@keyframes preFill{ to { transform: scaleX(1); } }
 
-html[lang="ar"] .pre-caption,
-html[lang="he"] .pre-caption{ letter-spacing: .04em; text-transform: none; }
+@keyframes preMark   { to { opacity: 1; transform: none; } }
+@keyframes preLetter { to { opacity: 1; transform: none; filter: none; } }
+@keyframes preFadeIn { to { opacity: 1; } }
+@keyframes preFadeUp { to { opacity: 1; transform: none; } }
+@keyframes preFill   { to { transform: scaleX(1); } }
+
+html[lang="ar"] .pre-sub,
+html[lang="he"] .pre-sub{ letter-spacing: 0; }
 
 @media (max-width: 600px){
-  .pre-inner{ grid-template-columns: 1fr; justify-items: center; gap: var(--s-4); }
-  .pre-bar{ width: 60vw; }
-  .pre-caption{ text-align: center; }
+  .pre-stage{ gap: var(--s-4); }
+  .pre-word{ font-size: clamp(34px, 11vw, 56px); letter-spacing: clamp(.14em, .6vw, .26em); padding-left: clamp(.14em, .6vw, .26em); }
+  .pre-sub{ font-size: 14px; }
+  .pre-mark{ width: 32px; height: 32px; }
+  .pre-track{ width: clamp(140px, 38vw, 220px); }
 }
+
 @media (prefers-reduced-motion: reduce){
   .preloader{ display: none; }
 }
@@ -428,9 +478,10 @@ html[lang="he"] .pre-caption{ letter-spacing: .04em; text-transform: none; }
 .hero h1{
   margin: 0;
   font-weight: 500;
-  font-size: clamp(40px, 8.4vw, 96px);
+  font-size: clamp(28px, 7vw, 96px);
   line-height: 0.96;
   letter-spacing: -0.035em;
+  text-wrap: balance;
 }
 .hero h1 em{
   font-family: var(--font-serif);
@@ -448,7 +499,6 @@ html[lang="he"] .pre-caption{ letter-spacing: .04em; text-transform: none; }
 @media (max-width: 600px){
   .hero{ padding: var(--s-4) 0; gap: var(--s-3); }
   .hero-crest{ width: clamp(56px, 14vw, 80px); }
-  .hero h1{ font-size: clamp(36px, 10.5vw, 56px); }
   .hero .lede{ font-size: 14.5px; line-height: 1.5; }
 }
 
@@ -786,27 +836,11 @@ html[dir="rtl"] .field select{
    prefers-reduced-motion.
    ========================================================= */
 
-/* Mouse coordinates exposed by JS:
-   --mx / --my  — normalized -1..1 (0 = centre)
-   --mxp / --myp — raw px from top-left */
+/* Cursor coordinates exposed by JS (raw px from top-left).
+   Used by the custom cursor + spotlight; no parallax on hero. */
 :root{
-  --mx: 0;
-  --my: 0;
   --mxp: 50vw;
   --myp: 50vh;
-}
-
-/* --- Mouse parallax (subtle depth shift on hero) --- */
-@media (hover: hover) and (prefers-reduced-motion: no-preference){
-  .hero-crest{
-    transform: translate3d(calc(var(--mx) * 14px), calc(var(--my) * 14px), 0);
-  }
-  .hero h1{
-    transform: translate3d(calc(var(--mx) * 6px), calc(var(--my) * 6px), 0);
-  }
-  .hero .lede{
-    transform: translate3d(calc(var(--mx) * 3px), calc(var(--my) * 3px), 0);
-  }
 }
 
 /* --- Spotlight that follows the cursor --- */
@@ -950,15 +984,17 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
 </head>
 <body>
 
-<!-- Preloader — Hubtown-style 0%→100% counter, fades into hero -->
+<!-- Preloader — wordmark reveal + thin fill bar over the live atmosphere -->
 <div class="preloader" id="preloader" aria-hidden="true">
-  <div class="pre-inner">
-    <div class="pre-num"><span id="preNum">0</span><span class="pct">%</span></div>
-    <div class="pre-bar"></div>
-    <div class="pre-caption">
-      <span data-i18n="preload">Entering the circle</span>
-      <b>Croncore</b>
+  <div class="pre-stage">
+    <div class="pre-mark">
+      <img src="assets/logo-croncore.png" alt="" width="36" height="36" />
     </div>
+    <div class="pre-word" aria-label="Croncore">
+      <span>C</span><span>R</span><span>O</span><span>N</span><span>C</span><span>O</span><span>R</span><span>E</span>
+    </div>
+    <div class="pre-sub" data-i18n="preload">Entering the circle</div>
+    <div class="pre-track"><span class="pre-fill"></span></div>
   </div>
 </div>
 
@@ -989,7 +1025,7 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
     <div class="hero-crest" aria-hidden="true">
       <img src="assets/logo-croncore.png" alt="" />
     </div>
-    <h1 data-i18n-html="hero_h1">The Partners'<br/><em>Circle</em>.</h1>
+    <h1 data-i18n-html="hero_h1">The Partners' <em>Circle</em>.</h1>
     <p class="lede" data-i18n="hero_lede">Payments, investments, SPV, legal, concierge — through one private channel.</p>
     <div class="cta-row">
       <button class="btn btn-primary btn-lg" type="button" id="open-apply">
@@ -1160,7 +1196,7 @@ const I18N = {
     meta_desc: "A private circle of partners — payments, investments, SPV, legal, concierge. By invitation.",
     preload: "Entering the circle",
     brand_sub: "The Partners' Circle",
-    hero_h1: "The Partners'<br/><em>Circle</em>.",
+    hero_h1: "The Partners' <em>Circle</em>.",
     hero_lede: "Payments, investments, SPV, legal, concierge — through one private channel.",
     btn_apply: "Request access",
     footer_l1: "© 2026 CRONCORE · By invitation only",
@@ -1224,7 +1260,7 @@ const I18N = {
     meta_desc: "Ein privater Kreis von Partnern — Zahlungen, Investitionen, SPV, Recht, Concierge. Auf Einladung.",
     preload: "Eintritt in den Kreis",
     brand_sub: "Der Partnerkreis",
-    hero_h1: "Der Partner-<br/><em>Kreis</em>.",
+    hero_h1: "Der Partner-<em>kreis</em>.",
     hero_lede: "Zahlungen, Investitionen, SPV, Recht, Concierge — über einen privaten Kanal.",
     btn_apply: "Zugang anfragen",
     footer_l1: "© 2026 CRONCORE · Nur auf Einladung",
@@ -1480,7 +1516,7 @@ const I18N = {
     meta_desc: "Un círculo privado de socios — pagos, inversiones, SPV, legal, concierge. Por invitación.",
     preload: "Entrando al círculo",
     brand_sub: "El Círculo de Socios",
-    hero_h1: "El Círculo de<br/><em>Socios</em>.",
+    hero_h1: "El Círculo de <em>Socios</em>.",
     hero_lede: "Pagos, inversiones, SPV, legal, concierge — a través de un único canal privado.",
     btn_apply: "Solicitar acceso",
     footer_l1: "© 2026 CRONCORE · Solo por invitación",
@@ -1712,14 +1748,19 @@ function showSuccess(){
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine    = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  /* Preloader → entrance reveals. The 0%→100% counter runs for 2.6s,
-     then the .is-ready flip starts the staggered hero reveals while the
-     preloader itself fades out. Reduced motion skips both. */
+  /* Preloader timeline (pure CSS):
+       0.15s  mark fades in
+       0.35s  CRONCORE letters reveal one by one (~0.85s total)
+       1.0s   progress track fades in
+       1.05s  progress bar fills (1.4s)
+       1.25s  serif subline rises in
+       2.45s  CSS animations done
+     We start the hero reveals 150ms before that so the entrance
+     overlaps with the preloader fade. Reduced motion skips it all. */
   function boot(){
     const pre = document.getElementById("preloader");
-    const num = document.getElementById("preNum");
 
-    if (reduced || !pre || !num){
+    if (reduced || !pre){
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           document.body.classList.add("is-ready");
@@ -1729,18 +1770,8 @@ function showSuccess(){
       return;
     }
 
-    const start = performance.now();
-    const DUR   = 2600;
-    function tick(now){
-      const p = Math.min(1, (now - start) / DUR);
-      num.textContent = Math.floor(p * 100);
-      if (p < 1) requestAnimationFrame(tick);
-      else {
-        document.body.classList.add("is-ready");
-        setTimeout(() => pre.classList.add("done"), 200);
-      }
-    }
-    requestAnimationFrame(tick);
+    setTimeout(() => document.body.classList.add("is-ready"), 2300);
+    setTimeout(() => pre.classList.add("done"), 2500);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot, { once: true });
@@ -1748,47 +1779,23 @@ function showSuccess(){
     boot();
   }
 
-  if (!fine || reduced) return; /* touch / reduced motion: skip cursor + parallax */
+  if (!fine || reduced) return; /* touch / reduced motion: skip cursor */
 
   html.classList.add("cursor-on", "has-cursor");
 
-  /* Two coordinate streams:
-     - raw cursor px (cx, cy) → drives --mxp/--myp for the cursor dot/ring
-       (must be hard-tracked, any smoothing would feel broken)
-     - smoothed normalized (sx, sy) ∈ -1..1 → drives --mx/--my for the
-       hero parallax + spotlight (lerped in rAF, never via CSS transition) */
+  /* Raw cursor px → --mxp/--myp for the cursor dot/ring and spotlight.
+     No parallax on hero content (felt cheap, removed). */
   let cx = window.innerWidth  / 2;
   let cy = window.innerHeight / 2;
-  let tnx = 0, tny = 0; /* target normalized */
-  let snx = 0, sny = 0; /* smoothed normalized */
-  const LERP = 0.08;    /* lower = smoother + lazier, higher = snappier */
 
   function setRaw(px, py){
     html.style.setProperty("--mxp", px + "px");
     html.style.setProperty("--myp", py + "px");
   }
-  function setSmoothed(){
-    html.style.setProperty("--mx", snx.toFixed(4));
-    html.style.setProperty("--my", sny.toFixed(4));
-  }
   setRaw(cx, cy);
-  setSmoothed();
-
-  /* rAF loop: lerp smoothed values toward target.
-     We keep the loop running once started — the cost is negligible
-     and avoids any restart jank when the mouse first moves. */
-  function loop(){
-    snx += (tnx - snx) * LERP;
-    sny += (tny - sny) * LERP;
-    setSmoothed();
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
 
   document.addEventListener("mousemove", (e) => {
     cx = e.clientX; cy = e.clientY;
-    tnx = (cx / window.innerWidth  - 0.5) * 2;
-    tny = (cy / window.innerHeight - 0.5) * 2;
     setRaw(cx, cy);
   }, { passive: true });
 
