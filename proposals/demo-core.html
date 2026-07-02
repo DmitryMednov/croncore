@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>CRONCORE — Прототип: Хрустальное ядро + Кольцо партнёров</title>
+<style>
+:root{
+  --f-950: oklch(0.12 0.025 150);
+  --f-900: oklch(0.16 0.035 150);
+  --f-800: oklch(0.28 0.06 150);
+  --f-500: oklch(0.56 0.08 150);
+  --f-400: oklch(0.68 0.07 150);
+  --f-300: oklch(0.80 0.05 150);
+  --cream-50:  oklch(0.97 0.015 85);
+  --cream-200: oklch(0.86 0.022 85);
+  --cream-300: oklch(0.72 0.022 85);
+  --gold-500: oklch(0.78 0.12 90);
+  --font-sans:  "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", ui-serif, Georgia, serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, monospace;
+}
+*,*::before,*::after{ box-sizing:border-box; }
+html,body{ margin:0; height:100%; overflow:hidden; }
+body{
+  font-family: var(--font-sans);
+  color: var(--cream-50);
+  background: var(--f-950);
+  -webkit-font-smoothing: antialiased;
+  line-height:1.55;
+}
+
+/* Атмосфера — как на текущем лендинге */
+.atmosphere{
+  position:fixed; inset:-10%; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(55% 50% at 18% 12%, oklch(0.30 0.07 150 / .60), transparent 70%),
+    radial-gradient(45% 45% at 88% 22%, oklch(0.38 0.06 145 / .35), transparent 65%),
+    radial-gradient(60% 55% at 80% 80%, oklch(0.50 0.13 45 / .18), transparent 70%),
+    radial-gradient(70% 60% at 30% 80%, oklch(0.22 0.06 150 / .55), transparent 70%),
+    linear-gradient(180deg, oklch(0.13 0.025 150), oklch(0.10 0.020 150));
+  filter: blur(40px) saturate(115%);
+}
+.atmosphere::before{
+  content:""; position:absolute; inset:0;
+  background: radial-gradient(110% 80% at 50% 50%, transparent 50%, oklch(0.07 0.02 150 / .75) 100%);
+}
+
+/* WebGL-канвас — между атмосферой и контентом */
+#gl{
+  position:fixed; inset:0; z-index:1;
+  width:100%; height:100%;
+  display:block;
+}
+
+.slide{
+  position:relative; z-index:2;
+  display:grid; grid-template-rows:auto 1fr auto;
+  height:100svh; max-width:1320px; margin:0 auto; padding:0 48px;
+  pointer-events:none;
+}
+.slide a, .slide button{ pointer-events:auto; }
+
+.topbar{
+  display:flex; align-items:center; margin-top:22px;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--cream-300);
+}
+.topbar b{ color:var(--cream-50); letter-spacing:.12em; margin-right:12px; }
+
+.hero{
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  text-align:center; gap:20px;
+}
+.eyebrow{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--cream-300);
+}
+.hero h1{
+  margin:0; font-weight:500;
+  font-size:clamp(34px, 7vw, 96px);
+  line-height:.96; letter-spacing:-.035em;
+  text-shadow: 0 2px 30px oklch(0.10 0.02 150 / .8);
+}
+.hero h1 em{ font-family:var(--font-serif); font-style:italic; font-weight:400; color:var(--f-300); }
+.lede{
+  margin:0; font-size:clamp(15px,1.7vw,19px);
+  color:var(--cream-200); max-width:56ch;
+}
+.cta{
+  display:inline-flex; align-items:center; gap:10px;
+  margin-top:10px; padding:15px 26px;
+  font-family:var(--font-mono); font-size:13px; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--cream-50); text-decoration:none;
+  background: linear-gradient(180deg, var(--f-500), var(--f-800));
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 14px 26px rgba(0,0,0,.35);
+  border-radius:999px; cursor:pointer;
+  transition: transform .15s, filter .15s;
+}
+.cta:hover{ filter:brightness(1.12); transform:translateY(-1px); }
+
+.micro-footer{
+  display:flex; justify-content:space-between; padding:14px 4px 18px;
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--cream-300); opacity:.7;
+}
+@media (max-width:800px){ .slide{ padding:0 16px; } }
+</style>
+</head>
+<body>
+
+<div class="atmosphere"></div>
+<canvas id="gl"></canvas>
+
+<main class="slide">
+  <header class="topbar"><b>CRONCORE</b> Prototype · Crystal Core + Partners' Ring</header>
+  <section class="hero">
+    <span class="eyebrow">By invitation only</span>
+    <h1>The Partners' <em>Circle</em>.</h1>
+    <p class="lede">Payments, investments, SPV, legal, concierge — through one private channel.</p>
+    <a class="cta" href="#">Request access</a>
+  </section>
+  <div class="micro-footer">
+    <span>© 2026 CRONCORE</span>
+    <span>Concept A — живое ядро круга</span>
+  </div>
+</main>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.module.min.js"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from './vendor/RoomEnvironment.js';
+
+const canvas = document.getElementById('gl');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+} catch (e) {
+  canvas.remove(); // нет WebGL — остаётся CSS-атмосфера, страница живёт
+  throw e;
+}
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, innerWidth/innerHeight, .1, 60);
+camera.position.set(0, 0, 8.5);
+
+/* Окружение для стекла/преломлений */
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
+
+/* Палитра бренда в sRGB-приближении */
+const FOREST      = new THREE.Color('#3e7a58');
+const FOREST_DEEP = new THREE.Color('#12281c');
+const CREAM       = new THREE.Color('#f2ead9');
+const GOLD        = new THREE.Color('#d9b36a');
+
+const root = new THREE.Group();
+scene.add(root);
+
+/* ---- Хрустальное ядро — гранёный «камень» с преломлением ---- */
+const core = new THREE.Group();
+root.add(core);
+
+const gemGeo = new THREE.IcosahedronGeometry(.92, 0);
+const gemMat = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff,
+  metalness: 0,
+  roughness: .06,
+  transmission: 1,
+  thickness: 2.2,
+  ior: 1.45,
+  attenuationColor: FOREST,
+  attenuationDistance: 2.6,
+  iridescence: .35,
+  iridescenceIOR: 1.3,
+  clearcoat: 1,
+  clearcoatRoughness: .08,
+  flatShading: true,
+});
+const gem = new THREE.Mesh(gemGeo, gemMat);
+core.add(gem);
+
+/* Тонкая кремовая огранка по рёбрам */
+const edges = new THREE.LineSegments(
+  new THREE.EdgesGeometry(gemGeo),
+  new THREE.LineBasicMaterial({ color: CREAM, transparent: true, opacity: .18 })
+);
+core.add(edges);
+
+/* Светящееся ядро внутри — «жизнь» камня */
+const heart = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(.34, 1),
+  new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: .9 })
+);
+core.add(heart);
+const heartGlow = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(.52, 1),
+  new THREE.MeshBasicMaterial({ color: FOREST, transparent: true, opacity: .28, blending: THREE.AdditiveBlending })
+);
+core.add(heartGlow);
+
+/* ---- Кольцо партнёров — узлы на орбите + связи ---- */
+const RING_R = 2.75;
+const NODES = 84;
+const ring = new THREE.Group();
+ring.rotation.x = THREE.MathUtils.degToRad(64);
+ring.rotation.y = THREE.MathUtils.degToRad(-8);
+root.add(ring);
+
+const nodeGeo = new THREE.SphereGeometry(.030, 10, 10);
+const nodeMat = new THREE.MeshBasicMaterial({ color: CREAM });
+const nodes = new THREE.InstancedMesh(nodeGeo, nodeMat, NODES);
+const dummy = new THREE.Object3D();
+const phases = new Float32Array(NODES);
+for (let i = 0; i < NODES; i++) phases[i] = Math.random() * Math.PI * 2;
+ring.add(nodes);
+
+/* Замкнутая линия круга */
+const circlePts = [];
+for (let i = 0; i <= 128; i++){
+  const a = (i / 128) * Math.PI * 2;
+  circlePts.push(new THREE.Vector3(Math.cos(a) * RING_R, 0, Math.sin(a) * RING_R));
+}
+const circle = new THREE.Line(
+  new THREE.BufferGeometry().setFromPoints(circlePts),
+  new THREE.LineBasicMaterial({ color: FOREST, transparent: true, opacity: .5, blending: THREE.AdditiveBlending })
+);
+ring.add(circle);
+
+/* Второе, широкое тихое кольцо */
+const ring2 = new THREE.Group();
+ring2.rotation.x = THREE.MathUtils.degToRad(78);
+ring2.rotation.z = THREE.MathUtils.degToRad(24);
+root.add(ring2);
+const circle2 = circle.clone();
+circle2.material = new THREE.LineBasicMaterial({ color: GOLD, transparent: true, opacity: .16, blending: THREE.AdditiveBlending });
+circle2.scale.setScalar(1.34);
+ring2.add(circle2);
+
+/* ---- Пыль — разреженные частицы вокруг сцены ---- */
+const DUST = 420;
+const dustPos = new Float32Array(DUST * 3);
+for (let i = 0; i < DUST; i++){
+  const r = 3.4 + Math.random() * 5.5;
+  const th = Math.random() * Math.PI * 2;
+  const ph = Math.acos(2 * Math.random() - 1);
+  dustPos[i*3]   = r * Math.sin(ph) * Math.cos(th);
+  dustPos[i*3+1] = (Math.random() - .5) * 6.5;
+  dustPos[i*3+2] = r * Math.sin(ph) * Math.sin(th) - 1.5;
+}
+const dustGeo = new THREE.BufferGeometry();
+dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+  color: CREAM, size: .02, transparent: true, opacity: .45,
+  blending: THREE.AdditiveBlending, depthWrite: false,
+}));
+scene.add(dust);
+
+/* ---- Свет ---- */
+scene.add(new THREE.AmbientLight(FOREST_DEEP, 2.2));
+const key = new THREE.DirectionalLight(CREAM, 1.7);
+key.position.set(4, 6, 6);
+scene.add(key);
+const rimG = new THREE.PointLight(FOREST, 26, 22);
+rimG.position.set(-6, -2, 3);
+scene.add(rimG);
+const rimGold = new THREE.PointLight(GOLD, 14, 20);
+rimGold.position.set(5, -4, -3);
+scene.add(rimGold);
+
+/* ---- Взаимодействие: параллакс за курсором ---- */
+const mouse = new THREE.Vector2(0, 0);
+addEventListener('pointermove', (e) => {
+  mouse.x = (e.clientX / innerWidth)  * 2 - 1;
+  mouse.y = (e.clientY / innerHeight) * 2 - 1;
+}, { passive: true });
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+/* ---- Цикл ---- */
+const clock = new THREE.Clock();
+let raf = null;
+
+function placeNodes(t){
+  for (let i = 0; i < NODES; i++){
+    const a = (i / NODES) * Math.PI * 2 + t * .1;
+    const pulse = 1 + Math.sin(t * 1.6 + phases[i]) * .45;
+    dummy.position.set(Math.cos(a) * RING_R, Math.sin(t * .9 + phases[i]) * .05, Math.sin(a) * RING_R);
+    dummy.scale.setScalar(pulse);
+    dummy.updateMatrix();
+    nodes.setMatrixAt(i, dummy.matrix);
+  }
+  nodes.instanceMatrix.needsUpdate = true;
+}
+
+function frame(){
+  const t = clock.getElapsedTime();
+
+  /* дыхание ядра */
+  gem.rotation.y = t * .16;
+  gem.rotation.x = Math.sin(t * .23) * .18;
+  edges.rotation.copy(gem.rotation);
+  core.position.y = Math.sin(t * .7) * .09;
+  const hb = 1 + Math.sin(t * 1.8) * .12;
+  heart.scale.setScalar(hb);
+  heartGlow.scale.setScalar(hb * 1.15);
+
+  placeNodes(t);
+  ring.rotation.z = t * .05;
+  ring2.rotation.z = -t * .03;
+  dust.rotation.y = t * .012;
+
+  /* параллакс — сцена мягко тянется к курсору */
+  root.rotation.y += ((mouse.x * .22) - root.rotation.y) * .04;
+  root.rotation.x += ((mouse.y * .14) - root.rotation.x) * .04;
+  camera.position.x += ((mouse.x * .35) - camera.position.x) * .03;
+  camera.position.y += ((-mouse.y * .25) - camera.position.y) * .03;
+  camera.lookAt(0, 0, 0);
+
+  renderer.render(scene, camera);
+  raf = requestAnimationFrame(frame);
+}
+
+placeNodes(0);
+if (reduced){
+  renderer.render(scene, camera); /* один статичный кадр */
+} else {
+  frame();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden){ cancelAnimationFrame(raf); raf = null; }
+    else if (!raf) frame();
+  });
+}
+</script>
+</body>
+</html>
