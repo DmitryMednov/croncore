@@ -2,6 +2,16 @@
 
 The marketing site (`index.html`) has one CTA: **Request access**. It opens an in-page form that collects enough context for any partner to pick up the request without follow-up. This document explains the moving parts and how to wire the form to your Telegram group.
 
+## Current wiring
+
+| piece            | value                                              |
+|------------------|----------------------------------------------------|
+| Notifier bot     | `@croncore_applications_bot`                       |
+| Partner group    | https://t.me/+LKvrheCHrUdjZDBi                     |
+| Bot token        | **kept out of the repo** — lives in the Worker as a secret |
+| Worker URL       | *(pending — fill in `<meta name="apply-endpoint">` when deployed)* |
+| Group `chat_id`  | *(pending — see step 1 below)*                     |
+
 ## How it works
 
 ```
@@ -15,80 +25,73 @@ visitor → form (modal in index.html)
                                                        with the same content pre-filled
 ```
 
-Until you finish setup, the form already works via the `mailto:` fallback — submissions open the user's mail client with a pre-filled letter addressed to `hello@croncore.com`. Change the recipient in `index.html`:
+Until you finish deployment, the form already works via the `mailto:` fallback — submissions open the user's mail client with a pre-filled letter addressed to `hello@croncore.com`. Change the recipient in `index.html`:
 
 ```html
 <meta name="apply-mailto" content="hello@croncore.com" />
 ```
 
-## One-time setup (≈ 15 minutes)
+## Deploy checklist — three human steps
 
-### 1 · Create a "notifier" bot
+### Step 1 · Get the group's `chat_id`
 
-1. Open [@BotFather](https://t.me/BotFather) in Telegram.
-2. `/newbot` → give it any name (e.g. `Croncore Inquiries`) and a username ending in `_bot`.
-3. **Copy the token** — looks like `123456789:AAExxxxxxxxxxxxxxxxxxx`.
+1. Open [https://t.me/+LKvrheCHrUdjZDBi](https://t.me/+LKvrheCHrUdjZDBi) in Telegram (as an admin).
+2. Group menu → **Add member** → search `@croncore_applications_bot` → add.
+3. Post any message in the group (e.g. `test`) so the bot has one update to read.
+4. Run this from any terminal (Telegram API isn't reachable from my sandbox, so this one is on you):
 
-This bot is purely a notifier — it doesn't need to be the same as your eventual `@CRONCORE_bot` advisor.
-
-### 2 · Add the bot to your partner group
-
-Partner group invite (this is the one inquiries land in):
-**https://t.me/+LKvrheCHrUdjZDBi**
-
-The Bot API needs a numeric `chat_id`, not the invite link — the invite link only lets humans join. To get the id:
-
-1. Open the group from the link above and make sure you're an admin.
-2. Add the new bot as a member (Group → Add member → search by username).
-3. Send any message in the group so the bot has at least one update to read.
-4. Open in a browser:
-
-   ```
-   https://api.telegram.org/bot<TOKEN>/getUpdates
+   ```bash
+   curl -sS 'https://api.telegram.org/bot8908574050:AAGbHcUgAU3h5mM1T3D0bSgFz3vySPj5GsM/getUpdates' \
+     | python3 -m json.tool
    ```
 
-   Look for `"chat":{"id":-1001234567890,…}`. **Save the negative number** — that's your `CHAT_ID`. (Supergroups always start with `-100`.)
+   In the JSON, find `"chat":{"id":-100…,…}`. **Copy that negative number** — that's your `CHAT_ID`.
 
-If `getUpdates` returns an empty `result`, the bot hasn't seen anything yet — send another message in the group and refresh. If you've previously set a webhook on this bot you'll need to remove it first (`/deleteWebhook`), since webhooks and `getUpdates` are mutually exclusive.
+   Empty `result`? Send another message in the group and re-run. If it stays empty, this bot may already have a webhook set — clear it once with:
 
-### 3 · Deploy the Worker
+   ```bash
+   curl -sS 'https://api.telegram.org/bot8908574050:AAGbHcUgAU3h5mM1T3D0bSgFz3vySPj5GsM/deleteWebhook'
+   ```
 
-Easiest path — Cloudflare dashboard:
+### Step 2 · Deploy the Worker
 
-1. Sign up / log in at https://dash.cloudflare.com (free).
-2. **Workers & Pages** → **Create application** → **Create Worker** → give it a name like `croncore-apply`.
-3. Click **Quick edit**, replace the default content with everything from `apply-worker.js` (in this repo), and **Save and deploy**.
-4. In **Settings → Variables**, add:
-   - **Encrypted (Secret)** — `BOT_TOKEN` = your token from step 1
-   - **Plaintext (Variable)** — `CHAT_ID` = the negative number from step 2
-   - **Plaintext (Variable)** — `ALLOW_ORIGIN` = `https://croncore.io` (or `*` for any origin while testing)
-5. Note the public Worker URL — e.g. `https://croncore-apply.your-name.workers.dev`.
+Easiest path — Cloudflare dashboard, no CLI needed:
 
-CLI alternative (if you have wrangler installed):
+1. Log in at https://dash.cloudflare.com (free plan is enough).
+2. **Workers & Pages → Create → Create Worker** → name it `croncore-apply` → **Deploy**.
+3. Click **Edit code**, delete everything, paste the whole content of [`apply-worker.js`](./apply-worker.js) from this repo, **Save & deploy**.
+4. **Settings → Variables & Secrets** → add:
+   - Type **Secret** — name `BOT_TOKEN` — value `8908574050:AAGbHcUgAU3h5mM1T3D0bSgFz3vySPj5GsM`
+   - Type **Text** — name `CHAT_ID` — value the negative number from step 1
+   - Type **Text** — name `ALLOW_ORIGIN` — value `https://croncore.io` (or `*` while you test)
+5. Copy the public URL Cloudflare shows for the Worker — looks like `https://croncore-apply.<your-name>.workers.dev`.
+
+CLI alternative (if wrangler is your speed):
 
 ```bash
-wrangler init croncore-apply --type none
-cp apply-worker.js croncore-apply/src/index.js
-cd croncore-apply
-wrangler secret put BOT_TOKEN          # paste the token
-wrangler deploy --var CHAT_ID:-100123456 --var ALLOW_ORIGIN:https://croncore.io
+# in the repo root
+npx wrangler deploy apply-worker.js --name croncore-apply
+npx wrangler secret put BOT_TOKEN --name croncore-apply       # paste the token
+npx wrangler deploy --var CHAT_ID:-100xxxxxxxxxx --var ALLOW_ORIGIN:https://croncore.io
 ```
 
-### 4 · Point the site at the Worker
+`wrangler.toml` is intentionally not committed so nothing pins your account/zone by accident — the CLI works fine without it, and the dashboard path doesn't need it at all.
 
-In `index.html`, set the meta tag:
+### Step 3 · Point the site at the Worker
+
+Send me the Worker URL and I'll drop it into `<meta name="apply-endpoint">` in `index.html` and push, or do it yourself:
 
 ```html
-<meta name="apply-endpoint" content="https://croncore-apply.your-name.workers.dev" />
+<meta name="apply-endpoint" content="https://croncore-apply.<your-name>.workers.dev" />
 ```
 
-That's it. Reload the site. From now on, hitting **Send request** in the form will POST to the Worker, which forwards a Markdown card into the group.
+That's it. Reload the site — from now on, hitting **Send request** in the form POSTs to the Worker, which forwards a Markdown card into the group.
 
-## Verifying
+## Verifying end-to-end
 
-- GET the Worker URL in a browser — it should respond `{"ok":true,"service":"croncore-apply"}`.
-- Submit a test inquiry from the site. The group should receive a message within a couple of seconds.
-- If something fails, the form shows a red error banner and logs the reason to the browser console; the Worker also logs to **Cloudflare → Workers → Logs**.
+- Open the Worker URL in a browser — should reply `{"ok":true,"service":"croncore-apply"}`.
+- Submit a test inquiry from the site. The partner group should receive a message within a couple of seconds.
+- If something fails, the form shows a red error banner and logs the reason to the browser console; the Worker also logs to **Cloudflare → Workers → Logs** (real-time tail is under the Worker's **Logs** tab).
 
 ## Fields collected
 
@@ -107,6 +110,10 @@ Every inquiry includes:
 | `lang`         | auto     | Current site language (en/de/ru/ar/he/es).                       |
 
 The Worker rejects malformed payloads and silently swallows honeypot-tripping submissions.
+
+## Rotating the token
+
+If the token ever leaks, in `@BotFather` → `/mybots` → `croncore_applications_bot` → **API Token** → **Revoke current token**. Paste the new one into the Worker's `BOT_TOKEN` secret and you're done — no code change needed.
 
 ## Going back to the multi-section site
 
