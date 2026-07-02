@@ -240,8 +240,31 @@ export function LoadingScreen() {
                         flexDirection: 'row',
                     }}>
                         {gpuError ? (
-                            <div style={{ fontSize: '0.8rem', maxWidth: '400px', lineHeight: '1.4', textAlign: 'center' }}>
-                                <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.7rem' }}>ERROR CODE: {gpuError}</p>
+                            <div style={{ fontSize: '0.8rem', maxWidth: '420px', lineHeight: '1.5', textAlign: 'center' }}>
+                                <p style={{ margin: '0 0 10px', fontWeight: 'bold', fontSize: '0.7rem', opacity: 0.7 }}>
+                                    ERROR CODE: {gpuError}
+                                </p>
+                                <p style={{ margin: '0 0 16px', color: '#9ec2ad', fontSize: '0.75rem' }}>
+                                    This world runs on WebGPU — available in recent Chrome, Edge
+                                    and Safari. Meanwhile, the Circle is open the classic way.
+                                </p>
+                                <a
+                                    href="../"
+                                    style={{
+                                        display: 'inline-block',
+                                        padding: '10px 22px',
+                                        border: '1px solid #2c6c4e',
+                                        borderRadius: '999px',
+                                        color: '#bff5d3',
+                                        background: 'rgba(44,108,78,0.15)',
+                                        textDecoration: 'none',
+                                        fontSize: '0.7rem',
+                                        letterSpacing: '2px',
+                                        pointerEvents: 'auto',
+                                    }}
+                                >
+                                    ← RETURN TO CRONCORE
+                                </a>
                             </div>
                         ) : (
                             isMobile ? (

@@ -1,12 +1,18 @@
 import { Billboard, Html } from '@react-three/drei';
-import { useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { Group, MeshStandardMaterial, Vector3 } from 'three';
+import { MathUtils } from 'three';
+import { useGameStore } from '../core/store/gameStore';
 
 /**
  * Croncore "Investor's Circle" blocks — six floating monoliths arranged in
  * a ring around spawn. Each block is the 3D analogue of a section on the
- * marketing site. Hover → glow; click → open the matching section in a new
- * tab. Designed to drop into <WorldController/> alongside Rose / Grass /
- * Character without depending on any of their pipelines.
+ * marketing site.
+ *
+ * Bruno-Simon-style proximity: walk the astronaut close to a monolith and
+ * it wakes up — glow ramps in, the label panel unfolds. Walk away and it
+ * goes quiet again. Hover (desktop) does the same; click opens the section.
  */
 
 const BASE_URL: string =
@@ -31,6 +37,10 @@ const BLOCKS: Block[] = [
 const RADIUS = 22;
 const Y_OFFSET = 4;
 
+/* Proximity thresholds (hysteresis so the panel doesn't flicker at the edge). */
+const NEAR_ENTER = 8.5;
+const NEAR_EXIT = 10.5;
+
 export function CroncoreBlocks({ visible = true }: { visible?: boolean }) {
     return (
         <group name="croncore-blocks" visible={visible}>
@@ -43,6 +53,7 @@ export function CroncoreBlocks({ visible = true }: { visible?: boolean }) {
                 return (
                     <Monolith
                         key={b.key}
+                        index={i}
                         position={[x, Y_OFFSET, z]}
                         rotationY={rotY}
                         title={b.title}
@@ -61,6 +72,7 @@ function resolveHref(suffix: string): string {
 }
 
 type MonolithProps = {
+    index: number;
     position: [number, number, number];
     rotationY: number;
     title: string;
@@ -68,11 +80,51 @@ type MonolithProps = {
     href: string;
 };
 
-function Monolith({ position, rotationY, title, sub, href }: MonolithProps) {
+function Monolith({ index, position, rotationY, title, sub, href }: MonolithProps) {
     const [hovered, setHovered] = useState(false);
+    const [near, setNear] = useState(false);
+
+    const characterRef = useGameStore((state) => state.characterRef);
+
+    const groupRef = useRef<Group>(null);
+    const matRef = useRef<MeshStandardMaterial>(null);
+    const worldPos = useMemo(() => new Vector3(), []);
+    const phase = index * 1.7; // desync the float bob per monolith
+
+    const awake = near || hovered;
+
+    useFrame(({ clock }, delta) => {
+        const group = groupRef.current;
+        if (!group) return;
+
+        // Slow idle float, slightly livelier when awake.
+        const t = clock.getElapsedTime();
+        const bobAmp = awake ? 0.34 : 0.22;
+        group.position.y = position[1] + Math.sin(t * 0.6 + phase) * bobAmp;
+
+        // Proximity check against the astronaut (hysteresis band).
+        const char = characterRef?.current;
+        if (char) {
+            group.getWorldPosition(worldPos);
+            const d = worldPos.distanceTo(char.position);
+            if (!near && d < NEAR_ENTER) setNear(true);
+            else if (near && d > NEAR_EXIT) setNear(false);
+        }
+
+        // Glow ramps smoothly instead of snapping.
+        const mat = matRef.current;
+        if (mat) {
+            const target = awake ? 1.45 : 0.55;
+            mat.emissiveIntensity = MathUtils.lerp(
+                mat.emissiveIntensity,
+                target,
+                Math.min(1, delta * 6)
+            );
+        }
+    });
 
     return (
-        <group position={position} rotation={[0, rotationY, 0]}>
+        <group ref={groupRef} position={position} rotation={[0, rotationY, 0]}>
             <mesh
                 onPointerOver={(e) => {
                     e.stopPropagation();
@@ -90,9 +142,10 @@ function Monolith({ position, rotationY, title, sub, href }: MonolithProps) {
             >
                 <boxGeometry args={[2.4, 6, 0.4]} />
                 <meshStandardMaterial
+                    ref={matRef}
                     color="#0a1d14"
-                    emissive={hovered ? '#9deec0' : '#2c6c4e'}
-                    emissiveIntensity={hovered ? 1.35 : 0.55}
+                    emissive={awake ? '#9deec0' : '#2c6c4e'}
+                    emissiveIntensity={0.55}
                     metalness={0.25}
                     roughness={0.30}
                     transparent
@@ -131,25 +184,38 @@ function Monolith({ position, rotationY, title, sub, href }: MonolithProps) {
                                 lineHeight: 1,
                                 color: '#dffbe9',
                                 marginBottom: 8,
+                                opacity: awake ? 1 : 0.55,
+                                transform: awake ? 'translateY(0)' : 'translateY(6px)',
+                                transition: 'opacity .45s ease, transform .45s ease',
                             }}
                         >
                             {title}
                         </div>
-                        <div style={{ fontSize: 13, color: '#9ec2ad', maxWidth: 280, margin: '0 auto' }}>
-                            {sub}
-                        </div>
+
+                        {/* Details unfold only when the astronaut is close (or hover). */}
                         <div
                             style={{
-                                marginTop: 14,
-                                fontFamily: '"JetBrains Mono", ui-monospace, monospace',
-                                fontSize: 10,
-                                letterSpacing: '.2em',
-                                textTransform: 'uppercase',
-                                color: hovered ? '#bff5d3' : '#6fb892',
-                                transition: 'color .15s',
+                                opacity: awake ? 1 : 0,
+                                transform: awake ? 'translateY(0)' : 'translateY(10px)',
+                                transition: 'opacity .45s ease .08s, transform .45s ease .08s',
                             }}
                         >
-                            {hovered ? '› Click to open' : 'CRONCORE · 2026'}
+                            <div style={{ fontSize: 13, color: '#9ec2ad', maxWidth: 280, margin: '0 auto' }}>
+                                {sub}
+                            </div>
+                            <div
+                                style={{
+                                    marginTop: 14,
+                                    fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+                                    fontSize: 10,
+                                    letterSpacing: '.2em',
+                                    textTransform: 'uppercase',
+                                    color: hovered ? '#bff5d3' : '#6fb892',
+                                    transition: 'color .15s',
+                                }}
+                            >
+                                {hovered ? '› Click to open' : '› Click to open · Croncore'}
+                            </div>
                         </div>
                     </div>
                 </Html>

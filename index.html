@@ -1139,6 +1139,10 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
       <button class="btn btn-glitch btn-pixel" type="button" id="open-apply">
         <span class="glitch-text" data-i18n="btn_apply" data-text="Request access">Request access</span>
       </button>
+      <a class="btn btn-secondary" id="enter-world" href="game/" hidden>
+        <span data-i18n="btn_world">Enter the world</span>
+        <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
     </div>
   </section>
 
@@ -1306,6 +1310,7 @@ const I18N = {
     hero_h1: "The Partners' <em>Circle</em>.",
     hero_lede: "Payments, investments, SPV, legal, concierge — through one private channel.",
     btn_apply: "Request access",
+    btn_world: "Enter the world",
     footer_l1: "© 2026 CRONCORE · By invitation only",
     footer_l2: "Information shared is not investment, legal or tax advice",
     form_eyebrow: "Private request",
@@ -1370,6 +1375,7 @@ const I18N = {
     hero_h1: "Der Partner-<em>kreis</em>.",
     hero_lede: "Zahlungen, Investitionen, SPV, Recht, Concierge — über einen privaten Kanal.",
     btn_apply: "Zugang anfragen",
+    btn_world: "Die Welt betreten",
     footer_l1: "© 2026 CRONCORE · Nur auf Einladung",
     footer_l2: "Geteilte Informationen sind keine Anlage-, Rechts- oder Steuerberatung",
     form_eyebrow: "Private Anfrage",
@@ -1434,6 +1440,7 @@ const I18N = {
     hero_h1: "Круг <em>Партнёров</em>.",
     hero_lede: "Платежи, инвестиции, SPV, право, concierge — через один частный канал.",
     btn_apply: "Оставить заявку",
+    btn_world: "Войти в мир",
     footer_l1: "© 2026 CRONCORE · Только по приглашению",
     footer_l2: "Информация в заявке не является инвестиционной, юридической или налоговой консультацией",
     form_eyebrow: "Частная заявка",
@@ -1498,6 +1505,7 @@ const I18N = {
     hero_h1: "دائرة <em>الشركاء</em>.",
     hero_lede: "مدفوعات، استثمارات، SPV، قانون، كونسيرج — عبر قناة خاصة واحدة.",
     btn_apply: "اطلب الوصول",
+    btn_world: "ادخل العالم",
     footer_l1: "© 2026 CRONCORE · بالدعوة فقط",
     footer_l2: "المعلومات المقدمة لا تشكّل استشارة استثمارية أو قانونية أو ضريبية",
     form_eyebrow: "طلب خاص",
@@ -1562,6 +1570,7 @@ const I18N = {
     hero_h1: "מעגל <em>השותפים</em>.",
     hero_lede: "תשלומים, השקעות, SPV, משפט, קונסיירז' — דרך ערוץ פרטי אחד.",
     btn_apply: "בקשו גישה",
+    btn_world: "היכנסו לעולם",
     footer_l1: "© 2026 CRONCORE · בהזמנה בלבד",
     footer_l2: "המידע אינו מהווה ייעוץ השקעות, משפטי או מס",
     form_eyebrow: "בקשה פרטית",
@@ -1626,6 +1635,7 @@ const I18N = {
     hero_h1: "El Círculo de <em>Socios</em>.",
     hero_lede: "Pagos, inversiones, SPV, legal, concierge — a través de un único canal privado.",
     btn_apply: "Solicitar acceso",
+    btn_world: "Entrar al mundo",
     footer_l1: "© 2026 CRONCORE · Solo por invitación",
     footer_l2: "La información compartida no constituye asesoramiento de inversión, legal o fiscal",
     form_eyebrow: "Solicitud privada",
@@ -1750,6 +1760,12 @@ function closeApply(){
 }
 
 document.getElementById("open-apply").addEventListener("click", openApply);
+
+/* «Enter the world» — the walkable 3D world needs WebGPU; keep the door
+   hidden on browsers that can't open it. */
+if (navigator.gpu) {
+  document.getElementById("enter-world").hidden = false;
+}
 document.querySelectorAll("[data-close]").forEach(el => el.addEventListener("click", closeApply));
 modal.addEventListener("click", (e) => { if (e.target === modal) closeApply(); });
 modal.addEventListener("cancel", () => { closeApply(); });
