@@ -26,6 +26,7 @@ import GrassWebGPU from './grass/GrassWebGPU';
 import { Character } from './character';
 import { GrassCullingDebug } from '../debug/GrassCullingDebug';
 import { CroncoreBlocks } from './CroncoreBlocks';
+import { SpawnLetters } from './physics/SpawnLetters';
 
 export function WorldController() {
     const setActiveTargets = useGameStore((state) => state.setActiveTargets);
@@ -88,13 +89,14 @@ export function WorldController() {
         };
     }, [debugMode]);
 
-    const { enableEnv, enableRose, enableGrass, enableCharacter, enableGrassDebug, enableCroncore } = useControls('Game.Content', {
+    const { enableEnv, enableRose, enableGrass, enableCharacter, enableGrassDebug, enableCroncore, enableLetters } = useControls('Game.Content', {
         enableEnv: { value: true, label: 'Environment' },
         enableCharacter: { value: true, label: '👤 Character' },
         enableRose: { value: true, label: '🌹 Rose Field' },
         enableGrass: { value: true, label: '🌿 Grass Field' },
         enableGrassDebug: { value: false, label: '🌿 Grass Culling Debug' },
         enableCroncore: { value: true, label: '🏛 Croncore Blocks' },
+        enableLetters: { value: true, label: '🅲 Physics Letters' },
     }, { collapsed: true });
 
 
@@ -176,6 +178,12 @@ export function WorldController() {
             </AsyncCompile>
 
             <CroncoreBlocks visible={enableCroncore} />
+
+            {/* Own Suspense boundary: rapier WASM init must never be able
+                to hold the rest of the world back. */}
+            <Suspense fallback={null}>
+                <SpawnLetters visible={enableLetters} />
+            </Suspense>
         </Suspense>
     </>
 }
