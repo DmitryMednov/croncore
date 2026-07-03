@@ -4,10 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title data-i18n="meta_title">CRONCORE — The Partners' Circle</title>
-<meta name="description" data-i18n-meta="meta_desc" content="A private circle of partners — payments, investments, SPV, legal, concierge. By invitation." />
+<meta name="description" data-i18n-meta="meta_desc" content="A private circle of partners. By invitation." />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="CRONCORE — The Partners' Circle" />
-<meta property="og:description" content="A private circle of partners — payments, investments, SPV, legal, concierge. By invitation." />
+<meta property="og:description" content="A private circle of partners. By invitation." />
 <meta property="og:image" content="assets/logo-croncore.png" />
 <meta name="theme-color" content="#0a1810" />
 
@@ -27,28 +27,16 @@
 :root{
   --f-950: oklch(0.12 0.025 150);
   --f-900: oklch(0.16 0.035 150);
-  --f-850: oklch(0.20 0.045 150);
   --f-800: oklch(0.28 0.06 150);
-  --f-700: oklch(0.36 0.06 150);
   --f-600: oklch(0.46 0.07 150);
   --f-500: oklch(0.56 0.08 150);
   --f-400: oklch(0.68 0.07 150);
   --f-300: oklch(0.80 0.05 150);
-  --f-200: oklch(0.89 0.03 150);
-  --f-100: oklch(0.94 0.018 150);
-  --f-50:  oklch(0.972 0.010 150);
 
   --cream-50:  oklch(0.97 0.015 85);
-  --cream-100: oklch(0.93 0.020 85);
   --cream-200: oklch(0.86 0.022 85);
   --cream-300: oklch(0.72 0.022 85);
   --cream-400: oklch(0.55 0.018 85);
-  --cream-500: oklch(0.42 0.015 85);
-
-  --bone-50:  var(--cream-50);
-  --bone-100: var(--cream-100);
-  --bone-300: var(--cream-200);
-  --bone-400: var(--cream-300);
 
   --clay-500: oklch(0.72 0.16 45);
   --gold-500: oklch(0.78 0.12 90);
@@ -62,12 +50,9 @@
   --font-serif: "Newsreader", ui-serif, Georgia, serif;
   --font-mono:  "JetBrains Mono", ui-monospace, monospace;
 
-  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
-  --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px;
+  --s-3:12px; --s-4:16px; --s-5:24px;
+  --r-md:16px; --r-xl:32px; --r-pill:999px;
 
-  --r-sm:12px; --r-md:16px; --r-lg:24px; --r-xl:32px; --r-pill:999px;
-
-  --glass-bg: rgba(255,255,255,0.04);
   --glass-line: rgba(255,255,255,0.10);
   --glass-line-2: rgba(255,255,255,0.18);
   --rim-dark:
@@ -81,16 +66,16 @@
   --float-3: 0 40px 80px -24px rgba(0,0,0,0.65);
 
   --ease-out: cubic-bezier(.22,.9,.24,1);
-  --ease-exp: cubic-bezier(.87,0,.13,1);
-  --wrap: min(1320px, calc(100vw - 2 * clamp(16px, 5vw, 64px)));
+  --mxp: 50vw; --myp: 50vh;
 }
 
 *,*::before,*::after{ box-sizing: border-box; }
-html{ scrollbar-color: rgba(255,255,255,.22) transparent; }
-html, body{ margin:0; padding:0; }
-html.lock, html.lock body{ overflow: hidden; }
-html.modal-open, body.modal-open{ overflow: hidden; }
-
+html, body{
+  margin:0; padding:0;
+  height:100%; height:100svh;
+  overflow:hidden;
+  overscroll-behavior: none;
+}
 body{
   font-family: var(--font-sans);
   color: var(--ink);
@@ -98,26 +83,17 @@ body{
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   line-height: 1.55;
-  overflow-x: clip;
 }
 ::selection{ background: oklch(0.56 0.08 150 / .45); color: var(--cream-50); }
 
 html[lang="ar"] body{ font-family: "Noto Sans Arabic", var(--font-sans); }
 html[lang="he"] body{ font-family: "Noto Sans Hebrew", var(--font-sans); }
-html[lang="ar"] em, html[lang="ar"] .serif{
-  font-family: "Noto Sans Arabic", var(--font-serif); font-style: normal;
-}
-html[lang="he"] em, html[lang="he"] .serif{
-  font-family: "Noto Serif Hebrew", var(--font-serif); font-style: normal;
-}
-html[lang="ar"] .eyebrow, html[lang="he"] .eyebrow,
-html[lang="ar"] .mono, html[lang="he"] .mono{
-  letter-spacing: .02em; text-transform: none;
-}
-html[dir="rtl"] .arr svg{ transform: scaleX(-1); }
+html[lang="ar"] em{ font-family: "Noto Sans Arabic", var(--font-serif); font-style: normal; }
+html[lang="he"] em{ font-family: "Noto Serif Hebrew", var(--font-serif); font-style: normal; }
+html[lang="ar"] .mono, html[lang="he"] .mono{ letter-spacing:.02em; text-transform:none; }
 
 /* =========================================================
-   ATMOSPHERE — fixed painted backdrop behind everything
+   ATMOSPHERE
    ========================================================= */
 .atmosphere{
   position: fixed; inset: -10%;
@@ -148,21 +124,21 @@ html[dir="rtl"] .arr svg{ transform: scaleX(-1); }
   z-index: 0; pointer-events: none;
   mix-blend-mode: screen;
   filter: blur(70px) saturate(140%);
-  will-change: transform, opacity;
+  will-change: transform;
 }
 .aurora{
   background:
     radial-gradient(46% 38% at 30% 35%, oklch(0.58 0.18 150 / .50), transparent 60%),
     radial-gradient(38% 30% at 72% 60%, oklch(0.66 0.14 130 / .38), transparent 70%);
   opacity: .85;
-  animation: aurora-drift 32s ease-in-out infinite alternate;
+  animation: aurora-drift 26s ease-in-out infinite alternate;
 }
 .aurora-2{
   background:
     radial-gradient(40% 32% at 80% 22%, oklch(0.78 0.12 90 / .40), transparent 65%),
     radial-gradient(32% 26% at 18% 82%, oklch(0.66 0.20 25 / .32), transparent 70%);
   opacity: .75;
-  animation: aurora-drift-2 44s ease-in-out infinite alternate-reverse;
+  animation: aurora-drift-2 36s ease-in-out infinite alternate-reverse;
   animation-delay: -12s;
 }
 @keyframes aurora-drift{
@@ -178,124 +154,55 @@ html[dir="rtl"] .arr svg{ transform: scaleX(-1); }
   100% { transform: translate3d( 7%,  1%, 0) scale(.98);  }
 }
 
+/* Shared 3D canvas — preloader chaos, the assembled circle, the dive */
+#gl{
+  position: fixed; inset: 0; z-index: 1;
+  width: 100%; height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
 /* =========================================================
-   PRELOADER — counter + masked wordmark + curtain lift
+   PRELOADER LAYER — just numbers over the living scene
    ========================================================= */
-.preloader{
-  position: fixed; inset: 0; z-index: 200;
-  background:
-    radial-gradient(80% 60% at 50% 40%, oklch(0.14 0.03 150), oklch(0.09 0.02 150));
-  display: grid; place-items: center;
-  transform: translateY(0);
-}
-.preloader.done{ pointer-events: none; }
-
-.pre-brand{
-  position: absolute; top: 26px; left: clamp(18px, 4vw, 48px);
-  display: flex; align-items: center; gap: 10px;
-  font-family: var(--font-mono); font-size: 11px;
-  letter-spacing: .18em; text-transform: uppercase; color: var(--cream-300);
-  opacity: 0;
-}
-html[dir="rtl"] .pre-brand{ left: auto; right: clamp(18px, 4vw, 48px); }
-.pre-brand img{ width: 20px; height: 20px; }
-
-.pre-word{
-  display: flex;
-  font-weight: 500;
-  font-size: clamp(44px, 9vw, 128px);
-  letter-spacing: clamp(.06em, .5vw, .16em);
-  line-height: 1;
-  color: var(--cream-50);
-}
-.pre-word .m{ display:inline-block; overflow: hidden; }
-.pre-word .c{
-  display:inline-block;
-  transform: translateY(120%);
+.pre{
+  position: fixed; inset: 0; z-index: 40;
+  pointer-events: none;
 }
 .pre-sub{
-  margin-top: 18px;
-  text-align: center;
-  font-family: var(--font-serif); font-style: italic;
-  font-size: clamp(14px, 1.6vw, 18px);
-  color: var(--cream-300);
+  position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: .34em; text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
   opacity: 0;
 }
 .pre-count{
   position: absolute; bottom: 14px; right: clamp(18px, 4vw, 48px);
-  font-family: var(--font-sans);
   font-weight: 200;
-  font-size: clamp(72px, 14vw, 180px);
-  line-height: 1;
+  font-size: clamp(64px, 12vw, 150px);
+  line-height: 1; letter-spacing: -.04em;
   color: var(--cream-50);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -.04em;
-  opacity: .9;
+  opacity: 0;
 }
 html[dir="rtl"] .pre-count{ right: auto; left: clamp(18px, 4vw, 48px); }
-.pre-count .pct{
-  font-size: .22em; font-weight: 400; color: var(--cream-300);
-  vertical-align: super; letter-spacing: 0;
-}
-.pre-line{
-  position: absolute; left: 0; bottom: 0;
-  height: 2px; width: 100%;
-  background: rgba(255,255,255,.08);
-}
-.pre-line i{
-  position:absolute; left:0; top:0; bottom:0; width:100%;
-  background: linear-gradient(90deg, var(--f-400), var(--gold-500));
-  transform-origin: left; transform: scaleX(0);
-  display: block;
-}
-html[dir="rtl"] .pre-line i{ transform-origin: right; }
-
-@media (prefers-reduced-motion: reduce){
-  .preloader{ display:none; }
-}
+.pre-count .pct{ font-size: .2em; font-weight: 400; color: var(--cream-300); vertical-align: super; }
+.pre.done{ display: none; }
 
 /* =========================================================
-   NAV — fixed, gains glass once scrolled
+   NAV — brand + languages, nothing else
    ========================================================= */
 .nav{
-  position: fixed; top: 0; left: 0; right: 0; z-index: 90;
-  display:flex; align-items:center; gap: var(--s-5);
-  padding: 16px clamp(16px, 4vw, 48px);
-  transition: background .4s ease, border-color .4s ease, backdrop-filter .4s ease, padding .4s ease;
-  border-bottom: 1px solid transparent;
-}
-.nav.scrolled{
-  background: oklch(0.12 0.025 150 / .72);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border-bottom-color: var(--glass-line);
-  padding-top: 10px; padding-bottom: 10px;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+  display: flex; align-items: center;
+  padding: 18px clamp(16px, 4vw, 48px);
 }
 .brand-lock{ display:flex; align-items:center; gap: 10px; text-decoration:none; color:inherit; }
 .brand-lock img{ width: 26px; height: 26px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.55)); }
-.brand-lock .wm{ font-weight: 600; letter-spacing: .12em; font-size: 14px; color: var(--bone-50); }
-.brand-lock .sub{
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--ink-3); margin-left: 4px;
-}
-@media (max-width: 760px){ .brand-lock .sub{ display:none; } }
-
-.nav-links{
-  margin-left: auto;
-  display:flex; gap: 6px; align-items:center;
-}
-html[dir="rtl"] .nav-links{ margin-left: 0; margin-right: auto; }
-.nav-links a{
-  font-family: var(--font-mono); font-size: 10.5px;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--ink-3); text-decoration: none;
-  padding: 8px 12px; border-radius: var(--r-pill);
-  transition: color .2s, background .2s;
-}
-.nav-links a:hover{ color: var(--ink); background: rgba(255,255,255,.06); }
-@media (max-width: 900px){ .nav-links{ display:none; } }
-
+.brand-lock .wm{ font-weight: 600; letter-spacing: .14em; font-size: 14px; color: var(--cream-50); }
 .lang{
+  margin-left: auto;
   display:flex; gap: 2px; padding: 3px;
   border-radius: var(--r-pill);
   background: rgba(0,0,0,0.30);
@@ -303,7 +210,7 @@ html[dir="rtl"] .nav-links{ margin-left: 0; margin-right: auto; }
   font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em;
   align-items:center;
 }
-@media (max-width: 900px){ .lang{ margin-left: auto; } html[dir="rtl"] .lang{ margin-left:0; margin-right:auto; } }
+html[dir="rtl"] .lang{ margin-left: 0; margin-right: auto; }
 .lang button{
   appearance:none; border:0; background:transparent; cursor:pointer;
   color: var(--ink-3); padding: 6px 9px; border-radius: var(--r-pill);
@@ -311,7 +218,7 @@ html[dir="rtl"] .nav-links{ margin-left: 0; margin-right: auto; }
 }
 .lang button:hover{ color: var(--ink); }
 .lang button.active{
-  color: var(--bone-50);
+  color: var(--cream-50);
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.10);
   box-shadow: var(--rim-dark);
@@ -319,377 +226,180 @@ html[dir="rtl"] .nav-links{ margin-left: 0; margin-right: auto; }
 @media (max-width: 420px){
   .lang{ font-size: 9.5px; }
   .lang button{ padding: 5px 6px; }
+  .brand-lock .wm{ font-size: 12.5px; letter-spacing: .08em; }
 }
 
 /* =========================================================
-   BUTTONS — magnetic pills with cursor-origin fill
+   STAGE — one screen, one message
    ========================================================= */
+.stage{
+  position: relative; z-index: 10;
+  height: 100svh;
+  display: grid; place-items: center;
+  pointer-events: none;
+}
+.stage-inner{
+  display:flex; flex-direction: column; align-items: center; text-align: center;
+  gap: clamp(18px, 3vh, 30px);
+  padding: 0 16px;
+}
+.stage h1{
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(40px, 8.6vw, 124px);
+  line-height: .95;
+  letter-spacing: -.04em;
+  text-wrap: balance;
+  text-shadow: 0 2px 40px oklch(0.08 0.02 150 / .9);
+}
+.stage h1 em{
+  font-family: var(--font-serif);
+  font-style: italic; font-weight: 400;
+  color: var(--f-300);
+}
+.stage .btn{ pointer-events: auto; }
+
+/* Magnetic primary button with cursor-origin fill */
 .btn{
   --bx: 50%; --by: 50%;
   position: relative; isolation: isolate;
   display:inline-flex; align-items:center; justify-content:center; gap: 12px;
   font-family: var(--font-sans); font-weight: 500;
   border-radius: var(--r-pill);
-  padding: 16px 28px; font-size: 15px;
+  padding: 18px 34px; font-size: 16px;
   letter-spacing: -.005em; line-height: 1;
   text-decoration:none; cursor:pointer; border: 1px solid transparent;
-  color: var(--ink);
+  color: var(--cream-50);
   overflow: hidden;
-  transition: transform .3s var(--ease-out), box-shadow .3s ease, border-color .3s ease, color .3s ease;
+  transition: transform .3s var(--ease-out), box-shadow .3s ease;
   will-change: transform;
-}
-.btn > *{ position: relative; z-index: 2; }
-.btn::before{ /* top light rim */
-  content:""; position:absolute; inset:1px; border-radius:inherit; z-index:1;
-  background: linear-gradient(180deg, rgba(255,255,255,0.10), transparent 50%);
-  pointer-events:none;
-}
-.btn::after{ /* cursor-origin fill */
-  content:""; position:absolute; z-index:0;
-  left: var(--bx); top: var(--by);
-  width: 0; height: 0; border-radius: 999px;
-  transform: translate(-50%,-50%);
-  transition: width .5s var(--ease-out), height .5s var(--ease-out), opacity .4s ease;
-  opacity: 0;
-}
-.btn:hover::after{ width: 240%; height: 620%; opacity: 1; }
-.btn:active{ transform: scale(.985); }
-.btn:disabled{ opacity:.6; cursor: progress; pointer-events:none; }
-
-.btn .arr{
-  display:inline-grid; place-items:center;
-  width: 18px; height: 18px;
-}
-.btn .arr svg{ width: 15px; height: 15px; transition: transform .3s var(--ease-out); }
-.btn:hover .arr svg{ transform: translateX(3px); }
-html[dir="rtl"] .btn:hover .arr svg{ transform: scaleX(-1) translateX(3px); }
-
-.btn-primary{
   background: linear-gradient(180deg, var(--f-600), var(--f-800));
-  color: var(--bone-50);
   border-color: rgba(0,0,0,0.4);
   box-shadow: var(--float-2),
     inset 0 1px 0 rgba(255,255,255,0.25),
     inset 0 -1px 0 rgba(0,0,0,0.45),
     0 0 0 1px rgba(255,255,255,0.06);
 }
-.btn-primary::after{ background: radial-gradient(circle, oklch(0.72 0.10 150 / .95), oklch(0.60 0.09 150 / .9) 60%); }
-.btn-primary:hover{ box-shadow: 0 16px 40px -12px oklch(0.55 0.14 150 / .6), inset 0 1px 0 rgba(255,255,255,0.25); }
-
+.btn > *{ position: relative; z-index: 2; }
+.btn::before{
+  content:""; position:absolute; inset:1px; border-radius:inherit; z-index:1;
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), transparent 50%);
+  pointer-events:none;
+}
+.btn::after{
+  content:""; position:absolute; z-index:0;
+  left: var(--bx); top: var(--by);
+  width: 0; height: 0; border-radius: 999px;
+  transform: translate(-50%,-50%);
+  background: radial-gradient(circle, oklch(0.72 0.10 150 / .95), oklch(0.60 0.09 150 / .9) 60%);
+  transition: width .5s var(--ease-out), height .5s var(--ease-out), opacity .4s ease;
+  opacity: 0;
+}
+.btn:hover::after{ width: 240%; height: 640%; opacity: 1; }
+.btn:hover{ box-shadow: 0 16px 40px -12px oklch(0.55 0.14 150 / .6), inset 0 1px 0 rgba(255,255,255,0.25); }
+.btn:active{ transform: scale(.985); }
+.btn:disabled{ opacity:.6; cursor:progress; pointer-events:none; }
+.btn .arr{ display:inline-grid; place-items:center; width: 18px; height: 18px; }
+.btn .arr svg{ width: 15px; height: 15px; transition: transform .3s var(--ease-out); }
+.btn:hover .arr svg{ transform: translateX(3px); }
+html[dir="rtl"] .btn .arr svg{ transform: scaleX(-1); }
+html[dir="rtl"] .btn:hover .arr svg{ transform: scaleX(-1) translateX(3px); }
 .btn-ghost{
   background: rgba(255,255,255,0.05);
-  color: var(--ink);
   border-color: var(--glass-line-2);
   box-shadow: var(--float-1), var(--rim-dark);
 }
 .btn-ghost::after{ background: radial-gradient(circle, rgba(255,255,255,.16), rgba(255,255,255,.10) 60%); }
 
-.btn-lg{ padding: 19px 34px; font-size: 16px; }
-
 /* =========================================================
-   LAYOUT PRIMITIVES
+   WORLD HINT + DIVE OVERLAY (scroll → the world)
    ========================================================= */
-.wrap{ width: var(--wrap); margin: 0 auto; position: relative; }
-section{ position: relative; z-index: 1; }
-.eyebrow{
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
-  color: var(--ink-3);
-  display:inline-flex; align-items:center; gap: var(--s-3);
-}
-.eyebrow::before{
-  content:""; width: 6px; height: 6px; border-radius: 999px;
-  background: var(--f-400);
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.04), 0 0 12px var(--f-500);
-  animation: pulse 3.2s ease-in-out infinite;
-}
-@keyframes pulse{
-  0%,100%{ box-shadow: 0 0 0 3px rgba(255,255,255,0.04), 0 0 10px var(--f-500); }
-  50%{   box-shadow: 0 0 0 3px rgba(255,255,255,0.04), 0 0 18px var(--f-500); }
-}
-
-/* Reveal primitives (only active when JS present) */
-html.js [data-rv]{ opacity: 0; transform: translateY(34px); }
-html.js .hero-el, html.js #nav, html.js .scroll-hint{ opacity: 0; }
-html.js .mask{ display:block; overflow:hidden; }
-html.js .mask > .mline{ display:block; transform: translateY(115%); }
-
-/* =========================================================
-   HERO
-   ========================================================= */
-.hero{
-  min-height: 100svh;
-  display:grid; place-items:center;
-  padding: 140px 0 90px;
-  position: relative;
-}
-#hero-gl{
-  position: absolute; inset: 0; z-index: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-}
-.hero-inner{
-  position: relative; z-index: 2;
-  display:flex; flex-direction:column; align-items:center; text-align:center;
-  gap: clamp(var(--s-4), 2vh, var(--s-6));
-  width: var(--wrap);
-}
-.hero-crest{
-  position: relative;
-  width: clamp(64px, 8vw, 104px); aspect-ratio: 1/1;
-  isolation: isolate;
-}
-.hero-crest img{
-  position:relative; z-index:1; width:100%; height:100%;
-  object-fit:contain; display:block;
-  filter: drop-shadow(0 18px 30px rgba(0,0,0,.55));
-}
-.hero-crest::after{
-  content:""; position:absolute; inset:-30%;
-  z-index:0;
-  background: radial-gradient(58% 58% at 50% 50%, oklch(0.58 0.16 150 / .5), transparent 70%);
-  filter: blur(22px);
-  animation: crest-glow 4.2s ease-in-out infinite alternate;
-}
-@keyframes crest-glow{
-  from{ opacity:.55; transform: scale(.95); }
-  to  { opacity: 1;  transform: scale(1.05); }
-}
-
-.hero h1{
-  margin: 0;
-  font-weight: 500;
-  font-size: clamp(42px, 9.6vw, 148px);
-  line-height: .95;
-  letter-spacing: -.04em;
-  text-wrap: balance;
-  max-width: 12ch;
-}
-.hero h1 em{
-  font-family: var(--font-serif);
-  font-style: italic; font-weight: 400;
-  color: var(--f-300);
-}
-.hero .lede{
-  margin: 0;
-  font-size: clamp(15px, 1.8vw, 20px);
-  color: var(--ink-2);
-  max-width: 52ch;
-}
-.cta-row{
-  display:flex; gap: var(--s-4); flex-wrap: wrap;
-  align-items:center; justify-content:center;
-  margin-top: var(--s-3);
-}
-.enter-world[hidden]{ display: none !important; }
-
-.scroll-hint{
-  position:absolute; bottom: 26px; left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
+.world-hint{
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 20;
   display:flex; flex-direction:column; align-items:center; gap: 10px;
   font-family: var(--font-mono); font-size: 10px;
   letter-spacing: .3em; text-transform: uppercase;
   color: var(--ink-4);
+  pointer-events: auto; cursor: pointer;
+  opacity: 0;
+  white-space: nowrap;
 }
-.scroll-hint i{
-  display:block; width:1px; height: 44px;
+.world-hint[hidden]{ display: none; }
+.world-hint i{
+  display:block; width:1px; height: 40px;
   background: linear-gradient(180deg, transparent, var(--cream-300));
   overflow:hidden; position:relative;
 }
-.scroll-hint i::after{
+.world-hint i::after{
   content:""; position:absolute; left:0; top:-100%;
   width:100%; height:100%;
   background: linear-gradient(180deg, transparent, var(--cream-50));
-  animation: hintdrop 2.2s var(--ease-exp) infinite;
+  animation: hintdrop 2.2s cubic-bezier(.87,0,.13,1) infinite;
 }
 @keyframes hintdrop{ 0%{ top:-100%; } 55%,100%{ top:100%; } }
 
-/* =========================================================
-   MANIFESTO
-   ========================================================= */
-.manifesto{ padding: clamp(120px, 18vh, 220px) 0; }
-.manifesto .wrap{ display:grid; gap: var(--s-6); }
-.man-line{
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(28px, 5vw, 64px);
-  line-height: 1.16;
-  letter-spacing: -.015em;
-  color: var(--cream-100);
-  max-width: 24ch;
-  margin: 0;
+.dive{
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(60% 50% at 50% 50%, oklch(0.10 0.02 150 / .0), oklch(0.07 0.02 150 / .55) 100%);
 }
-.man-line em{ font-style: italic; color: var(--f-300); }
-.man-line.dim{ color: var(--ink-3); font-size: clamp(20px, 3vw, 34px); max-width: 44ch; }
-
-/* =========================================================
-   MARQUEE
-   ========================================================= */
-.marquee{
-  overflow:hidden; padding: 18px 0;
-  border-top: 1px solid var(--glass-line);
-  border-bottom: 1px solid var(--glass-line);
-  direction: ltr;
-}
-.marquee-track{
-  display:flex; gap: 3.2em; width:max-content;
-  font-family: var(--font-mono);
-  font-size: clamp(12px, 1.4vw, 15px);
-  letter-spacing: .28em; text-transform: uppercase;
-  color: var(--ink-4);
+.dive-box{ display:flex; flex-direction:column; align-items:center; gap: 16px; }
+.dive-text{
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .4em; text-transform: uppercase;
+  color: var(--cream-200);
   white-space: nowrap;
-  animation: marquee 36s linear infinite;
 }
-.marquee-track span b{ color: var(--f-400); font-weight:400; margin: 0 1.4em; }
-@keyframes marquee{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+.dive-bar{
+  width: min(300px, 60vw); height: 1px;
+  background: rgba(255,255,255,.12);
+  overflow: hidden;
+}
+.dive-bar i{
+  display:block; height:100%; width:100%;
+  background: linear-gradient(90deg, var(--f-400), var(--gold-500));
+  transform-origin: left; transform: scaleX(0);
+}
+html[dir="rtl"] .dive-bar i{ transform-origin: right; }
+.dive-flash{
+  position: fixed; inset: 0; z-index: 60;
+  background: radial-gradient(60% 60% at 50% 50%, oklch(0.95 0.06 150), oklch(0.75 0.10 150));
+  opacity: 0; pointer-events: none;
+}
 
 /* =========================================================
-   DIRECTIONS — index rows
+   MICRO FOOTER
    ========================================================= */
-.services{ padding: clamp(110px, 16vh, 200px) 0 clamp(80px, 10vh, 140px); }
-.sec-head{ display:grid; gap: var(--s-4); margin-bottom: clamp(40px, 6vh, 72px); }
-.sec-title{
-  margin:0; font-weight:500;
-  font-size: clamp(32px, 5.4vw, 76px);
-  line-height: 1.02; letter-spacing: -.03em;
-}
-.sec-title em{
-  font-family: var(--font-serif); font-style: italic; font-weight: 400;
-  color: var(--f-300);
-}
-
-.dir-list{ display:block; border-top: 1px solid var(--glass-line); }
-.dir-row{
-  --bx: 50%; --by: 50%;
-  position: relative;
-  display:grid;
-  grid-template-columns: 3.2em 1fr auto;
-  align-items:center; gap: clamp(14px, 3vw, 40px);
-  padding: clamp(20px, 3.4vh, 34px) clamp(6px, 1vw, 18px);
-  border-bottom: 1px solid var(--glass-line);
-  text-decoration:none; color: inherit;
-  cursor: pointer;
-  isolation: isolate;
-  transition: padding .35s var(--ease-out);
-}
-.dir-row::before{
-  content:""; position:absolute; inset:0; z-index:-1;
-  background: linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-  opacity: 0; transition: opacity .35s ease;
-}
-.dir-row:hover::before{ opacity: 1; }
-.dir-row:hover{ padding-left: clamp(14px, 2vw, 30px); padding-right: clamp(6px,1vw,18px); }
-html[dir="rtl"] .dir-row:hover{ padding-right: clamp(14px, 2vw, 30px); padding-left: clamp(6px,1vw,18px); }
-.dr-num{
-  font-family: var(--font-mono); font-size: 12px;
-  color: var(--ink-4); letter-spacing: .1em;
-}
-.dr-title{
-  font-weight: 500;
-  font-size: clamp(22px, 3.6vw, 46px);
-  letter-spacing: -.02em; line-height: 1.1;
-  transition: color .3s ease;
-}
-.dir-row:hover .dr-title{ color: var(--f-200); }
-.dr-arrow{
-  display:grid; place-items:center;
-  width: clamp(38px, 4vw, 52px); height: clamp(38px, 4vw, 52px);
-  border-radius: 999px;
-  border: 1px solid var(--glass-line-2);
-  background: rgba(255,255,255,.04);
-  transition: background .3s ease, transform .35s var(--ease-out), border-color .3s ease;
-}
-.dr-arrow svg{ width: 40%; height: 40%; transition: transform .35s var(--ease-out); }
-.dir-row:hover .dr-arrow{
-  background: linear-gradient(180deg, var(--f-600), var(--f-800));
-  border-color: rgba(255,255,255,.22);
-  transform: rotate(-45deg);
-}
-html[dir="rtl"] .dir-row:hover .dr-arrow{ transform: rotate(45deg); }
-
-/* =========================================================
-   HOW IT WORKS — three glass steps
-   ========================================================= */
-.how{ padding: clamp(110px, 16vh, 200px) 0; }
-.how-grid{
-  display:grid; grid-template-columns: repeat(3, 1fr);
-  gap: clamp(14px, 2vw, 24px);
-}
-@media (max-width: 900px){ .how-grid{ grid-template-columns: 1fr; } }
-.how-card{
-  position:relative;
-  border-radius: var(--r-lg);
-  border: 1px solid var(--glass-line-2);
-  background: rgba(15,25,20,0.45);
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
-  box-shadow: var(--float-1), var(--rim-dark);
-  padding: clamp(24px, 3vw, 40px);
-  display:grid; gap: 14px; align-content:start;
-  min-height: clamp(200px, 26vh, 280px);
-  transition: transform .4s var(--ease-out), border-color .3s ease;
-}
-.how-card:hover{ transform: translateY(-6px); border-color: rgba(255,255,255,.28); }
-.how-card .n{
-  font-family: var(--font-mono); font-size: 12px;
-  letter-spacing:.16em; color: var(--f-400);
-}
-.how-card h3{
-  margin:0; font-weight:500;
-  font-size: clamp(20px, 2.2vw, 28px);
-  letter-spacing:-.02em;
-}
-.how-card p{ margin:0; color: var(--ink-3); font-size: 14.5px; }
-
-/* =========================================================
-   ACCESS
-   ========================================================= */
-.access{
-  padding: clamp(130px, 20vh, 260px) 0 clamp(80px, 10vh, 130px);
-  text-align:center;
-}
-.access .wrap{ display:flex; flex-direction:column; align-items:center; gap: var(--s-5); }
-.access .sec-title{ font-size: clamp(36px, 6.6vw, 96px); max-width: 14ch; }
-.access .lede{ margin:0; color: var(--ink-2); max-width: 46ch; font-size: clamp(15px, 1.7vw, 19px); }
-
-/* =========================================================
-   FOOTER + giant scrubbed wordmark
-   ========================================================= */
-.giant-wm{
-  overflow:hidden; pointer-events:none;
-  padding: clamp(30px, 6vh, 80px) 0 0;
-}
-.giant-wm span{
-  display:block; width:max-content;
-  font-weight: 600;
-  font-size: clamp(90px, 22vw, 340px);
-  line-height: .8; letter-spacing: -.02em;
-  color: transparent;
-  -webkit-text-stroke: 1px oklch(0.80 0.05 150 / .22);
-  white-space: nowrap;
-  will-change: transform;
-}
 .micro-footer{
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 15;
   display:flex; justify-content:space-between; align-items:center;
-  gap: var(--s-3); flex-wrap:wrap;
-  padding: 26px 0 30px;
+  gap: var(--s-3); flex-wrap: wrap;
+  padding: 12px clamp(16px, 4vw, 48px) 14px;
   font-family: var(--font-mono);
-  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--ink-4);
-  border-top: 1px solid var(--glass-line);
+  font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: oklch(0.55 0.018 85 / .75);
+  pointer-events: none;
+}
+@media (max-width: 640px){
+  .micro-footer{ justify-content: center; text-align:center; }
+  .micro-footer span:nth-child(2){ display: none; }
 }
 
 /* =========================================================
-   APPLY MODAL (unchanged mechanics, restyled buttons)
+   APPLY MODAL — the ritual
    ========================================================= */
 dialog.apply-modal{
-  width: min(94vw, 600px);
+  width: min(94vw, 580px);
   max-height: 90svh;
   padding: 0;
   border: 1px solid var(--glass-line-2);
   border-radius: var(--r-xl);
-  background: rgba(14, 24, 18, 0.92);
+  background:
+    radial-gradient(120% 90% at 50% -10%, oklch(0.22 0.05 150 / .55), transparent 60%),
+    rgba(11, 20, 15, 0.94);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   color: var(--ink);
@@ -697,32 +407,41 @@ dialog.apply-modal{
   overflow: hidden;
 }
 dialog.apply-modal::backdrop{
-  background: rgba(5, 10, 8, 0.65);
-  backdrop-filter: blur(8px) saturate(120%);
-  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  background: rgba(4, 9, 7, 0.72);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
 }
-dialog.apply-modal[open]{ animation: dlg-in .3s var(--ease-out) both; }
-dialog.apply-modal[open]::backdrop{ animation: dlg-fade .3s ease-out both; }
-@keyframes dlg-in{ from{ transform: translateY(14px) scale(.99); opacity: 0; } to{ transform:none; opacity: 1; } }
+dialog.apply-modal[open]{ animation: dlg-in .35s var(--ease-out) both; }
+dialog.apply-modal[open]::backdrop{ animation: dlg-fade .35s ease-out both; }
+@keyframes dlg-in{ from{ transform: translateY(16px) scale(.985); opacity: 0; } to{ transform:none; opacity: 1; } }
 @keyframes dlg-fade{ from{ opacity: 0; } to{ opacity: 1; } }
 @media (max-width: 600px){
-  dialog.apply-modal{ width: 100vw; height: 100svh; max-height: 100svh; border-radius: 0; border: 0; }
+  dialog.apply-modal{ width:100vw; height:100svh; max-height:100svh; border-radius:0; border:0; }
 }
-.apply-shell{ display:grid; grid-template-rows: auto 1fr auto; max-height: inherit; height:100%; min-height:0; }
+.apply-shell{ display:grid; grid-template-rows:auto 1fr auto; max-height:inherit; height:100%; min-height:0; }
 .apply-shell > *{ min-height: 0; }
-#apply-form{ display:grid; grid-template-rows: 1fr auto; min-height:0; overflow:hidden; }
+#apply-form{ display:grid; grid-template-rows:1fr auto; min-height:0; overflow:hidden; }
 .apply-head{
-  padding: 22px 28px 14px;
+  padding: 26px 30px 16px;
   display:grid; grid-template-columns: 1fr auto; gap: var(--s-4);
   border-bottom: 1px solid var(--glass-line);
+  position: relative;
+}
+.apply-head::before{ /* tiny ring motif */
+  content:""; position:absolute; top: 20px; inset-inline-start: 30px;
+  width: 8px; height: 8px; border-radius: 999px;
+  border: 1px solid var(--f-400);
+  box-shadow: 0 0 12px var(--f-500);
 }
 .apply-head h2{
-  margin: 6px 0 4px;
-  font-size: clamp(22px, 3vw, 28px);
-  letter-spacing: -.02em; font-weight: 500; line-height: 1.05;
+  margin: 14px 0 2px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(26px, 3.4vw, 34px);
+  letter-spacing: -.01em; font-weight: 400; line-height: 1.05;
+  color: var(--cream-50);
 }
-.apply-head h2 em{ font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--f-300); }
-.apply-head p{ margin:0; color: var(--ink-3); font-size: 13.5px; max-width: 48ch; }
+.apply-head h2 em{ color: var(--f-300); }
 .apply-close{
   appearance:none; border:0; background: rgba(255,255,255,0.05);
   width: 36px; height: 36px; border-radius: 999px;
@@ -734,7 +453,7 @@ dialog.apply-modal[open]::backdrop{ animation: dlg-fade .3s ease-out both; }
 .apply-close:hover{ color: var(--ink); background: rgba(255,255,255,0.10); transform: rotate(90deg); }
 .apply-close svg{ width: 16px; height: 16px; }
 .apply-body{
-  padding: 18px 28px 10px;
+  padding: 18px 30px 10px;
   overflow-y: auto; overflow-x: hidden; min-height: 0;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
@@ -745,7 +464,7 @@ dialog.apply-modal[open]::backdrop{ animation: dlg-fade .3s ease-out both; }
 fieldset.apply-group{ border:0; padding:0; margin: 0 0 18px; display:grid; gap: var(--s-3); }
 fieldset.apply-group > legend{
   font-family: var(--font-mono);
-  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+  font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase;
   color: var(--ink-3);
   padding-bottom: 4px;
   display:flex; align-items:center; gap: var(--s-3);
@@ -755,10 +474,10 @@ fieldset.apply-group > legend::after{
   background: linear-gradient(90deg, rgba(255,255,255,0.18), transparent);
 }
 html[lang="ar"] fieldset.apply-group > legend,
-html[lang="he"] fieldset.apply-group > legend{ letter-spacing: .02em; text-transform: none; }
+html[lang="he"] fieldset.apply-group > legend{ letter-spacing:.02em; text-transform:none; }
 .field{ display:flex; flex-direction:column; gap: 6px; }
-.field-row{ display:grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
-@media (max-width: 520px){ .field-row{ grid-template-columns: 1fr; } }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap: var(--s-3); }
+@media (max-width: 520px){ .field-row{ grid-template-columns:1fr; } }
 .field label{ font-size: 12.5px; color: var(--ink-2); font-weight: 500; }
 .field label .req{ color: var(--clay-500); margin-left: 4px; }
 .field .hint{ font-size: 11.5px; color: var(--ink-4); }
@@ -767,10 +486,10 @@ html[lang="he"] fieldset.apply-group > legend{ letter-spacing: .02em; text-trans
   border: 1px solid var(--glass-line-2);
   border-radius: var(--r-md);
   color: var(--ink);
-  padding: 11px 13px;
+  padding: 12px 14px;
   font-family: var(--font-sans);
   font-size: 14.5px;
-  transition: background .15s, border-color .15s;
+  transition: background .15s, border-color .15s, box-shadow .15s;
   width: 100%;
 }
 .field textarea{ resize: vertical; min-height: 92px; line-height: 1.5; }
@@ -779,7 +498,7 @@ html[lang="he"] fieldset.apply-group > legend{ letter-spacing: .02em; text-trans
   outline: none;
   border-color: var(--f-400);
   background: rgba(255,255,255,0.07);
-  box-shadow: 0 0 0 3px rgba(108, 184, 146, 0.18);
+  box-shadow: 0 0 0 3px rgba(108, 184, 146, 0.18), 0 0 24px -6px oklch(0.56 0.08 150 / .5);
 }
 .field select{
   appearance: none;
@@ -798,25 +517,18 @@ html[dir="rtl"] .field select{
 }
 .hidden-pot{ position:absolute; left:-9999px; top:0; width:1px; height:1px; opacity:0; }
 .apply-foot{
-  padding: 16px 28px 22px;
+  padding: 16px 30px 24px;
   display:flex; align-items:center; gap: var(--s-4);
   border-top: 1px solid var(--glass-line);
   background: rgba(0,0,0,0.18);
 }
 .apply-foot .meta{
-  font-family: var(--font-mono); font-size: 11px;
+  font-family: var(--font-mono); font-size: 10.5px;
   color: var(--ink-4); letter-spacing: .08em; flex: 1;
 }
-.apply-foot button[type="submit"]{ min-width: 200px; }
-.btn .spin{
-  display:inline-block; width: 14px; height: 14px; border-radius: 999px;
-  border: 2px solid rgba(255,255,255,0.25);
-  border-top-color: rgba(255,255,255,0.95);
-  animation: spin .8s linear infinite;
-}
-@keyframes spin{ to{ transform: rotate(360deg); } }
+.apply-foot button[type="submit"]{ min-width: 200px; padding: 15px 26px; font-size: 15px; }
 .apply-success{
-  padding: 36px 28px 40px; text-align:center;
+  padding: 40px 28px 44px; text-align:center;
   display:none; flex-direction:column; align-items:center; gap: var(--s-4);
 }
 .apply-modal[data-state="success"] .apply-success{ display:flex; }
@@ -825,16 +537,21 @@ html[dir="rtl"] .field select{
 .apply-modal[data-state="success"] .apply-body,
 .apply-modal[data-state="success"] .apply-head{ display:none; }
 .apply-success .ok{
-  width: 64px; height: 64px; border-radius: 999px;
-  background: radial-gradient(circle, rgba(108,184,146,0.30), rgba(108,184,146,0.05) 75%);
+  width: 68px; height: 68px; border-radius: 999px;
+  border: 1px solid oklch(0.68 0.07 150 / .5);
+  background: radial-gradient(circle, rgba(108,184,146,0.28), rgba(108,184,146,0.04) 75%);
   display:grid; place-items:center; margin-bottom: 4px;
+  box-shadow: 0 0 40px -6px oklch(0.56 0.08 150 / .55);
 }
 .apply-success .ok svg{ width: 32px; height: 32px; color: var(--f-300); }
-.apply-success h3{ margin:0; font-size: 26px; font-weight:500; letter-spacing:-.02em; }
-.apply-success h3 em{ font-family: var(--font-serif); font-style:italic; font-weight:400; color: var(--f-300); }
-.apply-success p{ margin:0; color: var(--ink-2); max-width: 40ch; }
+.apply-success h3{
+  margin:0; font-family: var(--font-serif); font-style: italic;
+  font-size: 28px; font-weight:400; letter-spacing:-.01em;
+}
+.apply-success h3 em{ color: var(--f-300); }
+.apply-success p{ margin:0; color: var(--ink-2); max-width: 40ch; font-size: 14.5px; }
 .apply-success .micro{
-  font-family: var(--font-mono); font-size: 11px; letter-spacing:.14em;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing:.2em;
   color: var(--ink-4); margin-top: var(--s-3); text-transform: uppercase;
 }
 .apply-error{
@@ -847,26 +564,26 @@ html[dir="rtl"] .field select{
 }
 .apply-modal[data-error="1"] .apply-error{ display:block; }
 @media (max-width: 600px){
-  .apply-head{ padding: 16px 18px 12px; }
-  .apply-body{ padding: 14px 18px 8px; }
-  .apply-foot{ padding: 12px 18px 16px; flex-direction: column-reverse; align-items: stretch; gap: 10px; }
-  .apply-foot .meta{ text-align:center; font-size: 10.5px; }
+  .apply-head{ padding: 20px 20px 12px; }
+  .apply-body{ padding: 14px 20px 8px; }
+  .apply-foot{ padding: 12px 20px 18px; flex-direction: column-reverse; align-items: stretch; gap: 10px; }
+  .apply-foot .meta{ text-align:center; font-size: 10px; }
   .apply-foot button[type="submit"]{ width:100%; min-width:0; }
   .field input, .field select, .field textarea{ font-size: 16px; }
 }
+html.modal-open, body.modal-open{ overflow: hidden; }
 
 /* =========================================================
    CURSOR + SPOTLIGHT
    ========================================================= */
-:root{ --mxp: 50vw; --myp: 50vh; }
 .spotlight{
   position: fixed; left:0; top:0;
   width: 640px; height: 640px;
-  pointer-events:none; z-index: 1;
+  pointer-events:none; z-index: 2;
   transform: translate3d(var(--mxp), var(--myp), 0) translate(-50%,-50%);
   background: radial-gradient(50% 50% at 50% 50%,
-    oklch(0.80 0.14 150 / .16),
-    oklch(0.78 0.12 90 / .07) 45%,
+    oklch(0.80 0.14 150 / .15),
+    oklch(0.78 0.12 90 / .06) 45%,
     transparent 72%);
   mix-blend-mode: screen;
   filter: blur(12px);
@@ -902,7 +619,7 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
   }
   .cursor-dot{
     width: 5px; height: 5px; border-radius: 999px;
-    background: var(--bone-50);
+    background: var(--cream-50);
     box-shadow: 0 0 8px oklch(0.95 0.05 150 / .6);
     transition: opacity .3s ease;
   }
@@ -923,16 +640,15 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
 }
 @media (hover: none), (pointer: coarse){ .cursor-dot, .cursor-ring{ display:none; } }
 
-/* =========================================================
-   REDUCED MOTION — everything readable, nothing moves
-   ========================================================= */
+/* Initial hidden states (JS present only) */
+html.js .nav, html.js .stage h1, html.js .stage .btn,
+html.js .world-hint, html.js .micro-footer span{ opacity: 0; }
+
 @media (prefers-reduced-motion: reduce){
-  .aurora, .aurora-2, .eyebrow::before, .hero-crest::after,
-  .scroll-hint i::after, .marquee-track{ animation: none !important; }
-  html.js [data-rv]{ opacity: 1 !important; transform: none !important; }
-  html.js .hero-el, html.js #nav, html.js .scroll-hint{ opacity: 1 !important; }
-  html.js .mask > .mline{ transform: none !important; }
-  *{ scroll-behavior: auto !important; }
+  .aurora, .aurora-2, .world-hint i::after{ animation: none !important; }
+  html.js .nav, html.js .stage h1, html.js .stage .btn,
+  html.js .world-hint, html.js .micro-footer span{ opacity: 1 !important; transform: none !important; }
+  .pre{ display: none; }
 }
 </style>
 </head>
@@ -941,34 +657,21 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
 <div class="atmosphere"></div>
 <div class="aurora" aria-hidden="true"></div>
 <div class="aurora-2" aria-hidden="true"></div>
+<canvas id="gl" aria-hidden="true"></canvas>
 <div class="spotlight" aria-hidden="true"></div>
 
-<!-- PRELOADER -->
-<div class="preloader" id="preloader" aria-hidden="true">
-  <div class="pre-brand">
-    <img src="assets/logo-croncore.png" alt="" width="20" height="20" />
-    <span data-i18n="brand_sub">The Partners' Circle</span>
-  </div>
-  <div>
-    <div class="pre-word" aria-label="CRONCORE" id="preWord"></div>
-    <div class="pre-sub" data-i18n="preload">Entering the circle</div>
-  </div>
+<!-- PRELOADER LAYER — the circle assembles itself on the shared canvas -->
+<div class="pre" id="pre" aria-hidden="true">
+  <div class="pre-sub" data-i18n="preload">Entering the circle</div>
   <div class="pre-count"><span id="preNum">0</span><span class="pct">%</span></div>
-  <div class="pre-line"><i id="preFill"></i></div>
 </div>
 
 <!-- NAV -->
 <header class="nav" id="nav">
-  <a class="brand-lock" href="#top" data-scroll>
+  <a class="brand-lock" href="#">
     <img src="assets/logo-croncore.png" alt="" />
     <span class="wm">CRONCORE</span>
-    <span class="sub" data-i18n="brand_sub">The Partners' Circle</span>
   </a>
-  <nav class="nav-links">
-    <a href="#services" data-scroll data-i18n="nav_services">Directions</a>
-    <a href="#how" data-scroll data-i18n="nav_how">How it works</a>
-    <a href="#access" data-scroll data-i18n="nav_access">Access</a>
-  </nav>
   <div class="lang" role="group" aria-label="Language">
     <button class="active" data-lang="en">EN</button>
     <button data-lang="de">DE</button>
@@ -979,160 +682,40 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
   </div>
 </header>
 
-<main id="top">
-
-  <!-- HERO -->
-  <section class="hero">
-    <canvas id="hero-gl" aria-hidden="true"></canvas>
-    <div class="hero-inner">
-      <div class="hero-crest hero-el" aria-hidden="true">
-        <img src="assets/logo-croncore.png" alt="" />
-      </div>
-      <h1 id="hero-h1" data-i18n-html="hero_h1">The Partners' <em>Circle</em>.</h1>
-      <p class="lede hero-el" data-i18n="hero_lede">Payments, investments, SPV, legal, concierge — through one private channel.</p>
-      <div class="cta-row hero-el">
-        <button class="btn btn-primary btn-lg" type="button" id="open-apply">
-          <span data-i18n="btn_apply">Request access</span>
-          <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </button>
-        <a class="btn btn-ghost btn-lg enter-world" href="game/" hidden>
-          <span data-i18n="btn_world">Enter the world</span>
-          <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-      </div>
-    </div>
-    <div class="scroll-hint" aria-hidden="true">
-      <span data-i18n="hero_scroll">Scroll</span><i></i>
-    </div>
-  </section>
-
-  <!-- MANIFESTO -->
-  <section class="manifesto">
-    <div class="wrap">
-      <span class="eyebrow" data-rv data-i18n="man_eyebrow">The idea</span>
-      <p class="man-line">
-        <span class="mask"><span class="mline" data-i18n-html="man_l1">A private circle of <em>partners</em>.</span></span>
-      </p>
-      <p class="man-line dim">
-        <span class="mask"><span class="mline" data-i18n="man_l2">One channel for payments, investments, SPV, legal and concierge — run by people who answer.</span></span>
-      </p>
-    </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track" id="marquee-track"></div>
+<!-- STAGE -->
+<main class="stage">
+  <div class="stage-inner">
+    <h1 id="hero-h1" data-i18n-html="hero_h1">The Partners' <em>Circle</em>.</h1>
+    <button class="btn" type="button" id="open-apply">
+      <span data-i18n="btn_apply">Request access</span>
+      <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </button>
   </div>
-
-  <!-- DIRECTIONS -->
-  <section class="services" id="services">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="eyebrow" data-rv data-i18n="svc_eyebrow">Directions</span>
-        <h2 class="sec-title" data-rv data-i18n-html="svc_title">Six private <em>directions</em>.</h2>
-      </div>
-      <div class="dir-list">
-        <a class="dir-row" data-rv data-dir="payments">
-          <span class="dr-num mono">01</span>
-          <span class="dr-title" data-i18n="form_dir_payments">Payments &amp; Fintech</span>
-          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a class="dir-row" data-rv data-dir="invest">
-          <span class="dr-num mono">02</span>
-          <span class="dr-title" data-i18n="form_dir_invest">Investments &amp; DeFi</span>
-          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a class="dir-row" data-rv data-dir="spv">
-          <span class="dr-num mono">03</span>
-          <span class="dr-title" data-i18n="form_dir_spv">SPV &amp; Tokenization</span>
-          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a class="dir-row" data-rv data-dir="legal">
-          <span class="dr-num mono">04</span>
-          <span class="dr-title" data-i18n="form_dir_legal">Legal &amp; Corporate</span>
-          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a class="dir-row" data-rv data-dir="concierge">
-          <span class="dr-num mono">05</span>
-          <span class="dr-title" data-i18n="form_dir_concierge">Concierge &amp; Real Estate</span>
-          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a class="dir-row" data-rv data-dir="network">
-          <span class="dr-num mono">06</span>
-          <span class="dr-title" data-i18n="form_dir_network">Private Network</span>
-          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="how" id="how">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="eyebrow" data-rv data-i18n="how_eyebrow">Process</span>
-        <h2 class="sec-title" data-rv data-i18n-html="how_title">From a message to <em>the right room</em>.</h2>
-      </div>
-      <div class="how-grid">
-        <div class="how-card" data-rv>
-          <span class="n mono">01</span>
-          <h3 data-i18n="how1_t">One message</h3>
-          <p data-i18n="how1_d">Describe the task in a few lines — context, goal, timeline.</p>
-        </div>
-        <div class="how-card" data-rv>
-          <span class="n mono">02</span>
-          <h3 data-i18n="how2_t">The right room</h3>
-          <p data-i18n="how2_d">A partner takes it directly. No relays, no tickets.</p>
-        </div>
-        <div class="how-card" data-rv>
-          <span class="n mono">03</span>
-          <h3 data-i18n="how3_t">Quiet execution</h3>
-          <p data-i18n="how3_d">Updates in your channel until it's closed.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ACCESS -->
-  <section class="access" id="access">
-    <div class="wrap">
-      <span class="eyebrow" data-rv data-i18n="acc_eyebrow">Access</span>
-      <h2 class="sec-title" data-rv data-i18n-html="acc_title">Enter the Partners' <em>Circle</em>.</h2>
-      <p class="lede" data-rv data-i18n="acc_lede">By invitation — or by a request that deserves one.</p>
-      <div class="cta-row" data-rv>
-        <button class="btn btn-primary btn-lg" type="button" id="open-apply-2">
-          <span data-i18n="btn_apply">Request access</span>
-          <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </button>
-        <a class="btn btn-ghost btn-lg enter-world" href="game/" hidden>
-          <span data-i18n="btn_world">Enter the world</span>
-          <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="giant-wm" aria-hidden="true"><span id="giant-wm">CRONCORE</span></div>
-    <div class="wrap">
-      <div class="micro-footer">
-        <span data-i18n="footer_l1">© 2026 CRONCORE · By invitation only</span>
-        <span data-i18n="footer_l2">Information shared is not investment, legal or tax advice</span>
-      </div>
-    </div>
-  </footer>
-
 </main>
+
+<!-- SCROLL → THE WORLD -->
+<div class="world-hint" id="world-hint" hidden>
+  <span data-i18n="world_hint">Scroll — enter the world</span><i></i>
+</div>
+<div class="dive" id="dive" aria-hidden="true">
+  <div class="dive-box">
+    <div class="dive-text" data-i18n="world_entering">Entering the world</div>
+    <div class="dive-bar"><i id="dive-fill"></i></div>
+  </div>
+</div>
+<div class="dive-flash" id="dive-flash" aria-hidden="true"></div>
+
+<div class="micro-footer">
+  <span data-i18n="footer_l1">© 2026 CRONCORE · By invitation only</span>
+  <span data-i18n="footer_l2">Information shared is not investment, legal or tax advice</span>
+</div>
 
 <!-- APPLY MODAL -->
 <dialog id="apply-modal" class="apply-modal" aria-labelledby="apply-title">
   <div class="apply-shell">
     <header class="apply-head">
       <div>
-        <span class="eyebrow" data-i18n="form_eyebrow">Private request</span>
         <h2 id="apply-title" data-i18n-html="form_title">Tell us <em>what you need</em>.</h2>
-        <p data-i18n="form_desc">A few details so a partner can pick it up directly, without follow-up questions.</p>
       </div>
       <button class="apply-close" type="button" aria-label="Close" data-close>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -1233,7 +816,7 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
         <div class="meta">
           <span data-i18n="form_privacy">Private · not stored beyond delivery to the partner network.</span>
         </div>
-        <button class="btn btn-primary" type="submit" id="submit-btn">
+        <button class="btn" type="submit" id="submit-btn">
           <span class="label" data-i18n="form_submit">Send request</span>
         </button>
       </footer>
@@ -1245,7 +828,7 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
       </div>
       <h3 data-i18n-html="form_success_title">Request <em>received</em>.</h3>
       <p data-i18n="form_success_text">A partner from the network will reach out within 48 hours through the channel you provided.</p>
-      <div class="cta-row" style="margin-top: var(--s-4); justify-content:center;">
+      <div style="margin-top: var(--s-4);">
         <button class="btn btn-ghost" type="button" data-close data-i18n="form_success_close">Close</button>
       </div>
       <div class="micro">CRONCORE · The Partners' Circle</div>
@@ -1257,50 +840,32 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
 <div class="cursor-dot" aria-hidden="true"></div>
 
 <script src="assets/vendor/gsap.min.js"></script>
-<script src="assets/vendor/ScrollTrigger.min.js"></script>
-<script src="assets/vendor/lenis.min.js"></script>
-
 <script>
 document.documentElement.classList.add('js');
 
+/* Shared state the 3D module reads every frame */
+window.CORE_STATE = {
+  progress: 0,      /* 0..1 — chain assembly during preload */
+  flipAt: 0,        /* performance.now() when the circle tilts into place */
+  dive: 0,          /* 0..1 — scroll-to-world progress */
+  reduced: matchMedia("(prefers-reduced-motion: reduce)").matches,
+};
+
 /* ============================================================
-   I18N
+   I18N — deliberately sparse. The circle speaks for itself.
    ============================================================ */
 const I18N = {
   en: {
     meta_title: "CRONCORE — The Partners' Circle",
-    meta_desc: "A private circle of partners — payments, investments, SPV, legal, concierge. By invitation.",
+    meta_desc: "A private circle of partners. By invitation.",
     preload: "Entering the circle",
-    brand_sub: "The Partners' Circle",
-    nav_services: "Directions",
-    nav_how: "How it works",
-    nav_access: "Access",
     hero_h1: "The Partners' <em>Circle</em>.",
-    hero_lede: "Payments, investments, SPV, legal, concierge — through one private channel.",
-    hero_scroll: "Scroll",
     btn_apply: "Request access",
-    btn_world: "Enter the world",
-    man_eyebrow: "The idea",
-    man_l1: "A private circle of <em>partners</em>.",
-    man_l2: "One channel for payments, investments, SPV, legal and concierge — run by people who answer.",
-    svc_eyebrow: "Directions",
-    svc_title: "Six private <em>directions</em>.",
-    how_eyebrow: "Process",
-    how_title: "From a message to <em>the right room</em>.",
-    how1_t: "One message",
-    how1_d: "Describe the task in a few lines — context, goal, timeline.",
-    how2_t: "The right room",
-    how2_d: "A partner takes it directly. No relays, no tickets.",
-    how3_t: "Quiet execution",
-    how3_d: "Updates in your channel until it's closed.",
-    acc_eyebrow: "Access",
-    acc_title: "Enter the Partners' <em>Circle</em>.",
-    acc_lede: "By invitation — or by a request that deserves one.",
+    world_hint: "Scroll — enter the world",
+    world_entering: "Entering the world",
     footer_l1: "© 2026 CRONCORE · By invitation only",
     footer_l2: "Information shared is not investment, legal or tax advice",
-    form_eyebrow: "Private request",
     form_title: "Tell us <em>what you need</em>.",
-    form_desc: "A few details so a partner can pick it up directly, without follow-up questions.",
     form_g_contact: "Contact",
     form_g_request: "Request",
     form_g_details: "Details",
@@ -1354,38 +919,15 @@ const I18N = {
   },
   de: {
     meta_title: "CRONCORE — Der Partnerkreis",
-    meta_desc: "Ein privater Kreis von Partnern — Zahlungen, Investitionen, SPV, Recht, Concierge. Auf Einladung.",
+    meta_desc: "Ein privater Kreis von Partnern. Auf Einladung.",
     preload: "Eintritt in den Kreis",
-    brand_sub: "Der Partnerkreis",
-    nav_services: "Richtungen",
-    nav_how: "So funktioniert es",
-    nav_access: "Zugang",
     hero_h1: "Der Partner-<em>kreis</em>.",
-    hero_lede: "Zahlungen, Investitionen, SPV, Recht, Concierge — über einen privaten Kanal.",
-    hero_scroll: "Scrollen",
     btn_apply: "Zugang anfragen",
-    btn_world: "Die Welt betreten",
-    man_eyebrow: "Die Idee",
-    man_l1: "Ein privater Kreis von <em>Partnern</em>.",
-    man_l2: "Ein Kanal für Zahlungen, Investitionen, SPV, Recht und Concierge — geführt von Menschen, die antworten.",
-    svc_eyebrow: "Richtungen",
-    svc_title: "Sechs private <em>Richtungen</em>.",
-    how_eyebrow: "Prozess",
-    how_title: "Von einer Nachricht in <em>den richtigen Raum</em>.",
-    how1_t: "Eine Nachricht",
-    how1_d: "Beschreiben Sie die Aufgabe in wenigen Zeilen — Kontext, Ziel, Zeitrahmen.",
-    how2_t: "Der richtige Raum",
-    how2_d: "Ein Partner übernimmt direkt. Keine Weiterleitungen, keine Tickets.",
-    how3_t: "Stille Ausführung",
-    how3_d: "Updates in Ihrem Kanal, bis es abgeschlossen ist.",
-    acc_eyebrow: "Zugang",
-    acc_title: "Treten Sie in den Partner-<em>kreis</em> ein.",
-    acc_lede: "Auf Einladung — oder mit einer Anfrage, die eine verdient.",
+    world_hint: "Scrollen — die Welt betreten",
+    world_entering: "Betreten der Welt",
     footer_l1: "© 2026 CRONCORE · Nur auf Einladung",
     footer_l2: "Geteilte Informationen sind keine Anlage-, Rechts- oder Steuerberatung",
-    form_eyebrow: "Private Anfrage",
     form_title: "Sagen Sie uns, <em>was Sie brauchen</em>.",
-    form_desc: "Ein paar Details, damit ein Partner direkt übernehmen kann — ohne Rückfragen.",
     form_g_contact: "Kontakt",
     form_g_request: "Anliegen",
     form_g_details: "Details",
@@ -1439,38 +981,15 @@ const I18N = {
   },
   ru: {
     meta_title: "CRONCORE — Круг партнёров",
-    meta_desc: "Частный круг партнёров — платежи, инвестиции, SPV, право, concierge. По приглашению.",
+    meta_desc: "Частный круг партнёров. По приглашению.",
     preload: "Вход в круг",
-    brand_sub: "Круг партнёров",
-    nav_services: "Направления",
-    nav_how: "Как это работает",
-    nav_access: "Доступ",
     hero_h1: "Круг <em>Партнёров</em>.",
-    hero_lede: "Платежи, инвестиции, SPV, право, concierge — через один частный канал.",
-    hero_scroll: "Листайте",
     btn_apply: "Оставить заявку",
-    btn_world: "Войти в мир",
-    man_eyebrow: "Идея",
-    man_l1: "Частный круг <em>партнёров</em>.",
-    man_l2: "Один канал для платежей, инвестиций, SPV, права и concierge — им управляют люди, которые отвечают.",
-    svc_eyebrow: "Направления",
-    svc_title: "Шесть частных <em>направлений</em>.",
-    how_eyebrow: "Процесс",
-    how_title: "От сообщения — <em>в нужную комнату</em>.",
-    how1_t: "Одно сообщение",
-    how1_d: "Опишите задачу в нескольких строках — контекст, цель, сроки.",
-    how2_t: "Нужная комната",
-    how2_d: "Партнёр берёт задачу напрямую. Без пересылок и тикетов.",
-    how3_t: "Тихое исполнение",
-    how3_d: "Апдейты в вашем канале, пока задача не закрыта.",
-    acc_eyebrow: "Доступ",
-    acc_title: "Войдите в Круг <em>Партнёров</em>.",
-    acc_lede: "По приглашению — или по заявке, которая его заслуживает.",
+    world_hint: "Листайте — войдите в мир",
+    world_entering: "Входим в мир",
     footer_l1: "© 2026 CRONCORE · Только по приглашению",
     footer_l2: "Информация в заявке не является инвестиционной, юридической или налоговой консультацией",
-    form_eyebrow: "Частная заявка",
     form_title: "Расскажите, <em>что нужно</em>.",
-    form_desc: "Несколько деталей, чтобы партнёр мог взять задачу в работу без уточняющих вопросов.",
     form_g_contact: "Контакт",
     form_g_request: "Запрос",
     form_g_details: "Детали",
@@ -1524,38 +1043,15 @@ const I18N = {
   },
   ar: {
     meta_title: "CRONCORE — دائرة الشركاء",
-    meta_desc: "دائرة شركاء خاصة — مدفوعات، استثمارات، SPV، قانون، كونسيرج. بالدعوة.",
+    meta_desc: "دائرة شركاء خاصة. بالدعوة.",
     preload: "الدخول إلى الدائرة",
-    brand_sub: "دائرة الشركاء",
-    nav_services: "الاتجاهات",
-    nav_how: "كيف يعمل",
-    nav_access: "الوصول",
     hero_h1: "دائرة <em>الشركاء</em>.",
-    hero_lede: "مدفوعات، استثمارات، SPV، قانون، كونسيرج — عبر قناة خاصة واحدة.",
-    hero_scroll: "مرر",
     btn_apply: "اطلب الوصول",
-    btn_world: "ادخل العالم",
-    man_eyebrow: "الفكرة",
-    man_l1: "دائرة خاصة من <em>الشركاء</em>.",
-    man_l2: "قناة واحدة للمدفوعات والاستثمارات وSPV والقانون والكونسيرج — يديرها أشخاص يجيبون.",
-    svc_eyebrow: "الاتجاهات",
-    svc_title: "ستة اتجاهات <em>خاصة</em>.",
-    how_eyebrow: "العملية",
-    how_title: "من رسالة إلى <em>الغرفة الصحيحة</em>.",
-    how1_t: "رسالة واحدة",
-    how1_d: "صف المهمة في بضعة أسطر — السياق، الهدف، الإطار الزمني.",
-    how2_t: "الغرفة الصحيحة",
-    how2_d: "يتولاها شريك مباشرة. بلا وسطاء، بلا تذاكر.",
-    how3_t: "تنفيذ هادئ",
-    how3_d: "تحديثات في قناتك حتى الإغلاق.",
-    acc_eyebrow: "الوصول",
-    acc_title: "ادخل دائرة <em>الشركاء</em>.",
-    acc_lede: "بالدعوة — أو بطلب يستحق واحدة.",
+    world_hint: "مرر — ادخل العالم",
+    world_entering: "الدخول إلى العالم",
     footer_l1: "© 2026 CRONCORE · بالدعوة فقط",
     footer_l2: "المعلومات المقدمة لا تشكّل استشارة استثمارية أو قانونية أو ضريبية",
-    form_eyebrow: "طلب خاص",
     form_title: "أخبرنا <em>بما تحتاجه</em>.",
-    form_desc: "بعض التفاصيل ليتولى الشريك المهمة مباشرةً دون أسئلة إضافية.",
     form_g_contact: "التواصل",
     form_g_request: "الطلب",
     form_g_details: "التفاصيل",
@@ -1609,38 +1105,15 @@ const I18N = {
   },
   he: {
     meta_title: "CRONCORE — מעגל השותפים",
-    meta_desc: "מעגל פרטי של שותפים — תשלומים, השקעות, SPV, משפט, קונסיירז'. בהזמנה.",
+    meta_desc: "מעגל פרטי של שותפים. בהזמנה.",
     preload: "כניסה למעגל",
-    brand_sub: "מעגל השותפים",
-    nav_services: "כיוונים",
-    nav_how: "איך זה עובד",
-    nav_access: "גישה",
     hero_h1: "מעגל <em>השותפים</em>.",
-    hero_lede: "תשלומים, השקעות, SPV, משפט, קונסיירז' — דרך ערוץ פרטי אחד.",
-    hero_scroll: "גללו",
     btn_apply: "בקשו גישה",
-    btn_world: "היכנסו לעולם",
-    man_eyebrow: "הרעיון",
-    man_l1: "מעגל פרטי של <em>שותפים</em>.",
-    man_l2: "ערוץ אחד לתשלומים, השקעות, SPV, משפט וקונסיירז' — מנוהל על ידי אנשים שעונים.",
-    svc_eyebrow: "כיוונים",
-    svc_title: "שישה כיוונים <em>פרטיים</em>.",
-    how_eyebrow: "תהליך",
-    how_title: "מהודעה — <em>לחדר הנכון</em>.",
-    how1_t: "הודעה אחת",
-    how1_d: "תארו את המשימה בכמה שורות — הקשר, מטרה, לוח זמנים.",
-    how2_t: "החדר הנכון",
-    how2_d: "שותף לוקח את זה ישירות. בלי העברות, בלי טיקטים.",
-    how3_t: "ביצוע שקט",
-    how3_d: "עדכונים בערוץ שלכם עד לסגירה.",
-    acc_eyebrow: "גישה",
-    acc_title: "היכנסו למעגל <em>השותפים</em>.",
-    acc_lede: "בהזמנה — או בבקשה שראויה לאחת.",
+    world_hint: "גללו — היכנסו לעולם",
+    world_entering: "נכנסים לעולם",
     footer_l1: "© 2026 CRONCORE · בהזמנה בלבד",
     footer_l2: "המידע אינו מהווה ייעוץ השקעות, משפטי או מס",
-    form_eyebrow: "בקשה פרטית",
     form_title: "ספרו לנו <em>מה צריך</em>.",
-    form_desc: "כמה פרטים כדי ששותף יוכל לקחת זאת ישירות, ללא שאלות נוספות.",
     form_g_contact: "יצירת קשר",
     form_g_request: "הבקשה",
     form_g_details: "פרטים",
@@ -1694,38 +1167,15 @@ const I18N = {
   },
   es: {
     meta_title: "CRONCORE — El Círculo de Socios",
-    meta_desc: "Un círculo privado de socios — pagos, inversiones, SPV, legal, concierge. Por invitación.",
+    meta_desc: "Un círculo privado de socios. Por invitación.",
     preload: "Entrando al círculo",
-    brand_sub: "El Círculo de Socios",
-    nav_services: "Direcciones",
-    nav_how: "Cómo funciona",
-    nav_access: "Acceso",
     hero_h1: "El Círculo de <em>Socios</em>.",
-    hero_lede: "Pagos, inversiones, SPV, legal, concierge — a través de un único canal privado.",
-    hero_scroll: "Desliza",
     btn_apply: "Solicitar acceso",
-    btn_world: "Entrar al mundo",
-    man_eyebrow: "La idea",
-    man_l1: "Un círculo privado de <em>socios</em>.",
-    man_l2: "Un canal para pagos, inversiones, SPV, legal y concierge — dirigido por personas que responden.",
-    svc_eyebrow: "Direcciones",
-    svc_title: "Seis direcciones <em>privadas</em>.",
-    how_eyebrow: "Proceso",
-    how_title: "De un mensaje a <em>la sala correcta</em>.",
-    how1_t: "Un mensaje",
-    how1_d: "Describe la tarea en unas líneas — contexto, objetivo, plazos.",
-    how2_t: "La sala correcta",
-    how2_d: "Un socio lo asume directamente. Sin intermediarios, sin tickets.",
-    how3_t: "Ejecución silenciosa",
-    how3_d: "Actualizaciones en tu canal hasta cerrarlo.",
-    acc_eyebrow: "Acceso",
-    acc_title: "Entra al Círculo de <em>Socios</em>.",
-    acc_lede: "Por invitación — o con una solicitud que la merezca.",
+    world_hint: "Desliza — entra al mundo",
+    world_entering: "Entrando al mundo",
     footer_l1: "© 2026 CRONCORE · Solo por invitación",
     footer_l2: "La información compartida no constituye asesoramiento de inversión, legal o fiscal",
-    form_eyebrow: "Solicitud privada",
     form_title: "Cuéntanos <em>qué necesitas</em>.",
-    form_desc: "Unos pocos detalles para que un socio pueda asumirlo directamente, sin más preguntas.",
     form_g_contact: "Contacto",
     form_g_request: "Solicitud",
     form_g_details: "Detalles",
@@ -1781,16 +1231,6 @@ const I18N = {
 
 const RTL_LANGS = new Set(["ar", "he"]);
 const SUPPORTED = Object.keys(I18N);
-const DIR_KEYS = ["payments","invest","spv","legal","concierge","network"];
-
-function buildMarquee(){
-  const d = I18N[document.documentElement.lang] || I18N.en;
-  const track = document.getElementById("marquee-track");
-  if (!track) return;
-  const items = DIR_KEYS.map(k => d["form_dir_" + k]).join(' <b>·</b> ');
-  const chunk = `<span>${items} <b>·</b></span>`;
-  track.innerHTML = chunk + chunk; /* two copies → seamless -50% loop */
-}
 
 function applyLang(lang){
   if (!I18N[lang]) lang = "en";
@@ -1818,9 +1258,7 @@ function applyLang(lang){
   document.querySelectorAll(".lang button").forEach(b => {
     b.classList.toggle("active", b.dataset.lang === lang);
   });
-  buildMarquee();
   try { localStorage.setItem("croncore_lang", lang); } catch(e){}
-  if (window.ScrollTrigger) requestAnimationFrame(() => ScrollTrigger.refresh());
 }
 
 function detectInitialLang(){
@@ -1839,15 +1277,11 @@ const modal = document.getElementById("apply-modal");
 const form  = document.getElementById("apply-form");
 const submitBtn = document.getElementById("submit-btn");
 
-function openApply(presetDir){
-  if (presetDir){
-    const sel = document.getElementById("f-dir");
-    if (sel) sel.value = presetDir;
-  }
+function openApply(){
   if (typeof modal.showModal === "function") modal.showModal();
   else modal.setAttribute("open", "");
   document.documentElement.classList.add("modal-open");
-  setTimeout(() => document.getElementById("f-name")?.focus(), 120);
+  setTimeout(() => document.getElementById("f-name")?.focus(), 140);
 }
 function closeApply(){
   modal.removeAttribute("data-error");
@@ -1859,15 +1293,7 @@ function closeApply(){
     modal.removeAttribute("data-state");
   }
 }
-
 document.getElementById("open-apply").addEventListener("click", () => openApply());
-document.getElementById("open-apply-2").addEventListener("click", () => openApply());
-document.querySelectorAll(".dir-row").forEach(row => {
-  row.addEventListener("click", (e) => {
-    e.preventDefault();
-    openApply(row.dataset.dir);
-  });
-});
 document.querySelectorAll("[data-close]").forEach(el => el.addEventListener("click", closeApply));
 modal.addEventListener("click", (e) => { if (e.target === modal) closeApply(); });
 modal.addEventListener("cancel", () => { closeApply(); });
@@ -1956,191 +1382,31 @@ form.addEventListener("submit", async (e) => {
 function showSuccess(){ modal.setAttribute("data-state", "success"); }
 
 /* ============================================================
-   MOTION SYSTEM — Lenis + GSAP ScrollTrigger
+   PRELOADER — the chain assembles on the shared canvas;
+   this layer only narrates with numbers.
    ============================================================ */
-const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
-let lenis = null;
+const S = window.CORE_STATE;
 
-if (!REDUCED && window.gsap && window.ScrollTrigger && window.Lenis){
-  gsap.registerPlugin(ScrollTrigger);
-  lenis = new Lenis({ autoRaf: false, lerp: 0.11, wheelMultiplier: 1.0 });
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
-  /* NB: keep gsap's default lagSmoothing — with it disabled, any main-thread
-     stall (font/shader compile) fast-forwards the preloader timeline. */
-} else if (window.gsap && window.ScrollTrigger && !REDUCED){
-  gsap.registerPlugin(ScrollTrigger);
-}
-
-function scrollToTarget(sel){
-  const el = document.querySelector(sel);
-  if (!el) return;
-  if (lenis) lenis.scrollTo(el, { offset: -70, duration: 1.4 });
-  else el.scrollIntoView({ behavior: REDUCED ? "auto" : "smooth" });
-}
-document.querySelectorAll("[data-scroll]").forEach(a => {
-  a.addEventListener("click", (e) => {
-    const href = a.getAttribute("href");
-    if (href && href.startsWith("#")){ e.preventDefault(); scrollToTarget(href); }
-  });
-});
-
-/* Scroll reveals */
-function initReveals(){
-  if (REDUCED || !window.gsap || !window.ScrollTrigger) {
-    document.querySelectorAll("[data-rv]").forEach(el => { el.style.opacity = 1; el.style.transform = "none"; });
-    return;
-  }
-  gsap.utils.toArray("[data-rv]").forEach(el => {
-    gsap.fromTo(el,
-      { y: 34, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 1.05, ease: "power3.out",
-        scrollTrigger: { trigger: el, start: "top 88%", once: true } });
-  });
-  gsap.utils.toArray(".mask > .mline").forEach(el => {
-    gsap.to(el, {
-      y: 0, yPercent: 0, duration: 1.2, ease: "power4.out",
-      startAt: { yPercent: 115 },
-      scrollTrigger: { trigger: el.parentElement, start: "top 86%", once: true }
-    });
-  });
-  /* giant footer wordmark scrub */
-  const wm = document.getElementById("giant-wm");
-  if (wm){
-    gsap.fromTo(wm, { xPercent: 6 }, {
-      xPercent: -14, ease: "none",
-      scrollTrigger: { trigger: wm, start: "top bottom", end: "bottom top", scrub: 1 }
-    });
-  }
-  /* hero content drifts up + fades as you scroll past */
-  const heroInner = document.querySelector(".hero-inner");
-  if (heroInner){
-    gsap.to(heroInner, {
-      yPercent: -14, autoAlpha: 0, ease: "none",
-      scrollTrigger: { trigger: ".hero", start: "top top", end: "86% top", scrub: .6 }
-    });
-  }
-}
-
-/* Nav scroll state */
-const navEl = document.getElementById("nav");
-function onScrollNav(){
-  navEl.classList.toggle("scrolled", (window.scrollY || 0) > 40);
-}
-window.addEventListener("scroll", onScrollNav, { passive: true });
-
-/* ============================================================
-   MAGNETIC BUTTONS
-   ============================================================ */
-(function(){
-  if (!matchMedia("(hover: hover) and (pointer: fine)").matches || REDUCED) return;
-  const STRENGTH = 0.32;
-  document.querySelectorAll(".btn").forEach(btn => {
-    btn.addEventListener("pointermove", (e) => {
-      const r = btn.getBoundingClientRect();
-      /* fill origin for the ::after ripple */
-      btn.style.setProperty("--bx", (e.clientX - r.left) + "px");
-      btn.style.setProperty("--by", (e.clientY - r.top) + "px");
-      /* magnetic pull */
-      const dx = e.clientX - (r.left + r.width / 2);
-      const dy = e.clientY - (r.top + r.height / 2);
-      btn.style.transform = `translate(${dx * STRENGTH * .3}px, ${dy * STRENGTH * .6}px)`;
-    });
-    btn.addEventListener("pointerleave", () => {
-      btn.style.transform = "";
-    });
-  });
-})();
-
-/* ============================================================
-   PRELOADER — counter + masked wordmark + curtain lift
-   ============================================================ */
-(function(){
-  const pre = document.getElementById("preloader");
-  const word = document.getElementById("preWord");
-  const num = document.getElementById("preNum");
-  const fill = document.getElementById("preFill");
-  const html = document.documentElement;
-
-  /* build masked chars */
-  "CRONCORE".split("").forEach(ch => {
-    const m = document.createElement("span"); m.className = "m";
-    const c = document.createElement("span"); c.className = "c"; c.textContent = ch;
-    m.appendChild(c);
-    word.appendChild(m);
-  });
-
-  function finish(){
-    document.body.classList.add("is-ready");
-    document.body.classList.add("pre-done");
-    html.classList.remove("lock");
-    if (pre){ pre.classList.add("done"); pre.style.display = "none"; }
-    heroEntrance();
-  }
-
-  if (REDUCED || !window.gsap){
-    if (pre) pre.remove();
-    document.body.classList.add("is-ready");
-    document.body.classList.add("pre-done");
-    html.classList.remove("lock");
-    document.querySelectorAll("[data-rv], .hero-el, #nav, .scroll-hint").forEach(el => {
-      el.style.opacity = 1; el.style.transform = "none";
-    });
-    return;
-  }
-
-  html.classList.add("lock");
-
-  const chars = word.querySelectorAll(".c");
-  const state = { p: 0 };
-  const tl = gsap.timeline();
-
-  tl.to(".pre-brand", { opacity: 1, duration: .6, ease: "power2.out" }, .15)
-    .to(chars, { y: 0, yPercent: 0, startAt: { yPercent: 120 }, duration: 1.0, ease: "power4.out", stagger: .045 }, .25)
-    .to(".pre-sub", { opacity: 1, duration: .7, ease: "power2.out" }, .9)
-    .to(state, {
-      p: 100, duration: 2.05, ease: "power2.inOut",
-      onUpdate(){
-        num.textContent = Math.round(state.p);
-        fill.style.transform = `scaleX(${state.p / 100})`;
-      }
-    }, .35)
-    .to(chars, { yPercent: -120, duration: .7, ease: "power3.in", stagger: .03 }, "+=.15")
-    .to([".pre-sub", ".pre-brand", ".pre-count"], { opacity: 0, duration: .45, ease: "power2.in" }, "<")
-    .to(pre, { yPercent: -100, duration: .95, ease: "expo.inOut", onStart: () => {
-        document.body.classList.add("is-ready");
-        html.classList.remove("lock");
-        heroEntrance();
-      }, onComplete: () => {
-        pre.classList.add("done"); pre.style.display = "none";
-        document.body.classList.add("pre-done");
-      } }, "-=.1");
-
-  /* safety: never trap the user behind the curtain */
-  setTimeout(() => {
-    if (!document.body.classList.contains("is-ready")) finish();
-  }, 7000);
-})();
-
-/* Hero entrance after the curtain lifts */
-let heroPlayed = false;
 function heroEntrance(){
-  if (heroPlayed || REDUCED || !window.gsap) return;
-  heroPlayed = true;
+  if (heroEntrance.done) return;
+  heroEntrance.done = true;
+  document.body.classList.add("is-ready");
+  if (!window.gsap || S.reduced){
+    document.querySelectorAll(".nav, .stage h1, .stage .btn, .world-hint, .micro-footer span")
+      .forEach(el => { el.style.opacity = 1; el.style.transform = "none"; });
+    return;
+  }
   const h1 = document.getElementById("hero-h1");
-  /* split into word masks (word-level: safe for AR/HE shaping) */
   splitWords(h1);
-  const words = h1.querySelectorAll(".w");
   gsap.timeline()
-    .fromTo("#nav", { y: -16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .9, ease: "power3.out" }, .1)
-    .fromTo(".hero-crest", { scale: .8, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.0, ease: "power3.out" }, .15)
-    .fromTo(words, { yPercent: 120 }, { yPercent: 0, duration: 1.1, ease: "power4.out", stagger: .07 }, .3)
-    .fromTo(".hero .lede", { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .9, ease: "power3.out" }, .75)
-    .fromTo(".hero .cta-row", { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .9, ease: "power3.out" }, .9)
-    .fromTo(".scroll-hint", { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, 1.2);
+    .fromTo("#nav", { y: -14, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .8, ease: "power3.out" }, .15)
+    .fromTo(h1.querySelectorAll(".w"), { yPercent: 120 }, { yPercent: 0, duration: 1.05, ease: "power4.out", stagger: .07,
+      onStart(){ h1.style.opacity = 1; } }, .2)
+    .fromTo(".stage .btn", { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .85, ease: "power3.out" }, .7)
+    .fromTo(".world-hint", { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, 1.0)
+    .fromTo(".micro-footer span", { y: 8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7, stagger: .1 }, 1.05);
 }
 
-/* Wrap each word of an element (preserving <em>) in an overflow mask. */
 function splitWords(root){
   if (!root || root.querySelector(".w")) return;
   const wrap = (textNode) => {
@@ -2166,28 +1432,124 @@ function splitWords(root){
   texts.forEach(wrap);
 }
 
-/* Re-split hero h1 when language changes (innerHTML gets replaced) */
-function refreshHeroSplit(){
-  const h1 = document.getElementById("hero-h1");
-  if (!h1 || REDUCED || !window.gsap) return;
-  splitWords(h1);
-  if (document.body.classList.contains("is-ready")){
-    gsap.fromTo(h1.querySelectorAll(".w"),
-      { yPercent: 120 }, { yPercent: 0, duration: .9, ease: "power4.out", stagger: .05 });
+(function preloader(){
+  const pre = document.getElementById("pre");
+  const num = document.getElementById("preNum");
+
+  if (S.reduced || !window.gsap){
+    S.progress = 1;
+    S.flipAt = performance.now();
+    if (pre) pre.remove();
+    heroEntrance();
+    return;
   }
-}
+
+  const state = { p: 0 };
+  gsap.timeline()
+    .to(".pre-sub", { opacity: 1, duration: .7, ease: "power2.out" }, .2)
+    .to(".pre-count", { opacity: .92, duration: .6, ease: "power2.out" }, .35)
+    .to(state, {
+      p: 100, duration: 2.6, ease: "power2.inOut",
+      onUpdate(){
+        S.progress = state.p / 100;
+        num.textContent = Math.round(state.p);
+      }
+    }, .3)
+    .add(() => { S.flipAt = performance.now(); })            /* circle tilts, core ignites */
+    .to([".pre-sub", ".pre-count"], { opacity: 0, duration: .5, ease: "power2.in" }, "+=.05")
+    .add(() => { pre.classList.add("done"); heroEntrance(); }, "-=.15");
+
+  /* never trap the visitor */
+  setTimeout(() => { if (!heroEntrance.done){ S.progress = 1; if (!S.flipAt) S.flipAt = performance.now(); pre.classList.add("done"); heroEntrance(); } }, 8000);
+})();
 
 /* ============================================================
-   HERO 3D — crystal core + partners' ring (three.js, vendored)
+   SCROLL → THE WORLD (WebGPU browsers only)
    ============================================================ */
-/* module script injected below via <script type="module"> */
+(function(){
+  const hasGPU = !!navigator.gpu;
+  const hint = document.getElementById("world-hint");
+  const dive = document.getElementById("dive");
+  const fill = document.getElementById("dive-fill");
+  const flash = document.getElementById("dive-flash");
+  if (!hasGPU) return;          /* the door stays invisible */
+  hint.hidden = false;
+
+  let target = 0;               /* accumulated intent */
+  let leaving = false;
+
+  function launch(){
+    if (leaving) return;
+    leaving = true;
+    S.dive = 1;
+    if (window.gsap){
+      gsap.to(flash, { opacity: 1, duration: .5, ease: "power2.in",
+        onComplete: () => { window.location.href = "game/"; } });
+    } else {
+      window.location.href = "game/";
+    }
+  }
+
+  const stageInner = document.querySelector(".stage-inner");
+  const hintEl = document.getElementById("world-hint");
+  function render(){
+    if (leaving) return;
+    /* ease toward target, decay target slowly so it takes intent, not one flick */
+    target = Math.max(0, target - 0.0035);
+    S.dive += (target - S.dive) * 0.12;
+    if (S.dive < 0.001) S.dive = 0;
+    dive.style.opacity = Math.min(1, S.dive * 1.6);
+    fill.style.transform = `scaleX(${Math.min(1, S.dive)})`;
+    /* the message steps aside as you fall toward the core */
+    if (document.body.classList.contains("is-ready")){
+      const fade = Math.max(0, 1 - S.dive * 1.8);
+      stageInner.style.opacity = fade;
+      hintEl.style.opacity = Math.min(hintEl.style.opacity || 1, fade);
+    }
+    if (S.dive > 0.985) launch();
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+
+  addEventListener("wheel", (e) => {
+    if (document.documentElement.classList.contains("modal-open")) return;
+    if (e.deltaY > 0) target = Math.min(1.05, target + e.deltaY * 0.0011);
+  }, { passive: true });
+
+  let touchY = null;
+  addEventListener("touchstart", (e) => { touchY = e.touches[0].clientY; }, { passive: true });
+  addEventListener("touchmove", (e) => {
+    if (document.documentElement.classList.contains("modal-open") || touchY == null) return;
+    const dy = touchY - e.touches[0].clientY;
+    touchY = e.touches[0].clientY;
+    if (dy > 0) target = Math.min(1.05, target + dy * 0.004);
+  }, { passive: true });
+
+  addEventListener("keydown", (e) => {
+    if (document.documentElement.classList.contains("modal-open")) return;
+    if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") target = Math.min(1.05, target + 0.16);
+  });
+
+  hint.addEventListener("click", () => { target = 1.05; });
+})();
 
 /* ============================================================
-   ENTER-WORLD GATING — WebGPU browsers only
+   MAGNETIC BUTTONS
    ============================================================ */
-if (navigator.gpu) {
-  document.querySelectorAll(".enter-world").forEach(el => el.hidden = false);
-}
+(function(){
+  if (!matchMedia("(hover: hover) and (pointer: fine)").matches || S.reduced) return;
+  document.querySelectorAll(".btn").forEach(btn => {
+    btn.addEventListener("pointermove", (e) => {
+      const r = btn.getBoundingClientRect();
+      btn.style.setProperty("--bx", (e.clientX - r.left) + "px");
+      btn.style.setProperty("--by", (e.clientY - r.top) + "px");
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      btn.style.transform = `translate(${dx * .1}px, ${dy * .2}px)`;
+    });
+    btn.addEventListener("pointerleave", () => { btn.style.transform = ""; });
+  });
+})();
 
 /* ============================================================
    CURSOR + SPOTLIGHT
@@ -2195,7 +1557,7 @@ if (navigator.gpu) {
 (function(){
   const html = document.documentElement;
   const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
-  if (!fine || REDUCED) return;
+  if (!fine || S.reduced) return;
 
   html.classList.add("cursor-on", "has-cursor");
 
@@ -2214,7 +1576,7 @@ if (navigator.gpu) {
   document.addEventListener("mouseup",   () => html.classList.remove("cursor-press"));
   window.addEventListener("blur",        () => html.classList.remove("cursor-press"));
 
-  const HOVER_SEL = 'a, button, [role="button"], input, select, textarea, label, .dir-row, [data-cursor="hover"]';
+  const HOVER_SEL = 'a, button, [role="button"], input, select, textarea, label, .world-hint';
   document.addEventListener("mouseover", (e) => {
     if (e.target.closest(HOVER_SEL)) html.classList.add("cursor-hover");
   });
@@ -2232,12 +1594,20 @@ if (navigator.gpu) {
    ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".lang button").forEach(b => {
-    b.addEventListener("click", () => { applyLang(b.dataset.lang); refreshHeroSplit(); });
+    b.addEventListener("click", () => {
+      applyLang(b.dataset.lang);
+      /* re-split after innerHTML swap, keep it visible if already revealed */
+      const h1 = document.getElementById("hero-h1");
+      if (document.body.classList.contains("is-ready") && window.gsap && !S.reduced){
+        splitWords(h1);
+        gsap.fromTo(h1.querySelectorAll(".w"), { yPercent: 120 }, { yPercent: 0, duration: .8, ease: "power4.out", stagger: .05 });
+      }
+    });
   });
   applyLang(detectInitialLang());
-  refreshHeroSplit();
-  initReveals();
-  onScrollNav();
+  /* hide h1 words until entrance (it may already be split-pending) */
+  const h1 = document.getElementById("hero-h1");
+  if (window.gsap && !S.reduced) h1.style.opacity = 0;
 });
 </script>
 
@@ -2245,42 +1615,40 @@ document.addEventListener("DOMContentLoaded", () => {
 { "imports": { "three": "./assets/vendor/three.module.min.js" } }
 </script>
 <script type="module">
-/* HERO 3D — crystal core + orbiting partners' ring.
-   Fails silently (CSS atmosphere remains) on any error. */
+/* ============================================================
+   THE CIRCLE — one scene for the whole page.
+     phase 1 (preload): partner-circles drift in chaos, then lock
+       one by one into a face-on chain as the counter climbs; the
+       chain line draws itself link by link.
+     phase 2 (flip):   the closed circle tilts into perspective,
+       the crystal core ignites at its centre.
+     phase 3 (idle):   living hero — breathing core, orbiting
+       chain, a runner spark, cursor parallax.
+     phase 4 (dive):   scroll intent pulls the camera through the
+       core — into the world.
+   Fails silently (atmosphere remains) on any error.
+   ============================================================ */
 try {
-  const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* Wait until the preloader curtain has fully lifted before paying for
-     renderer + shader compilation — a main-thread stall here would freeze
-     the curtain/entrance animations on slower machines. */
-  await new Promise((resolve) => {
-    const ready = () => document.body.classList.contains("pre-done");
-    if (ready()) return resolve();
-    const mo = new MutationObserver(() => {
-      if (ready()){ mo.disconnect(); resolve(); }
-    });
-    mo.observe(document.body, { attributes: true, attributeFilter: ["class"] });
-    setTimeout(() => { mo.disconnect(); resolve(); }, 10000); /* hard fallback */
-  });
-  await new Promise(r => setTimeout(r, 350)); /* let the hero entrance breathe */
-
+  const S = window.CORE_STATE;
   const THREE = await import("three");
   const { RoomEnvironment } = await import("./assets/vendor/RoomEnvironment.js");
 
-  const canvas = document.getElementById("hero-gl");
+  const canvas = document.getElementById("gl");
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  const heroEl = document.querySelector(".hero");
-
-  const size = () => ({ w: heroEl.clientWidth, h: heroEl.clientHeight });
-  let { w, h } = size();
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setSize(w, h);
+  renderer.setSize(innerWidth, innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(38, w / h, .1, 60);
-  camera.position.set(0, 0, 9);
+  const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, .1, 60);
+  /* portrait screens need a longer lens so the core never swallows the title */
+  const baseZ = () => {
+    const a = innerWidth / innerHeight;
+    return a < .7 ? 14.5 : a < .95 ? 12 : 9;
+  };
+  let BZ = baseZ();
+  camera.position.set(0, 0, BZ);
 
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
@@ -2292,6 +1660,69 @@ try {
   const root = new THREE.Group();
   scene.add(root);
 
+  /* ---- the chain: ring group starts face-on to the camera ---- */
+  const FACE_ON = Math.PI / 2;
+  const TILT_X  = THREE.MathUtils.degToRad(64);
+  const TILT_Y  = THREE.MathUtils.degToRad(-8);
+  const ring = new THREE.Group();
+  ring.rotation.x = FACE_ON;
+  root.add(ring);
+
+  const RING_R = 2.9, NODES = 96;
+  const nodes = new THREE.InstancedMesh(
+    new THREE.SphereGeometry(.034, 10, 10),
+    new THREE.MeshBasicMaterial({ color: CREAM }), NODES);
+  ring.add(nodes);
+  const dummy = new THREE.Object3D();
+
+  /* per-node chaos base + motion phases */
+  const chaos = [];
+  const phases = new Float32Array(NODES);
+  for (let i = 0; i < NODES; i++){
+    phases[i] = Math.random() * Math.PI * 2;
+    const r = 2.2 + Math.random() * 4.6;
+    const th = Math.random() * Math.PI * 2;
+    const ph = Math.acos(2 * Math.random() - 1);
+    chaos.push(new THREE.Vector3(
+      r * Math.sin(ph) * Math.cos(th),
+      r * Math.cos(ph) * .8,
+      r * Math.sin(ph) * Math.sin(th) * .6
+    ));
+  }
+  const ringPos = [];
+  for (let i = 0; i < NODES; i++){
+    const a = (i / NODES) * Math.PI * 2;
+    ringPos.push(new THREE.Vector3(Math.cos(a) * RING_R, 0, Math.sin(a) * RING_R));
+  }
+
+  /* chain line — draws itself link by link via drawRange */
+  const SEGS = 256;
+  const circlePts = [];
+  for (let i = 0; i <= SEGS; i++){
+    const a = (i / SEGS) * Math.PI * 2;
+    circlePts.push(new THREE.Vector3(Math.cos(a) * RING_R, 0, Math.sin(a) * RING_R));
+  }
+  const circleGeo = new THREE.BufferGeometry().setFromPoints(circlePts);
+  const circle = new THREE.Line(circleGeo,
+    new THREE.LineBasicMaterial({ color: FOREST, transparent: true, opacity: .55, blending: THREE.AdditiveBlending }));
+  circle.geometry.setDrawRange(0, 0);
+  ring.add(circle);
+
+  /* runner spark — a short bright arc chasing around the closed chain */
+  const ARC = 22;
+  const runnerGeo = new THREE.BufferGeometry().setFromPoints(
+    Array.from({ length: ARC }, (_, i) => {
+      const a = (i / (ARC - 1)) * 0.5;
+      return new THREE.Vector3(Math.cos(a) * RING_R, 0, Math.sin(a) * RING_R);
+    }));
+  const runner = new THREE.Line(runnerGeo,
+    new THREE.LineBasicMaterial({ color: GOLD, transparent: true, opacity: 0, blending: THREE.AdditiveBlending }));
+  ring.add(runner);
+
+  /* ---- the core (hidden until the chain closes) ---- */
+  const core = new THREE.Group();
+  core.scale.setScalar(.0001);
+  root.add(core);
   const gemGeo = new THREE.IcosahedronGeometry(.85, 0);
   const gem = new THREE.Mesh(gemGeo, new THREE.MeshPhysicalMaterial({
     color: 0xffffff, metalness: 0, roughness: .06,
@@ -2300,41 +1731,20 @@ try {
     iridescence: .35, iridescenceIOR: 1.3,
     clearcoat: 1, clearcoatRoughness: .08, flatShading: true,
   }));
-  root.add(gem);
+  core.add(gem);
   const edges = new THREE.LineSegments(
     new THREE.EdgesGeometry(gemGeo),
     new THREE.LineBasicMaterial({ color: CREAM, transparent: true, opacity: .16 }));
-  root.add(edges);
+  core.add(edges);
   const heart = new THREE.Mesh(new THREE.IcosahedronGeometry(.3, 1),
     new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: .9 }));
-  root.add(heart);
+  core.add(heart);
   const heartGlow = new THREE.Mesh(new THREE.IcosahedronGeometry(.46, 1),
     new THREE.MeshBasicMaterial({ color: FOREST, transparent: true, opacity: .26, blending: THREE.AdditiveBlending }));
-  root.add(heartGlow);
+  core.add(heartGlow);
 
-  const RING_R = 2.9, NODES = 84;
-  const ring = new THREE.Group();
-  ring.rotation.x = THREE.MathUtils.degToRad(64);
-  ring.rotation.y = THREE.MathUtils.degToRad(-8);
-  root.add(ring);
-  const nodes = new THREE.InstancedMesh(
-    new THREE.SphereGeometry(.028, 8, 8),
-    new THREE.MeshBasicMaterial({ color: CREAM }), NODES);
-  const dummy = new THREE.Object3D();
-  const phases = new Float32Array(NODES);
-  for (let i = 0; i < NODES; i++) phases[i] = Math.random() * Math.PI * 2;
-  ring.add(nodes);
-  const circlePts = [];
-  for (let i = 0; i <= 128; i++){
-    const a = (i / 128) * Math.PI * 2;
-    circlePts.push(new THREE.Vector3(Math.cos(a) * RING_R, 0, Math.sin(a) * RING_R));
-  }
-  const circle = new THREE.Line(
-    new THREE.BufferGeometry().setFromPoints(circlePts),
-    new THREE.LineBasicMaterial({ color: FOREST, transparent: true, opacity: .45, blending: THREE.AdditiveBlending }));
-  ring.add(circle);
-
-  const DUST = 320;
+  /* ---- dust ---- */
+  const DUST = 340;
   const dustPos = new Float32Array(DUST * 3);
   for (let i = 0; i < DUST; i++){
     const r = 3.4 + Math.random() * 5.5;
@@ -2351,6 +1761,7 @@ try {
     blending: THREE.AdditiveBlending, depthWrite: false }));
   scene.add(dust);
 
+  /* ---- light ---- */
   scene.add(new THREE.AmbientLight(new THREE.Color('#12281c'), 2.2));
   const key = new THREE.DirectionalLight(CREAM, 1.6);
   key.position.set(4, 6, 6);
@@ -2362,6 +1773,7 @@ try {
   rimGold.position.set(5, -4, -3);
   scene.add(rimGold);
 
+  /* ---- interaction ---- */
   const mouse = new THREE.Vector2(0, 0);
   addEventListener("pointermove", (e) => {
     mouse.x = (e.clientX / innerWidth)  * 2 - 1;
@@ -2369,69 +1781,124 @@ try {
   }, { passive: true });
 
   addEventListener("resize", () => {
-    ({ w, h } = size());
-    camera.aspect = w / h;
+    camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
+    renderer.setSize(innerWidth, innerHeight);
+    BZ = baseZ();
   });
 
+  const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+  const easeInOut = (x) => x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2;
   const clock = new THREE.Clock();
+  const tmp = new THREE.Vector3();
   let raf = null;
-  let heroVisible = true;
 
-  function placeNodes(t){
+  function frame(){
+    const t = clock.getElapsedTime();
+    const p = S.progress;
+
+    /* flip factor 0→1 after the chain closes */
+    let flip = 0;
+    if (S.flipAt){
+      flip = Math.min(1, (performance.now() - S.flipAt) / 1100);
+      flip = easeInOut(flip);
+    }
+
+    /* --- nodes: chaos → chain, one by one --- */
+    let assembled = 0;
     for (let i = 0; i < NODES; i++){
-      const a = (i / NODES) * Math.PI * 2 + t * .1;
-      const pulse = 1 + Math.sin(t * 1.6 + phases[i]) * .45;
-      dummy.position.set(Math.cos(a) * RING_R, Math.sin(t * .9 + phases[i]) * .05, Math.sin(a) * RING_R);
-      dummy.scale.setScalar(pulse);
+      /* staggered lock-in: node i assembles in its own progress window */
+      const local = Math.min(1, Math.max(0, (p * 1.45 - (i / NODES) * .85) / .6));
+      const e = easeOut(local);
+      if (local >= 1) assembled++;
+
+      const cb = chaos[i];
+      /* chaotic drift: slow orbit + bob around the base position */
+      tmp.set(
+        cb.x + Math.sin(t * .7 + phases[i]) * .5,
+        cb.y + Math.cos(t * .5 + phases[i] * 1.3) * .5,
+        cb.z + Math.sin(t * .6 + phases[i] * .7) * .4
+      );
+      tmp.lerp(ringPos[i], e);
+      /* settled nodes keep a tiny communal pulse */
+      const pulse = 1 + Math.sin(t * 1.8 + phases[i]) * .4 * e;
+      /* lock-in pop: brief overshoot right as a node clicks into the chain */
+      const pop = local > 0 && local < 1 ? 1 + Math.sin(local * Math.PI) * .9 : 1;
+
+      dummy.position.copy(tmp);
+      dummy.scale.setScalar((.8 + .5 * e) * pulse * pop);
       dummy.updateMatrix();
       nodes.setMatrixAt(i, dummy.matrix);
     }
     nodes.instanceMatrix.needsUpdate = true;
-  }
 
-  function frame(){
-    const t = clock.getElapsedTime();
-    gem.rotation.y = t * .16;
-    gem.rotation.x = Math.sin(t * .23) * .18;
+    /* chain line draws behind the locked nodes */
+    circle.geometry.setDrawRange(0, Math.floor((assembled / NODES) * (SEGS + 1)));
+
+    /* --- flip: face-on chain tilts into the hero pose, core ignites --- */
+    ring.rotation.x = FACE_ON + (TILT_X - FACE_ON) * flip;
+    ring.rotation.y = TILT_Y * flip;
+    const coreScale = flip < .01 ? .0001 : (flip < .6 ? easeOut(flip / .6) * 1.18 : 1.18 - .18 * easeInOut((flip - .6) / .4));
+    core.scale.setScalar(coreScale);
+
+    /* --- idle life (scaled by flip so it wakes with the core) --- */
+    gem.rotation.y = t * .22;
+    gem.rotation.x = Math.sin(t * .3) * .22;
     edges.rotation.copy(gem.rotation);
-    root.position.y = Math.sin(t * .7) * .08;
-    const hb = 1 + Math.sin(t * 1.8) * .12;
+    core.position.y = Math.sin(t * .8) * .09 * flip;
+    const hb = 1 + Math.sin(t * 2.1) * .14;
     heart.scale.setScalar(hb);
     heartGlow.scale.setScalar(hb * 1.15);
-    placeNodes(t);
-    ring.rotation.z = t * .05;
-    dust.rotation.y = t * .012;
-    root.rotation.y += ((mouse.x * .22) - root.rotation.y) * .04;
-    root.rotation.x += ((mouse.y * .14) - root.rotation.x) * .04;
-    camera.position.x += ((mouse.x * .3) - camera.position.x) * .03;
-    camera.position.y += ((-mouse.y * .22) - camera.position.y) * .03;
+
+    ring.rotation.z = t * (.06 + S.dive * .9);
+    dust.rotation.y = t * .015;
+
+    /* runner spark appears once the chain is closed */
+    runner.material.opacity = flip * (.75 + Math.sin(t * 3) * .25);
+    runner.rotation.y = -t * 1.1;
+
+    /* --- dive: the camera falls through the core --- */
+    const d = S.dive;
+    camera.position.z = BZ - d * (BZ - 2.6);
+    renderer.toneMappingExposure = 1.0 + d * .9;
+    heart.material.opacity = .9 + d * .1;
+    heartGlow.material.opacity = .26 + d * .5;
+
+    /* cursor parallax — a touch stronger than before */
+    root.rotation.y += ((mouse.x * .3) - root.rotation.y) * .05;
+    root.rotation.x += ((mouse.y * .2) - root.rotation.x) * .05;
+    camera.position.x += ((mouse.x * .4) - camera.position.x) * .04;
+    camera.position.y += ((-mouse.y * .3) - camera.position.y) * .04;
     camera.lookAt(0, 0, 0);
+
     renderer.render(scene, camera);
     raf = requestAnimationFrame(frame);
   }
 
-  function play(){ if (!raf && heroVisible && !document.hidden) frame(); }
-  function pause(){ if (raf){ cancelAnimationFrame(raf); raf = null; } }
-
-  placeNodes(0);
-  if (REDUCED){
+  if (S.reduced){
+    /* static, assembled, facing the hero pose */
+    S.progress = 1;
+    ring.rotation.x = TILT_X; ring.rotation.y = TILT_Y;
+    core.scale.setScalar(1);
+    circle.geometry.setDrawRange(0, SEGS + 1);
+    for (let i = 0; i < NODES; i++){
+      dummy.position.copy(ringPos[i]);
+      dummy.scale.setScalar(1.2);
+      dummy.updateMatrix();
+      nodes.setMatrixAt(i, dummy.matrix);
+    }
+    nodes.instanceMatrix.needsUpdate = true;
     renderer.render(scene, camera);
   } else {
-    /* pause when hero is out of view or tab hidden */
-    new IntersectionObserver((entries) => {
-      heroVisible = entries[0].isIntersecting;
-      heroVisible ? play() : pause();
-    }, { threshold: 0.02 }).observe(heroEl);
+    frame();
     document.addEventListener("visibilitychange", () => {
-      document.hidden ? pause() : play();
+      if (document.hidden){ if (raf){ cancelAnimationFrame(raf); raf = null; } }
+      else if (!raf) frame();
     });
-    play();
   }
 } catch (err) {
-  console.warn("hero 3D disabled:", err);
-  document.getElementById("hero-gl")?.remove();
+  console.warn("circle scene disabled:", err);
+  document.getElementById("gl")?.remove();
 }
 </script>
 
