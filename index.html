@@ -411,202 +411,6 @@ html[dir="rtl"] .dive-bar i{ transform-origin: right; }
 }
 
 /* =========================================================
-   APPLY MODAL — the ritual
-   ========================================================= */
-dialog.apply-modal{
-  width: min(94vw, 580px);
-  max-height: 90svh;
-  padding: 0;
-  border: 1px solid var(--glass-line-2);
-  border-radius: var(--r-xl);
-  background:
-    radial-gradient(120% 90% at 50% -10%, oklch(0.22 0.05 150 / .55), transparent 60%),
-    rgba(11, 20, 15, 0.94);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  color: var(--ink);
-  box-shadow: var(--float-3), var(--rim-dark-2);
-  overflow: hidden;
-}
-dialog.apply-modal::backdrop{
-  background: rgba(4, 9, 7, 0.72);
-  backdrop-filter: blur(10px) saturate(120%);
-  -webkit-backdrop-filter: blur(10px) saturate(120%);
-}
-dialog.apply-modal[open]{ animation: dlg-in .35s var(--ease-out) both; }
-dialog.apply-modal[open]::backdrop{ animation: dlg-fade .35s ease-out both; }
-@keyframes dlg-in{ from{ transform: translateY(16px) scale(.985); opacity: 0; } to{ transform:none; opacity: 1; } }
-@keyframes dlg-fade{ from{ opacity: 0; } to{ opacity: 1; } }
-@media (max-width: 600px){
-  dialog.apply-modal{ width:100vw; height:100svh; max-height:100svh; border-radius:0; border:0; }
-}
-.apply-shell{ display:grid; grid-template-rows:auto 1fr auto; max-height:inherit; height:100%; min-height:0; }
-.apply-shell > *{ min-height: 0; }
-#apply-form{ display:grid; grid-template-rows:1fr auto; min-height:0; overflow:hidden; }
-.apply-head{
-  padding: 26px 30px 16px;
-  display:grid; grid-template-columns: 1fr auto; gap: var(--s-4);
-  border-bottom: 1px solid var(--glass-line);
-  position: relative;
-}
-.apply-head::before{ /* tiny ring motif */
-  content:""; position:absolute; top: 20px; inset-inline-start: 30px;
-  width: 8px; height: 8px; border-radius: 999px;
-  border: 1px solid var(--f-400);
-  box-shadow: 0 0 12px var(--f-500);
-}
-.apply-head h2{
-  margin: 14px 0 2px;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(26px, 3.4vw, 34px);
-  letter-spacing: -.01em; font-weight: 400; line-height: 1.05;
-  color: var(--cream-50);
-}
-.apply-head h2 em{ color: var(--f-300); }
-.apply-close{
-  appearance:none; border:0; background: rgba(255,255,255,0.05);
-  width: 36px; height: 36px; border-radius: 999px;
-  color: var(--ink-2); cursor:pointer;
-  display:grid; place-items:center;
-  border: 1px solid var(--glass-line);
-  transition: background .15s, color .15s, transform .3s var(--ease-out);
-}
-.apply-close:hover{ color: var(--ink); background: rgba(255,255,255,0.10); transform: rotate(90deg); }
-.apply-close svg{ width: 16px; height: 16px; }
-.apply-body{
-  padding: 18px 30px 10px;
-  overflow-y: auto; overflow-x: hidden; min-height: 0;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.18) transparent;
-}
-.apply-body::-webkit-scrollbar{ width: 8px; }
-.apply-body::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.18); border-radius: 999px; }
-/* Each group is its own glass card */
-fieldset.apply-group{
-  border: 1px solid var(--glass-line);
-  border-radius: 20px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015) 40%);
-  box-shadow: var(--rim-dark), 0 10px 30px -18px rgba(0,0,0,.6);
-  padding: 16px 18px 18px;
-  margin: 0 0 14px;
-  display:grid; gap: var(--s-3);
-}
-fieldset.apply-group > legend{
-  font-family: var(--font-mono);
-  font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--ink-3);
-  padding-bottom: 4px;
-  display:flex; align-items:center; gap: var(--s-3);
-}
-fieldset.apply-group > legend::after{
-  content:""; flex:1; height:1px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.18), transparent);
-}
-html[lang="ar"] fieldset.apply-group > legend,
-html[lang="he"] fieldset.apply-group > legend{ letter-spacing:.02em; text-transform:none; }
-.field{ display:flex; flex-direction:column; gap: 6px; }
-.field-row{ display:grid; grid-template-columns:1fr 1fr; gap: var(--s-3); }
-@media (max-width: 520px){ .field-row{ grid-template-columns:1fr; } }
-.field label{ font-size: 12.5px; color: var(--ink-2); font-weight: 500; }
-.field label .req{ color: var(--clay-500); margin-left: 4px; }
-.field .hint{ font-size: 11.5px; color: var(--ink-4); }
-.field input, .field select, .field textarea{
-  background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-  border: 1px solid var(--glass-line-2);
-  border-radius: var(--r-md);
-  color: var(--ink);
-  padding: 12px 14px;
-  font-family: var(--font-sans);
-  font-size: 14.5px;
-  transition: background .15s, border-color .15s, box-shadow .15s;
-  width: 100%;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.25);
-}
-.field textarea{ resize: vertical; min-height: 92px; line-height: 1.5; }
-.field input::placeholder, .field textarea::placeholder{ color: var(--ink-4); }
-.field input:focus, .field select:focus, .field textarea:focus{
-  outline: none;
-  border-color: var(--f-400);
-  background: rgba(255,255,255,0.07);
-  box-shadow: 0 0 0 3px rgba(108, 184, 146, 0.18), 0 0 24px -6px oklch(0.56 0.08 150 / .5);
-}
-.field select{
-  appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ab6a5' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 13px center;
-  padding-right: 36px;
-}
-html[dir="rtl"] .field select{
-  background-position: left 13px center;
-  padding-right: 13px; padding-left: 36px;
-}
-.field input.invalid, .field select.invalid, .field textarea.invalid{
-  border-color: var(--clay-500);
-  box-shadow: 0 0 0 3px rgba(220, 130, 70, 0.20);
-}
-.hidden-pot{ position:absolute; left:-9999px; top:0; width:1px; height:1px; opacity:0; }
-.apply-foot{
-  padding: 16px 30px 24px;
-  display:flex; align-items:center; gap: var(--s-4);
-  border-top: 1px solid var(--glass-line);
-  background: rgba(0,0,0,0.18);
-}
-.apply-foot .meta{
-  font-family: var(--font-mono); font-size: 10.5px;
-  color: var(--ink-4); letter-spacing: .08em; flex: 1;
-}
-.apply-foot button[type="submit"]{ min-width: 200px; padding: 15px 26px; font-size: 15px; }
-.apply-success{
-  padding: 40px 28px 44px; text-align:center;
-  display:none; flex-direction:column; align-items:center; gap: var(--s-4);
-}
-.apply-modal[data-state="success"] .apply-success{ display:flex; }
-.apply-modal[data-state="success"] form,
-.apply-modal[data-state="success"] .apply-foot,
-.apply-modal[data-state="success"] .apply-body,
-.apply-modal[data-state="success"] .apply-head{ display:none; }
-.apply-success .ok{
-  width: 68px; height: 68px; border-radius: 999px;
-  border: 1px solid oklch(0.68 0.07 150 / .5);
-  background: radial-gradient(circle, rgba(108,184,146,0.28), rgba(108,184,146,0.04) 75%);
-  display:grid; place-items:center; margin-bottom: 4px;
-  box-shadow: 0 0 40px -6px oklch(0.56 0.08 150 / .55);
-}
-.apply-success .ok svg{ width: 32px; height: 32px; color: var(--f-300); }
-.apply-success h3{
-  margin:0; font-family: var(--font-serif); font-style: italic;
-  font-size: 28px; font-weight:400; letter-spacing:-.01em;
-}
-.apply-success h3 em{ color: var(--f-300); }
-.apply-success p{ margin:0; color: var(--ink-2); max-width: 40ch; font-size: 14.5px; }
-.apply-success .micro{
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing:.2em;
-  color: var(--ink-4); margin-top: var(--s-3); text-transform: uppercase;
-}
-.apply-error{
-  display:none; padding: 10px 14px;
-  border-radius: var(--r-md);
-  background: rgba(180, 60, 40, 0.16);
-  border: 1px solid rgba(220, 130, 90, 0.40);
-  color: oklch(0.86 0.10 35);
-  font-size: 13px; margin-bottom: 10px;
-}
-.apply-modal[data-error="1"] .apply-error{ display:block; }
-@media (max-width: 600px){
-  .apply-head{ padding: 20px 20px 12px; }
-  .apply-body{ padding: 14px 20px 8px; }
-  .apply-foot{ padding: 12px 20px 18px; flex-direction: column-reverse; align-items: stretch; gap: 10px; }
-  .apply-foot .meta{ text-align:center; font-size: 10px; }
-  .apply-foot button[type="submit"]{ width:100%; min-width:0; }
-  .field input, .field select, .field textarea{ font-size: 16px; }
-}
-html.modal-open, body.modal-open{ overflow: hidden; }
-
-/* =========================================================
    CURSOR + SPOTLIGHT
    ========================================================= */
 .spotlight{
@@ -636,13 +440,6 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
   html.cursor-on textarea, html.cursor-on label{ cursor: none; }
   html.cursor-on body:not(.is-ready),
   html.cursor-on body:not(.is-ready) *{ cursor: auto; }
-  html.cursor-on dialog.apply-modal,
-  html.cursor-on dialog.apply-modal *{ cursor: auto; }
-  html.cursor-on dialog.apply-modal a,
-  html.cursor-on dialog.apply-modal button{ cursor: pointer; }
-  html.cursor-on dialog.apply-modal input,
-  html.cursor-on dialog.apply-modal textarea{ cursor: text; }
-  html.cursor-on dialog.apply-modal select{ cursor: pointer; }
 
   .cursor-dot, .cursor-ring{
     position: fixed; left:0; top:0;
@@ -714,12 +511,12 @@ html.js .world-hint, html.js .micro-footer span{ opacity: 0; }
   </div>
 </header>
 
-<!-- STAGE — the emerald itself is the button -->
+<!-- STAGE — the emerald itself is the button; it leads to the bot -->
 <main class="stage">
-  <button class="gem-cta" type="button" id="open-apply" aria-label="Request access">
+  <a class="gem-cta" id="open-apply" href="https://t.me/CRONCORE_bot" target="_blank" rel="noopener" aria-label="Request access">
     <span class="gem-ring" aria-hidden="true"></span>
     <span class="gem-label" data-i18n="btn_apply">Request access</span>
-  </button>
+  </a>
 </main>
 
 <!-- SCROLL → THE WORLD (silent line, no words) -->
@@ -739,131 +536,7 @@ html.js .world-hint, html.js .micro-footer span{ opacity: 0; }
   <span data-i18n="footer_l2">Information shared is not investment, legal or tax advice</span>
 </div>
 
-<!-- APPLY MODAL -->
-<dialog id="apply-modal" class="apply-modal" aria-labelledby="apply-title">
-  <div class="apply-shell">
-    <header class="apply-head">
-      <div>
-        <h2 id="apply-title" data-i18n-html="form_title">Tell us <em>what you need</em>.</h2>
-      </div>
-      <button class="apply-close" type="button" aria-label="Close" data-close>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-    </header>
 
-    <form id="apply-form" novalidate>
-      <div class="apply-body">
-        <div class="apply-error" data-i18n="form_error_generic">Could not send. Please try again or use email.</div>
-
-        <fieldset class="apply-group">
-          <legend data-i18n="form_g_contact">Contact</legend>
-          <div class="field">
-            <label for="f-name"><span data-i18n="form_name">Name</span><span class="req">*</span></label>
-            <input id="f-name" name="name" type="text" required autocomplete="name" maxlength="120" data-i18n-placeholder="form_name_ph" placeholder="Full name" />
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="f-tg"><span data-i18n="form_telegram">Telegram</span><span class="req">*</span></label>
-              <input id="f-tg" name="telegram" type="text" required autocomplete="username" maxlength="40" data-i18n-placeholder="form_telegram_ph" placeholder="@username" inputmode="email" />
-            </div>
-            <div class="field">
-              <label for="f-email"><span data-i18n="form_email">Email</span></label>
-              <input id="f-email" name="email" type="email" autocomplete="email" maxlength="120" data-i18n-placeholder="form_email_ph" placeholder="you@example.com" />
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset class="apply-group">
-          <legend data-i18n="form_g_request">Request</legend>
-          <div class="field">
-            <label for="f-dir"><span data-i18n="form_direction">Direction</span><span class="req">*</span></label>
-            <select id="f-dir" name="direction" required>
-              <option value="" data-i18n="form_select_ph">Select…</option>
-              <option value="payments"  data-i18n="form_dir_payments">Payments &amp; Fintech</option>
-              <option value="invest"    data-i18n="form_dir_invest">Investments &amp; DeFi</option>
-              <option value="spv"       data-i18n="form_dir_spv">SPV &amp; Tokenization</option>
-              <option value="legal"     data-i18n="form_dir_legal">Legal &amp; Corporate</option>
-              <option value="concierge" data-i18n="form_dir_concierge">Concierge &amp; Real Estate</option>
-              <option value="network"   data-i18n="form_dir_network">Private Network</option>
-              <option value="other"     data-i18n="form_dir_other">Something else</option>
-            </select>
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="f-jur" data-i18n="form_jurisdiction">Jurisdiction</label>
-              <select id="f-jur" name="jurisdiction">
-                <option value="" data-i18n="form_select_ph">Select…</option>
-                <option value="UAE" data-i18n="form_jur_uae">UAE</option>
-                <option value="EU"  data-i18n="form_jur_eu">European Union</option>
-                <option value="UK"  data-i18n="form_jur_uk">United Kingdom</option>
-                <option value="US"  data-i18n="form_jur_us">United States</option>
-                <option value="CIS" data-i18n="form_jur_cis">CIS</option>
-                <option value="APAC" data-i18n="form_jur_apac">Asia-Pacific</option>
-                <option value="LATAM" data-i18n="form_jur_latam">Latin America</option>
-                <option value="other" data-i18n="form_jur_other">Other / multiple</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="f-bud" data-i18n="form_budget">Volume / budget</label>
-              <select id="f-bud" name="budget">
-                <option value="" data-i18n="form_select_ph">Select…</option>
-                <option value="<100k"   data-i18n="form_bud_under_100k">&lt; €100k</option>
-                <option value="100-500k" data-i18n="form_bud_100_500">€100k — €500k</option>
-                <option value="500k-2m"  data-i18n="form_bud_500_2m">€500k — €2M</option>
-                <option value="2-10m"    data-i18n="form_bud_2_10m">€2M — €10M</option>
-                <option value="10m+"     data-i18n="form_bud_10m">€10M+</option>
-                <option value="n/a"      data-i18n="form_bud_na">Not applicable</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label for="f-tim" data-i18n="form_timeline">Timeline</label>
-            <select id="f-tim" name="timeline">
-              <option value="" data-i18n="form_select_ph">Select…</option>
-              <option value="asap"   data-i18n="form_tim_asap">ASAP</option>
-              <option value="weeks"  data-i18n="form_tim_weeks">1–4 weeks</option>
-              <option value="months" data-i18n="form_tim_months">1–3 months</option>
-              <option value="quarter" data-i18n="form_tim_quarter">3–12 months</option>
-              <option value="explore" data-i18n="form_tim_explore">Just exploring</option>
-            </select>
-          </div>
-        </fieldset>
-
-        <fieldset class="apply-group">
-          <legend data-i18n="form_g_details">Details</legend>
-          <div class="field">
-            <label for="f-msg"><span data-i18n="form_message">Brief</span><span class="req">*</span></label>
-            <textarea id="f-msg" name="message" required minlength="20" maxlength="1500" data-i18n-placeholder="form_message_ph" placeholder="What do you need, what's the context, what does success look like…"></textarea>
-            <span class="hint" data-i18n="form_message_hint">The clearer the brief, the faster a partner can pick it up.</span>
-          </div>
-        </fieldset>
-
-        <input class="hidden-pot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
-      </div>
-
-      <footer class="apply-foot">
-        <div class="meta">
-          <span data-i18n="form_privacy">Private · not stored beyond delivery to the partner network.</span>
-        </div>
-        <button class="btn" type="submit" id="submit-btn">
-          <span class="label" data-i18n="form_submit">Send request</span>
-        </button>
-      </footer>
-    </form>
-
-    <div class="apply-success" role="status" aria-live="polite">
-      <div class="ok">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
-      </div>
-      <h3 data-i18n-html="form_success_title">Request <em>received</em>.</h3>
-      <p data-i18n="form_success_text">A partner from the network will reach out within 48 hours through the channel you provided.</p>
-      <div style="margin-top: var(--s-4);">
-        <button class="btn btn-ghost" type="button" data-close data-i18n="form_success_close">Close</button>
-      </div>
-      <div class="micro">CRONCORE · The Partners' Circle</div>
-    </div>
-  </div>
-</dialog>
 
 <div class="cursor-ring" aria-hidden="true"></div>
 <div class="cursor-dot" aria-hidden="true"></div>
@@ -1291,125 +964,15 @@ function applyLang(lang){
   try { localStorage.setItem("croncore_lang", lang); } catch(e){}
 }
 
+/* English by default — the browser locale no longer decides. Only an
+   explicit choice (persisted in localStorage) switches the language. */
 function detectInitialLang(){
   try {
     const saved = localStorage.getItem("croncore_lang");
     if (saved && I18N[saved]) return saved;
   } catch(e){}
-  const nav = (navigator.language || "en").slice(0,2).toLowerCase();
-  return SUPPORTED.includes(nav) ? nav : "en";
+  return "en";
 }
-
-/* ============================================================
-   APPLY MODAL
-   ============================================================ */
-const modal = document.getElementById("apply-modal");
-const form  = document.getElementById("apply-form");
-const submitBtn = document.getElementById("submit-btn");
-
-function openApply(){
-  if (typeof modal.showModal === "function") modal.showModal();
-  else modal.setAttribute("open", "");
-  document.documentElement.classList.add("modal-open");
-  setTimeout(() => document.getElementById("f-name")?.focus(), 140);
-}
-function closeApply(){
-  modal.removeAttribute("data-error");
-  if (typeof modal.close === "function") modal.close();
-  else modal.removeAttribute("open");
-  document.documentElement.classList.remove("modal-open");
-  if (modal.getAttribute("data-state") === "success") {
-    form.reset();
-    modal.removeAttribute("data-state");
-  }
-}
-document.getElementById("open-apply").addEventListener("click", () => openApply());
-document.querySelectorAll("[data-close]").forEach(el => el.addEventListener("click", closeApply));
-modal.addEventListener("click", (e) => { if (e.target === modal) closeApply(); });
-modal.addEventListener("cancel", () => { closeApply(); });
-
-function setSubmitting(on){
-  const lang = document.documentElement.lang || "en";
-  const d = I18N[lang] || I18N.en;
-  submitBtn.disabled = on;
-  const label = submitBtn.querySelector(".label");
-  label.textContent = on ? d.form_submitting : d.form_submit;
-}
-
-function normalizeTelegram(v){
-  if (!v) return v;
-  v = v.trim().replace(/^https?:\/\/t\.me\//i, "").replace(/^@*/, "");
-  return v ? "@" + v : "";
-}
-
-function formatPlain(data){
-  const lines = [];
-  lines.push("New CRONCORE inquiry");
-  lines.push("");
-  lines.push("Name:        " + (data.name || "—"));
-  lines.push("Telegram:    " + (data.telegram || "—"));
-  lines.push("Email:       " + (data.email || "—"));
-  lines.push("Direction:   " + (data.direction || "—"));
-  lines.push("Jurisdiction:" + (data.jurisdiction || "—"));
-  lines.push("Budget:      " + (data.budget || "—"));
-  lines.push("Timeline:    " + (data.timeline || "—"));
-  lines.push("Lang:        " + (data.lang || "—"));
-  lines.push("");
-  lines.push("Brief:");
-  lines.push(data.message || "—");
-  return lines.join("\n");
-}
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  modal.removeAttribute("data-error");
-
-  const fd = new FormData(form);
-  const data = Object.fromEntries(fd.entries());
-  data.telegram = normalizeTelegram(data.telegram);
-  data.lang = document.documentElement.lang || "en";
-
-  if (data.website) { showSuccess(); return; } /* honeypot */
-
-  let bad = false;
-  ["name", "telegram", "direction", "message"].forEach(name => {
-    const el = form.elements[name];
-    if (!data[name]) { el.classList.add("invalid"); bad = true; }
-    else el.classList.remove("invalid");
-  });
-  if (bad) return;
-
-  const endpoint = document.querySelector('meta[name="apply-endpoint"]')?.content?.trim();
-  const mailto = document.querySelector('meta[name="apply-mailto"]')?.content?.trim();
-
-  setSubmitting(true);
-  try {
-    if (endpoint) {
-      const res = await fetch(endpoint.replace(/\/+$/, "") + "/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok || !json.ok) throw new Error(json.error || ("HTTP " + res.status));
-      showSuccess();
-    } else if (mailto) {
-      const subject = encodeURIComponent("CRONCORE — " + (data.direction || "inquiry") + " — " + (data.name || ""));
-      const body = encodeURIComponent(formatPlain(data));
-      window.location.href = "mailto:" + mailto + "?subject=" + subject + "&body=" + body;
-      setTimeout(showSuccess, 500);
-    } else {
-      throw new Error("no endpoint configured");
-    }
-  } catch (err) {
-    console.error("apply submit failed:", err);
-    modal.setAttribute("data-error", "1");
-  } finally {
-    setSubmitting(false);
-  }
-});
-
-function showSuccess(){ modal.setAttribute("data-state", "success"); }
 
 /* ============================================================
    PRELOADER — the chain assembles on the shared canvas;
@@ -1424,27 +987,13 @@ function heroEntrance(){
   if (!window.gsap || S.reduced){
     document.querySelectorAll(".nav, .gem-label, .world-hint, .micro-footer span")
       .forEach(el => { el.style.opacity = 1; el.style.transform = "none"; });
-    openFromQuery();
     return;
   }
   gsap.timeline()
     .fromTo("#nav", { y: -14, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .8, ease: "power3.out" }, .15)
     .fromTo(".gem-label", { y: 14, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.0, ease: "power3.out" }, .55)
     .fromTo(".world-hint", { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, .9)
-    .fromTo(".micro-footer span", { y: 8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7, stagger: .1 }, .95)
-    .add(openFromQuery, 1.1);
-}
-
-/* Arriving from the world with ?dir=payments → open the form preselected */
-function openFromQuery(){
-  try {
-    const dir = new URLSearchParams(location.search).get("dir");
-    if (!dir) return;
-    history.replaceState(null, "", location.pathname);
-    const sel = document.getElementById("f-dir");
-    if (sel && [...sel.options].some(o => o.value === dir)) sel.value = dir;
-    openApply();
-  } catch(e){}
+    .fromTo(".micro-footer span", { y: 8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7, stagger: .1 }, .95);
 }
 
 (function preloader(){

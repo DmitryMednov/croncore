@@ -18,8 +18,9 @@ import { useGameStore } from '../core/store/gameStore';
  * landing with the apply form preselected for that direction.
  */
 
-const BASE_URL: string =
-    ((import.meta as any).env?.VITE_CRONCORE_URL as string | undefined) ?? '..';
+/* Applications go straight to the Telegram bot; ?start=<key> hands the
+   bot the direction the visitor came from. */
+const BOT_URL = 'https://t.me/CRONCORE_bot';
 
 type Block = {
     key: string;
@@ -30,12 +31,12 @@ type Block = {
 
 /* The six directions Croncore works in — one monolith each. */
 const BLOCKS: Block[] = [
-    { key: 'payments',  title: 'Payments & Fintech',      sub: '01 · Accounts, acquiring, settlement rails',   href: '/?dir=payments'  },
-    { key: 'invest',    title: 'Investments & DeFi',      sub: '02 · Allocations, treasury, structured deals', href: '/?dir=invest'    },
-    { key: 'spv',       title: 'SPV & Tokenization',      sub: '03 · Vehicles, cap tables, real-world assets', href: '/?dir=spv'       },
-    { key: 'legal',     title: 'Legal & Corporate',       sub: '04 · Jurisdictions, structuring, compliance',  href: '/?dir=legal'     },
-    { key: 'concierge', title: 'Concierge & Real Estate', sub: '05 · Relocation, property, quiet logistics',   href: '/?dir=concierge' },
-    { key: 'network',   title: 'Private Network',         sub: '06 · Introductions inside the circle',         href: '/?dir=network'   },
+    { key: 'payments',  title: 'Payments & Fintech',      sub: '01 · Accounts, acquiring, settlement rails',   href: `${BOT_URL}?start=payments`  },
+    { key: 'invest',    title: 'Investments & DeFi',      sub: '02 · Allocations, treasury, structured deals', href: `${BOT_URL}?start=invest`    },
+    { key: 'spv',       title: 'SPV & Tokenization',      sub: '03 · Vehicles, cap tables, real-world assets', href: `${BOT_URL}?start=spv`       },
+    { key: 'legal',     title: 'Legal & Corporate',       sub: '04 · Jurisdictions, structuring, compliance',  href: `${BOT_URL}?start=legal`     },
+    { key: 'concierge', title: 'Concierge & Real Estate', sub: '05 · Relocation, property, quiet logistics',   href: `${BOT_URL}?start=concierge` },
+    { key: 'network',   title: 'Private Network',         sub: '06 · Introductions inside the circle',         href: `${BOT_URL}?start=network`   },
 ];
 
 const RADIUS = 22;
@@ -59,7 +60,9 @@ function drawLabel(canvas: HTMLCanvasElement, title: string, sub: string) {
     const r = 44;
     ctx.beginPath();
     ctx.roundRect(8, 8, W - 16, H - 16, r);
-    ctx.fillStyle = 'rgba(6, 16, 11, 0.88)';
+    /* near-opaque: a translucent card lets the emissive monolith bleed
+       through and the bloom pass smears the text (seen in review) */
+    ctx.fillStyle = 'rgba(5, 13, 9, 0.97)';
     ctx.fill();
     ctx.strokeStyle = 'rgba(157, 238, 192, 0.35)';
     ctx.lineWidth = 3;
@@ -86,12 +89,43 @@ function drawLabel(canvas: HTMLCanvasElement, title: string, sub: string) {
     ctx.font = '400 34px "Geist", ui-sans-serif, system-ui, sans-serif';
     ctx.fillText(sub, W / 2, H * 0.60, W - 120);
 
-    /* CTA line */
+    /* CTA line: "PRESS [E] TO APPLY" with a drawn keycap */
+    const cy = H * 0.80;
+    ctx.font = '500 26px "JetBrains Mono", ui-monospace, monospace';
+    try { (ctx as any).letterSpacing = '6px'; } catch (e) { /* older engines */ }
+    const pressW = ctx.measureText('PRESS ').width;
+    const afterW = ctx.measureText(' TO APPLY').width;
+    const KEY = 46; /* keycap size */
+    const totalW = pressW + KEY + 14 + afterW;
+    let x = (W - totalW) / 2;
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#6fb892';
+    ctx.fillText('PRESS ', x, cy);
+    x += pressW + 6;
+
+    /* keycap */
+    ctx.beginPath();
+    ctx.roundRect(x, cy - KEY / 2, KEY, KEY, 10);
+    ctx.fillStyle = 'rgba(157, 238, 192, 0.14)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(157, 238, 192, 0.75)';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#dffbe9';
+    ctx.font = '600 30px "JetBrains Mono", ui-monospace, monospace';
+    try { (ctx as any).letterSpacing = '0px'; } catch (e) { /* keycap glyph */ }
+    ctx.fillText('E', x + KEY / 2, cy + 1);
+    x += KEY + 8;
+
+    ctx.textAlign = 'left';
     ctx.fillStyle = '#6fb892';
     ctx.font = '500 26px "JetBrains Mono", ui-monospace, monospace';
     try { (ctx as any).letterSpacing = '6px'; } catch (e) { /* older engines */ }
-    ctx.fillText('CLICK TO OPEN · CRONCORE', W / 2, H * 0.80);
+    ctx.fillText(' TO APPLY', x, cy);
     try { (ctx as any).letterSpacing = '0px'; } catch (e) { /* reset */ }
+    ctx.textAlign = 'center';
 }
 
 export function CroncoreBlocks({ visible = true }: { visible?: boolean }) {
@@ -111,17 +145,12 @@ export function CroncoreBlocks({ visible = true }: { visible?: boolean }) {
                         rotationY={rotY}
                         title={b.title}
                         sub={b.sub}
-                        href={resolveHref(b.href)}
+                        href={b.href}
                     />
                 );
             })}
         </group>
     );
-}
-
-function resolveHref(suffix: string): string {
-    const base = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
-    return base + suffix;
 }
 
 type MonolithProps = {
@@ -167,6 +196,19 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
         });
         return () => { alive = false; };
     }, [labelTexture, title, sub]);
+
+    /* Standing close: E opens the application for this direction.
+       ev.code is layout-independent, so it works on RU/HE/AR keyboards. */
+    useEffect(() => {
+        if (!near) return;
+        const onKey = (ev: KeyboardEvent) => {
+            if (ev.code === 'KeyE' && !ev.repeat) {
+                window.open(href, '_blank', 'noopener');
+            }
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [near, href]);
 
     const awake = near || hovered;
 
