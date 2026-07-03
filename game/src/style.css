@@ -15,10 +15,16 @@
     100% { opacity: 1; }
 }
 
+/* Landing hands us a bright green flash; we pick it up and let it settle. */
+@keyframes flashSettle {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
   html,
 body,
 #root{
-    background-color: #000;
+    background-color: #0a1510;
     position: fixed;
     top:0;
     left: 0;

@@ -109,7 +109,9 @@ export function LoadingScreen() {
     const containerStyle: React.CSSProperties = {
         position: 'fixed', top: 0, left: 0,
         width: '100vw', height: '100dvh',
-        background: '#000', zIndex: 9999,
+        /* same family as the landing's atmosphere — no more hard black cut */
+        background: 'radial-gradient(80% 60% at 50% 40%, #13241b, #0a130e)',
+        zIndex: 9999,
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         color: 'white', fontFamily: 'Cousine',
         pointerEvents: 'auto',
@@ -149,6 +151,16 @@ export function LoadingScreen() {
 
     return (
         <div ref={containerRef} style={containerStyle}>
+            {/* The landing's dive flash carries over and settles here. */}
+            <div
+                aria-hidden
+                style={{
+                    position: 'absolute', inset: 0,
+                    background: 'radial-gradient(60% 60% at 50% 50%, #eaf6e8, #8fc49b)',
+                    animation: 'flashSettle 1.1s ease-out forwards',
+                    pointerEvents: 'none',
+                }}
+            />
             <div className='entry' style={entryContainerStyle}>
 
                 {/* Left Side: Content Text */}
