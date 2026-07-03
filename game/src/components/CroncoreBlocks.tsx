@@ -27,7 +27,7 @@ type Block = {
 
 const BLOCKS: Block[] = [
     { key: 'services', title: 'Services',     sub: 'Six private directions',            href: '/#services' },
-    { key: 'advisor',  title: 'Advisor',      sub: 'Start with a question',             href: '/#advisor'  },
+    { key: 'advisor',  title: 'Advisor',      sub: 'Start with a question',             href: '/#access'   },
     { key: 'how',      title: 'How it works', sub: 'From a message to the right room',  href: '/#how'      },
     { key: 'access',   title: 'Access',       sub: "Enter The Investor's Circle",       href: '/#access'   },
     { key: 'payments', title: 'Payments',     sub: '01 · Infrastructure',               href: '/#services' },
@@ -111,10 +111,12 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
             else if (near && d > NEAR_EXIT) setNear(false);
         }
 
-        // Glow ramps smoothly instead of snapping.
+        // Glow ramps smoothly instead of snapping. Kept modest — at high
+        // intensity the tone-mapped face blows out to near-white and the
+        // label text becomes unreadable against it.
         const mat = matRef.current;
         if (mat) {
-            const target = awake ? 1.45 : 0.55;
+            const target = awake ? 1.0 : 0.5;
             mat.emissiveIntensity = MathUtils.lerp(
                 mat.emissiveIntensity,
                 target,
@@ -144,8 +146,8 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
                 <meshStandardMaterial
                     ref={matRef}
                     color="#0a1d14"
-                    emissive={awake ? '#9deec0' : '#2c6c4e'}
-                    emissiveIntensity={0.55}
+                    emissive="#2c6c4e"
+                    emissiveIntensity={0.5}
                     metalness={0.25}
                     roughness={0.30}
                     transparent
@@ -153,17 +155,19 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
                 />
             </mesh>
 
-            {/* HTML label hovering just off the front face, always facing the camera. */}
-            <Billboard follow position={[0, 0, 0.4]}>
+            {/* HTML label hovering just off the front face, always facing the
+                camera. Sits on its own dark glass card so it stays readable
+                no matter how bright the monolith face behind it gets. */}
+            <Billboard follow position={[0, 0, 0.55]}>
                 <Html
                     transform
                     center
-                    scale={0.012}
+                    scale={0.014}
                     pointerEvents="none"
                     style={{
                         pointerEvents: 'none',
                         userSelect: 'none',
-                        width: 320,
+                        width: 340,
                         textAlign: 'center',
                     }}
                 >
@@ -171,8 +175,14 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
                         style={{
                             fontFamily: '"Geist", ui-sans-serif, system-ui, sans-serif',
                             color: '#e6fff0',
-                            textShadow: '0 2px 18px rgba(0,0,0,.85)',
                             letterSpacing: '-0.02em',
+                            background: awake ? 'rgba(6, 16, 11, 0.86)' : 'rgba(6, 16, 11, 0)',
+                            border: `1px solid ${awake ? 'rgba(157, 238, 192, 0.28)' : 'rgba(157, 238, 192, 0)'}`,
+                            borderRadius: 16,
+                            padding: '20px 24px 18px',
+                            boxShadow: awake ? '0 18px 50px rgba(0,0,0,.55)' : 'none',
+                            textShadow: '0 2px 18px rgba(0,0,0,.9)',
+                            transition: 'background .45s ease, border-color .45s ease, box-shadow .45s ease',
                         }}
                     >
                         <div

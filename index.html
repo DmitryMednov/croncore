@@ -25,7 +25,6 @@
 
 <style>
 :root{
-  /* Forest — aligned with Design System v0.3 (slightly darker base) */
   --f-950: oklch(0.12 0.025 150);
   --f-900: oklch(0.16 0.035 150);
   --f-850: oklch(0.20 0.045 150);
@@ -39,7 +38,6 @@
   --f-100: oklch(0.94 0.018 150);
   --f-50:  oklch(0.972 0.010 150);
 
-  /* Cream — editorial warm whites (replaces bone-*) */
   --cream-50:  oklch(0.97 0.015 85);
   --cream-100: oklch(0.93 0.020 85);
   --cream-200: oklch(0.86 0.022 85);
@@ -47,54 +45,29 @@
   --cream-400: oklch(0.55 0.018 85);
   --cream-500: oklch(0.42 0.015 85);
 
-  /* Bone aliases — keep legacy names working */
   --bone-50:  var(--cream-50);
   --bone-100: var(--cream-100);
   --bone-300: var(--cream-200);
   --bone-400: var(--cream-300);
 
-  /* Clay accent */
   --clay-500: oklch(0.72 0.16 45);
-  --clay-400: oklch(0.80 0.13 45);
-  --clay-300: oklch(0.88 0.09 45);
   --gold-500: oklch(0.78 0.12 90);
 
-  /* Page text — anchored on cream */
   --ink:   var(--cream-50);
   --ink-2: var(--cream-200);
   --ink-3: var(--cream-300);
   --ink-4: var(--cream-400);
 
-  --rose-500: oklch(0.62 0.21 25);
-
-  /* Forest aliases for new code paths (mirrors design-system) */
-  --forest-950: var(--f-950);
-  --forest-900: var(--f-900);
-  --forest-850: var(--f-850);
-  --forest-800: var(--f-800);
-  --forest-700: var(--f-700);
-  --forest-600: var(--f-600);
-  --forest-500: var(--f-500);
-  --forest-400: var(--f-400);
-  --forest-300: var(--f-300);
-  --forest-200: var(--f-200);
-  --forest-100: var(--f-100);
-  --forest-50:  var(--f-50);
-
   --font-sans:  "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Newsreader", ui-serif, Georgia, serif;
   --font-mono:  "JetBrains Mono", ui-monospace, monospace;
-  --f-sans:  var(--font-sans);
-  --f-serif: var(--font-serif);
-  --f-mono:  var(--font-mono);
 
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
   --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px;
 
-  --r-sm:12px; --r-md:16px; --r-lg:24px; --r-xl:32px; --r-2xl:44px; --r-pill:999px;
+  --r-sm:12px; --r-md:16px; --r-lg:24px; --r-xl:32px; --r-pill:999px;
 
   --glass-bg: rgba(255,255,255,0.04);
-  --glass-bg-2: rgba(255,255,255,0.06);
   --glass-line: rgba(255,255,255,0.10);
   --glass-line-2: rgba(255,255,255,0.18);
   --rim-dark:
@@ -106,14 +79,16 @@
   --float-1: 0 1px 2px rgba(0,0,0,0.30), 0 6px 14px -4px rgba(0,0,0,0.35);
   --float-2: 0 2px 4px rgba(0,0,0,0.35), 0 22px 44px -14px rgba(0,0,0,0.50);
   --float-3: 0 40px 80px -24px rgba(0,0,0,0.65);
+
+  --ease-out: cubic-bezier(.22,.9,.24,1);
+  --ease-exp: cubic-bezier(.87,0,.13,1);
+  --wrap: min(1320px, calc(100vw - 2 * clamp(16px, 5vw, 64px)));
 }
 
 *,*::before,*::after{ box-sizing: border-box; }
-html, body{
-  margin:0; padding:0;
-  height: 100%; height: 100svh;
-  overflow: hidden;
-}
+html{ scrollbar-color: rgba(255,255,255,.22) transparent; }
+html, body{ margin:0; padding:0; }
+html.lock, html.lock body{ overflow: hidden; }
 html.modal-open, body.modal-open{ overflow: hidden; }
 
 body{
@@ -123,27 +98,26 @@ body{
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   line-height: 1.55;
+  overflow-x: clip;
 }
+::selection{ background: oklch(0.56 0.08 150 / .45); color: var(--cream-50); }
 
-/* Noto fallbacks for AR / HE — same logic as before */
 html[lang="ar"] body{ font-family: "Noto Sans Arabic", var(--font-sans); }
 html[lang="he"] body{ font-family: "Noto Sans Hebrew", var(--font-sans); }
-html[lang="ar"] em.serif, html[lang="ar"] .serif-em, html[lang="ar"] .hero h1 em{
+html[lang="ar"] em, html[lang="ar"] .serif{
   font-family: "Noto Sans Arabic", var(--font-serif); font-style: normal;
 }
-html[lang="he"] em.serif, html[lang="he"] .serif-em, html[lang="he"] .hero h1 em{
+html[lang="he"] em, html[lang="he"] .serif{
   font-family: "Noto Serif Hebrew", var(--font-serif); font-style: normal;
 }
-html[dir="rtl"] .btn-arrow svg{ transform: scaleX(-1); }
 html[lang="ar"] .eyebrow, html[lang="he"] .eyebrow,
-html[lang="ar"] .lang, html[lang="he"] .lang,
-html[lang="ar"] .topbar .wm, html[lang="he"] .topbar .wm,
-html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
+html[lang="ar"] .mono, html[lang="he"] .mono{
   letter-spacing: .02em; text-transform: none;
 }
+html[dir="rtl"] .arr svg{ transform: scaleX(-1); }
 
 /* =========================================================
-   ATMOSPHERE — same dark forest interior
+   ATMOSPHERE — fixed painted backdrop behind everything
    ========================================================= */
 .atmosphere{
   position: fixed; inset: -10%;
@@ -169,31 +143,25 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   content:""; position:absolute; inset:0;
   background: radial-gradient(110% 80% at 50% 50%, transparent 50%, oklch(0.07 0.02 150 / .75) 100%);
 }
-
-/* Aurora — two soft colour fields drifting on top of the base atmosphere
-   so the backdrop never sits still. `screen` blend over the dark base
-   gives an additive-light feel; the layers move in opposite directions
-   on different schedules, with a slow scale-pulse on top of that. */
 .aurora, .aurora-2{
   position: fixed; inset: -25%;
-  z-index: 0;
-  pointer-events: none;
+  z-index: 0; pointer-events: none;
   mix-blend-mode: screen;
   filter: blur(70px) saturate(140%);
   will-change: transform, opacity;
 }
 .aurora{
   background:
-    radial-gradient(46% 38% at 30% 35%, oklch(0.58 0.18 150 / .55), transparent 60%),
-    radial-gradient(38% 30% at 72% 60%, oklch(0.66 0.14 130 / .42), transparent 70%);
-  opacity: .9;
+    radial-gradient(46% 38% at 30% 35%, oklch(0.58 0.18 150 / .50), transparent 60%),
+    radial-gradient(38% 30% at 72% 60%, oklch(0.66 0.14 130 / .38), transparent 70%);
+  opacity: .85;
   animation: aurora-drift 32s ease-in-out infinite alternate;
 }
 .aurora-2{
   background:
-    radial-gradient(40% 32% at 80% 22%, oklch(0.78 0.12 90 / .42), transparent 65%),
-    radial-gradient(32% 26% at 18% 82%, oklch(0.66 0.20 25 / .35), transparent 70%);
-  opacity: .8;
+    radial-gradient(40% 32% at 80% 22%, oklch(0.78 0.12 90 / .40), transparent 65%),
+    radial-gradient(32% 26% at 18% 82%, oklch(0.66 0.20 25 / .32), transparent 70%);
+  opacity: .75;
   animation: aurora-drift-2 44s ease-in-out infinite alternate-reverse;
   animation-delay: -12s;
 }
@@ -209,196 +177,136 @@ html[lang="ar"] .micro-footer, html[lang="he"] .micro-footer{
   75%  { transform: translate3d( 3%, -4%, 0) scale(1.18); }
   100% { transform: translate3d( 7%,  1%, 0) scale(.98);  }
 }
-@media (prefers-reduced-motion: reduce){
-  .aurora, .aurora-2{ animation: none; }
-}
 
 /* =========================================================
-   PRELOADER — editorial wordmark reveal over the live atmosphere
-   Atmosphere + aurora keep animating behind a translucent
-   vignette so the curtain never feels static. Skipped on
-   prefers-reduced-motion.
+   PRELOADER — counter + masked wordmark + curtain lift
    ========================================================= */
 .preloader{
-  position: fixed; inset: 0; z-index: 100;
-  display: grid; place-items: center;
-  font-family: var(--font-sans);
-  color: var(--cream-50);
-  pointer-events: auto;
-  transition: opacity .9s cubic-bezier(.2,.6,.2,1), visibility .9s ease;
-}
-.preloader::before{
-  content:""; position: absolute; inset: 0; z-index: 0;
+  position: fixed; inset: 0; z-index: 200;
   background:
-    radial-gradient(65% 55% at 50% 50%, oklch(0.10 0.02 150 / .35), oklch(0.07 0.015 150 / .82) 75%),
-    linear-gradient(180deg, oklch(0.11 0.02 150 / .55), oklch(0.08 0.015 150 / .75));
+    radial-gradient(80% 60% at 50% 40%, oklch(0.14 0.03 150), oklch(0.09 0.02 150));
+  display: grid; place-items: center;
+  transform: translateY(0);
 }
-.preloader.done{ opacity: 0; visibility: hidden; pointer-events: none; }
+.preloader.done{ pointer-events: none; }
 
-.pre-stage{
-  position: relative; z-index: 1;
-  display: grid; gap: var(--s-5); justify-items: center;
-  width: min(680px, 90vw);
-  text-align: center;
-  padding: 0 var(--s-5);
+.pre-brand{
+  position: absolute; top: 26px; left: clamp(18px, 4vw, 48px);
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--cream-300);
+  opacity: 0;
 }
-
-.pre-mark{
-  width: 36px; height: 36px;
-  opacity: 0; transform: scale(.92);
-  animation: preMark .8s cubic-bezier(.2,.6,.2,1) .2s forwards;
-}
-.pre-mark img{
-  width: 100%; height: 100%; display: block; object-fit: contain;
-  filter: drop-shadow(0 6px 14px rgba(0,0,0,.55));
-}
+html[dir="rtl"] .pre-brand{ left: auto; right: clamp(18px, 4vw, 48px); }
+.pre-brand img{ width: 20px; height: 20px; }
 
 .pre-word{
   display: flex;
-  font-family: var(--font-mono);
   font-weight: 500;
-  font-size: clamp(40px, 7.5vw, 84px);
-  letter-spacing: clamp(.18em, .8vw, .42em);
+  font-size: clamp(44px, 9vw, 128px);
+  letter-spacing: clamp(.06em, .5vw, .16em);
   line-height: 1;
-  white-space: nowrap;
-  padding-left: clamp(.18em, .8vw, .42em);
   color: var(--cream-50);
 }
-.pre-word .char{
-  display: inline-block;
-  opacity: 0;        /* JS reveals during glitch */
-  font-variant-numeric: tabular-nums;
-  min-width: .55em;  /* keep width stable as glitch swaps in narrow chars */
-  text-align: center;
+.pre-word .m{ display:inline-block; overflow: hidden; }
+.pre-word .c{
+  display:inline-block;
+  transform: translateY(120%);
 }
-
 .pre-sub{
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(15px, 1.5vw, 19px);
-  color: var(--cream-200);
-  opacity: 0; transform: translateY(8px);
-  animation: preFadeUp 1.0s cubic-bezier(.2,.6,.2,1) 2.1s forwards;
-  letter-spacing: 0;
-}
-
-.pre-track-row{
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: var(--s-3);
-}
-.pre-track{
-  position: relative;
-  width: clamp(160px, 22vw, 240px); height: 1px;
-  background: rgba(255,255,255,.10);
-  overflow: hidden;
-  opacity: 0;
-  animation: preFadeIn .6s ease 1.4s forwards;
-}
-.pre-fill{
-  position: absolute; left: 0; top: 0; bottom: 0; width: 100%;
-  background: var(--cream-50);
-  transform-origin: left;
-  transform: scaleX(0);
-  animation: preFill 2.0s cubic-bezier(.65,.05,.2,1) 1.4s forwards;
-}
-.pre-num{
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: .14em;
+  margin-top: 18px;
+  text-align: center;
+  font-family: var(--font-serif); font-style: italic;
+  font-size: clamp(14px, 1.6vw, 18px);
   color: var(--cream-300);
-  font-variant-numeric: tabular-nums;
-  min-width: 3em;
-  text-align: left;
   opacity: 0;
-  animation: preFadeIn .6s ease 1.4s forwards;
 }
-.pre-num span{ color: var(--cream-50); }
-
-@keyframes preMark   { to { opacity: 1; transform: none; } }
-@keyframes preFadeIn { to { opacity: 1; } }
-@keyframes preFadeUp { to { opacity: 1; transform: none; } }
-@keyframes preFill   { to { transform: scaleX(1); } }
-
-html[lang="ar"] .pre-sub,
-html[lang="he"] .pre-sub{ letter-spacing: 0; }
-
-@media (max-width: 600px){
-  .pre-stage{ gap: var(--s-4); }
-  .pre-word{ font-size: clamp(34px, 11vw, 56px); letter-spacing: clamp(.14em, .6vw, .26em); padding-left: clamp(.14em, .6vw, .26em); }
-  .pre-sub{ font-size: 14px; }
-  .pre-mark{ width: 32px; height: 32px; }
-  .pre-track{ width: clamp(140px, 38vw, 220px); }
+.pre-count{
+  position: absolute; bottom: 14px; right: clamp(18px, 4vw, 48px);
+  font-family: var(--font-sans);
+  font-weight: 200;
+  font-size: clamp(72px, 14vw, 180px);
+  line-height: 1;
+  color: var(--cream-50);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.04em;
+  opacity: .9;
 }
+html[dir="rtl"] .pre-count{ right: auto; left: clamp(18px, 4vw, 48px); }
+.pre-count .pct{
+  font-size: .22em; font-weight: 400; color: var(--cream-300);
+  vertical-align: super; letter-spacing: 0;
+}
+.pre-line{
+  position: absolute; left: 0; bottom: 0;
+  height: 2px; width: 100%;
+  background: rgba(255,255,255,.08);
+}
+.pre-line i{
+  position:absolute; left:0; top:0; bottom:0; width:100%;
+  background: linear-gradient(90deg, var(--f-400), var(--gold-500));
+  transform-origin: left; transform: scaleX(0);
+  display: block;
+}
+html[dir="rtl"] .pre-line i{ transform-origin: right; }
 
 @media (prefers-reduced-motion: reduce){
-  .preloader{ display: none; }
+  .preloader{ display:none; }
 }
 
 /* =========================================================
-   LAYOUT — single 100svh slide, never scrolls
+   NAV — fixed, gains glass once scrolled
    ========================================================= */
-.slide{
-  position: relative; z-index: 1;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100svh;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 var(--s-7);
+.nav{
+  position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+  display:flex; align-items:center; gap: var(--s-5);
+  padding: 16px clamp(16px, 4vw, 48px);
+  transition: background .4s ease, border-color .4s ease, backdrop-filter .4s ease, padding .4s ease;
+  border-bottom: 1px solid transparent;
 }
-@media (max-width: 800px){ .slide{ padding: 0 var(--s-4); } }
-
-/* TOPBAR */
-.topbar{
-  display:flex; align-items:center; gap: var(--s-4);
-  margin-top: 18px;
-  padding: 9px 14px;
-  border-radius: var(--r-pill);
-  background: rgba(15,25,20,0.55);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--glass-line-2);
-  box-shadow: var(--float-2), var(--rim-dark-2);
-  position: relative;
+.nav.scrolled{
+  background: oklch(0.12 0.025 150 / .72);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom-color: var(--glass-line);
+  padding-top: 10px; padding-bottom: 10px;
 }
-.topbar::before{
-  content:""; position:absolute; inset:1px; border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255,255,255,0.08), transparent 35%);
-  pointer-events:none;
-}
-.topbar > *{ position: relative; z-index: 1; }
-.brand-lock{ display:flex; align-items:center; gap: 10px; text-decoration: none; color: inherit; }
-.brand-lock img{ width: 28px; height: 28px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.55)); }
-.brand-lock .wm{
-  font-weight: 600; letter-spacing: .12em;
-  font-size: 14px; color: var(--bone-50);
-}
+.brand-lock{ display:flex; align-items:center; gap: 10px; text-decoration:none; color:inherit; }
+.brand-lock img{ width: 26px; height: 26px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.55)); }
+.brand-lock .wm{ font-weight: 600; letter-spacing: .12em; font-size: 14px; color: var(--bone-50); }
 .brand-lock .sub{
-  font-family: var(--font-mono);
-  font-size: 10.5px; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--ink-3);
-  margin-left: 4px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ink-3); margin-left: 4px;
 }
-@media (max-width: 520px){ .brand-lock .sub{ display:none; } }
+@media (max-width: 760px){ .brand-lock .sub{ display:none; } }
+
+.nav-links{
+  margin-left: auto;
+  display:flex; gap: 6px; align-items:center;
+}
+html[dir="rtl"] .nav-links{ margin-left: 0; margin-right: auto; }
+.nav-links a{
+  font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3); text-decoration: none;
+  padding: 8px 12px; border-radius: var(--r-pill);
+  transition: color .2s, background .2s;
+}
+.nav-links a:hover{ color: var(--ink); background: rgba(255,255,255,.06); }
+@media (max-width: 900px){ .nav-links{ display:none; } }
 
 .lang{
-  margin-left: auto;
-  display:flex; gap: 2px;
-  padding: 3px;
+  display:flex; gap: 2px; padding: 3px;
   border-radius: var(--r-pill);
   background: rgba(0,0,0,0.30);
   border: 1px solid var(--glass-line);
-  font-family: var(--font-mono); font-size: 10.5px;
-  letter-spacing: .08em;
-  align-items: center;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em;
+  align-items:center;
 }
+@media (max-width: 900px){ .lang{ margin-left: auto; } html[dir="rtl"] .lang{ margin-left:0; margin-right:auto; } }
 .lang button{
-  appearance: none; border: 0; background: transparent;
-  cursor: pointer; color: var(--ink-3);
-  padding: 6px 9px; border-radius: var(--r-pill);
+  appearance:none; border:0; background:transparent; cursor:pointer;
+  color: var(--ink-3); padding: 6px 9px; border-radius: var(--r-pill);
   font: inherit; transition: background .15s, color .15s;
 }
 .lang button:hover{ color: var(--ink); }
@@ -410,64 +318,79 @@ html[lang="he"] .pre-sub{ letter-spacing: 0; }
 }
 @media (max-width: 420px){
   .lang{ font-size: 9.5px; }
-  .lang button{ padding: 5px 7px; }
+  .lang button{ padding: 5px 6px; }
 }
 
-/* Narrow mobile — keep the topbar from squeezing the lang switcher */
-@media (max-width: 480px){
-  .topbar{ padding: 7px 12px; gap: var(--s-3); }
-  .brand-lock img{ width: 26px; height: 26px; }
-  .brand-lock .wm{ font-size: 13px; letter-spacing: .10em; }
+/* =========================================================
+   BUTTONS — magnetic pills with cursor-origin fill
+   ========================================================= */
+.btn{
+  --bx: 50%; --by: 50%;
+  position: relative; isolation: isolate;
+  display:inline-flex; align-items:center; justify-content:center; gap: 12px;
+  font-family: var(--font-sans); font-weight: 500;
+  border-radius: var(--r-pill);
+  padding: 16px 28px; font-size: 15px;
+  letter-spacing: -.005em; line-height: 1;
+  text-decoration:none; cursor:pointer; border: 1px solid transparent;
+  color: var(--ink);
+  overflow: hidden;
+  transition: transform .3s var(--ease-out), box-shadow .3s ease, border-color .3s ease, color .3s ease;
+  will-change: transform;
 }
-@media (max-width: 380px){
-  .brand-lock .wm{ font-size: 12px; letter-spacing: .06em; }
-  .lang button{ padding: 4px 6px; font-size: 9px; }
+.btn > *{ position: relative; z-index: 2; }
+.btn::before{ /* top light rim */
+  content:""; position:absolute; inset:1px; border-radius:inherit; z-index:1;
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), transparent 50%);
+  pointer-events:none;
 }
+.btn::after{ /* cursor-origin fill */
+  content:""; position:absolute; z-index:0;
+  left: var(--bx); top: var(--by);
+  width: 0; height: 0; border-radius: 999px;
+  transform: translate(-50%,-50%);
+  transition: width .5s var(--ease-out), height .5s var(--ease-out), opacity .4s ease;
+  opacity: 0;
+}
+.btn:hover::after{ width: 240%; height: 620%; opacity: 1; }
+.btn:active{ transform: scale(.985); }
+.btn:disabled{ opacity:.6; cursor: progress; pointer-events:none; }
 
-/* HERO — centered editorial layout */
-.hero{
-  display:flex; flex-direction: column; justify-content: center;
-  align-items: center;
-  text-align: center;
-  gap: clamp(var(--s-3), 1.4vh, var(--s-5));
-  padding: var(--s-5) 0;
-  max-width: 1100px;
-  margin: 0 auto;
-  width: 100%;
+.btn .arr{
+  display:inline-grid; place-items:center;
+  width: 18px; height: 18px;
 }
-.hero .lede{ margin-left: auto; margin-right: auto; }
-.cta-row{ justify-content: center; }
-.hero-crest{
-  position: relative;
-  width: clamp(72px, 9vw, 116px);
-  aspect-ratio: 1 / 1;
-  margin-bottom: clamp(2px, 1vh, 10px);
-  isolation: isolate;
-}
-.hero-crest img{
-  position: relative; z-index: 1;
-  width: 100%; height: 100%;
-  display: block;
-  object-fit: contain;
-  filter:
-    drop-shadow(0 18px 30px rgba(0,0,0,.55))
-    drop-shadow(0 2px 0 rgba(255,255,255,.04));
-}
-.hero-crest::after{
-  content:""; position: absolute; inset: -28%;
-  z-index: 0;
-  background: radial-gradient(58% 58% at 50% 50%, oklch(0.58 0.16 150 / .55), transparent 70%);
-  filter: blur(22px);
-  animation: crest-glow 4.2s ease-in-out infinite alternate;
-}
-@keyframes crest-glow{
-  from{ opacity: .55; transform: scale(.95); }
-  to  { opacity: 1;   transform: scale(1.05); }
-}
-@media (prefers-reduced-motion: reduce){
-  .hero-crest::after{ animation: none; opacity: .8; transform: none; }
-}
+.btn .arr svg{ width: 15px; height: 15px; transition: transform .3s var(--ease-out); }
+.btn:hover .arr svg{ transform: translateX(3px); }
+html[dir="rtl"] .btn:hover .arr svg{ transform: scaleX(-1) translateX(3px); }
 
+.btn-primary{
+  background: linear-gradient(180deg, var(--f-600), var(--f-800));
+  color: var(--bone-50);
+  border-color: rgba(0,0,0,0.4);
+  box-shadow: var(--float-2),
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 -1px 0 rgba(0,0,0,0.45),
+    0 0 0 1px rgba(255,255,255,0.06);
+}
+.btn-primary::after{ background: radial-gradient(circle, oklch(0.72 0.10 150 / .95), oklch(0.60 0.09 150 / .9) 60%); }
+.btn-primary:hover{ box-shadow: 0 16px 40px -12px oklch(0.55 0.14 150 / .6), inset 0 1px 0 rgba(255,255,255,0.25); }
+
+.btn-ghost{
+  background: rgba(255,255,255,0.05);
+  color: var(--ink);
+  border-color: var(--glass-line-2);
+  box-shadow: var(--float-1), var(--rim-dark);
+}
+.btn-ghost::after{ background: radial-gradient(circle, rgba(255,255,255,.16), rgba(255,255,255,.10) 60%); }
+
+.btn-lg{ padding: 19px 34px; font-size: 16px; }
+
+/* =========================================================
+   LAYOUT PRIMITIVES
+   ========================================================= */
+.wrap{ width: var(--wrap); margin: 0 auto; position: relative; }
+section{ position: relative; z-index: 1; }
 .eyebrow{
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
@@ -485,23 +408,63 @@ html[lang="he"] .pre-sub{ letter-spacing: 0; }
   50%{   box-shadow: 0 0 0 3px rgba(255,255,255,0.04), 0 0 18px var(--f-500); }
 }
 
+/* Reveal primitives (only active when JS present) */
+html.js [data-rv]{ opacity: 0; transform: translateY(34px); }
+html.js .hero-el, html.js #nav, html.js .scroll-hint{ opacity: 0; }
+html.js .mask{ display:block; overflow:hidden; }
+html.js .mask > .mline{ display:block; transform: translateY(115%); }
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{
+  min-height: 100svh;
+  display:grid; place-items:center;
+  padding: 140px 0 90px;
+  position: relative;
+}
+#hero-gl{
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.hero-inner{
+  position: relative; z-index: 2;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap: clamp(var(--s-4), 2vh, var(--s-6));
+  width: var(--wrap);
+}
+.hero-crest{
+  position: relative;
+  width: clamp(64px, 8vw, 104px); aspect-ratio: 1/1;
+  isolation: isolate;
+}
+.hero-crest img{
+  position:relative; z-index:1; width:100%; height:100%;
+  object-fit:contain; display:block;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.55));
+}
+.hero-crest::after{
+  content:""; position:absolute; inset:-30%;
+  z-index:0;
+  background: radial-gradient(58% 58% at 50% 50%, oklch(0.58 0.16 150 / .5), transparent 70%);
+  filter: blur(22px);
+  animation: crest-glow 4.2s ease-in-out infinite alternate;
+}
+@keyframes crest-glow{
+  from{ opacity:.55; transform: scale(.95); }
+  to  { opacity: 1;  transform: scale(1.05); }
+}
+
 .hero h1{
   margin: 0;
   font-weight: 500;
-  font-size: clamp(28px, 7vw, 96px);
-  line-height: 0.96;
-  letter-spacing: -0.035em;
+  font-size: clamp(42px, 9.6vw, 148px);
+  line-height: .95;
+  letter-spacing: -.04em;
   text-wrap: balance;
+  max-width: 12ch;
 }
-.hero h1 .char{
-  display: inline-block;
-  will-change: transform, opacity;
-}
-.hero h1 .char-space{ white-space: pre; }
-/* Initial state — chars are scattered horizontally + invisible.
-   JS overrides these inline once split; this just prevents flash
-   on the brief window before JS sets per-char positions. */
-.hero h1.fx-pending .char{ opacity: 0; }
 .hero h1 em{
   font-family: var(--font-serif);
   font-style: italic; font-weight: 400;
@@ -509,169 +472,216 @@ html[lang="he"] .pre-sub{ letter-spacing: 0; }
 }
 .hero .lede{
   margin: 0;
-  font-size: clamp(15px, 1.7vw, 19px);
+  font-size: clamp(15px, 1.8vw, 20px);
   color: var(--ink-2);
-  max-width: 56ch;
-}
-
-/* Hero on narrow mobile — tighter so the single slide doesn't overflow */
-@media (max-width: 600px){
-  .hero{ padding: var(--s-4) 0; gap: var(--s-3); }
-  .hero-crest{ width: clamp(56px, 14vw, 80px); }
-  .hero .lede{ font-size: 14.5px; line-height: 1.5; }
-}
-
-/* Landscape mobile — when height is the constraint */
-@media (max-height: 480px) and (orientation: landscape){
-  .hero{ padding: var(--s-3) 0; gap: var(--s-2); }
-  .hero-crest{ width: 56px; margin-bottom: 0; }
-  .hero h1{ font-size: clamp(28px, 5.5vw, 44px); }
-  .micro-footer{ padding: 6px 4px 10px; }
+  max-width: 52ch;
 }
 .cta-row{
-  display:flex; gap: var(--s-3); flex-wrap: wrap; align-items: center;
+  display:flex; gap: var(--s-4); flex-wrap: wrap;
+  align-items:center; justify-content:center;
   margin-top: var(--s-3);
 }
-/* BUTTONS */
-.btn{
-  display:inline-flex; align-items:center; justify-content:center; gap: 10px;
-  font-family: var(--font-sans); font-weight: 500;
-  border-radius: var(--r-pill); padding: 14px 22px; font-size: 14.5px;
-  text-decoration: none; cursor: pointer;
-  transition: transform .12s, filter .15s, background .15s;
-  line-height: 1; letter-spacing: -.005em;
-  border: 1px solid transparent;
-  position: relative; isolation: isolate;
-  color: var(--ink);
+.enter-world[hidden]{ display: none !important; }
+
+.scroll-hint{
+  position:absolute; bottom: 26px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display:flex; flex-direction:column; align-items:center; gap: 10px;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .3em; text-transform: uppercase;
+  color: var(--ink-4);
 }
-.btn::before{
-  content:""; position:absolute; inset:1px; border-radius:inherit;
-  background: linear-gradient(180deg, rgba(255,255,255,0.10), transparent 50%);
-  pointer-events: none; z-index: 0;
+.scroll-hint i{
+  display:block; width:1px; height: 44px;
+  background: linear-gradient(180deg, transparent, var(--cream-300));
+  overflow:hidden; position:relative;
 }
-.btn > *{ position: relative; z-index: 1; }
-.btn:active{ transform: translateY(1px); }
-.btn:disabled{ opacity: .6; cursor: progress; pointer-events: none; }
-.btn-primary{
+.scroll-hint i::after{
+  content:""; position:absolute; left:0; top:-100%;
+  width:100%; height:100%;
+  background: linear-gradient(180deg, transparent, var(--cream-50));
+  animation: hintdrop 2.2s var(--ease-exp) infinite;
+}
+@keyframes hintdrop{ 0%{ top:-100%; } 55%,100%{ top:100%; } }
+
+/* =========================================================
+   MANIFESTO
+   ========================================================= */
+.manifesto{ padding: clamp(120px, 18vh, 220px) 0; }
+.manifesto .wrap{ display:grid; gap: var(--s-6); }
+.man-line{
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(28px, 5vw, 64px);
+  line-height: 1.16;
+  letter-spacing: -.015em;
+  color: var(--cream-100);
+  max-width: 24ch;
+  margin: 0;
+}
+.man-line em{ font-style: italic; color: var(--f-300); }
+.man-line.dim{ color: var(--ink-3); font-size: clamp(20px, 3vw, 34px); max-width: 44ch; }
+
+/* =========================================================
+   MARQUEE
+   ========================================================= */
+.marquee{
+  overflow:hidden; padding: 18px 0;
+  border-top: 1px solid var(--glass-line);
+  border-bottom: 1px solid var(--glass-line);
+  direction: ltr;
+}
+.marquee-track{
+  display:flex; gap: 3.2em; width:max-content;
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.4vw, 15px);
+  letter-spacing: .28em; text-transform: uppercase;
+  color: var(--ink-4);
+  white-space: nowrap;
+  animation: marquee 36s linear infinite;
+}
+.marquee-track span b{ color: var(--f-400); font-weight:400; margin: 0 1.4em; }
+@keyframes marquee{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+
+/* =========================================================
+   DIRECTIONS — index rows
+   ========================================================= */
+.services{ padding: clamp(110px, 16vh, 200px) 0 clamp(80px, 10vh, 140px); }
+.sec-head{ display:grid; gap: var(--s-4); margin-bottom: clamp(40px, 6vh, 72px); }
+.sec-title{
+  margin:0; font-weight:500;
+  font-size: clamp(32px, 5.4vw, 76px);
+  line-height: 1.02; letter-spacing: -.03em;
+}
+.sec-title em{
+  font-family: var(--font-serif); font-style: italic; font-weight: 400;
+  color: var(--f-300);
+}
+
+.dir-list{ display:block; border-top: 1px solid var(--glass-line); }
+.dir-row{
+  --bx: 50%; --by: 50%;
+  position: relative;
+  display:grid;
+  grid-template-columns: 3.2em 1fr auto;
+  align-items:center; gap: clamp(14px, 3vw, 40px);
+  padding: clamp(20px, 3.4vh, 34px) clamp(6px, 1vw, 18px);
+  border-bottom: 1px solid var(--glass-line);
+  text-decoration:none; color: inherit;
+  cursor: pointer;
+  isolation: isolate;
+  transition: padding .35s var(--ease-out);
+}
+.dir-row::before{
+  content:""; position:absolute; inset:0; z-index:-1;
+  background: linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  opacity: 0; transition: opacity .35s ease;
+}
+.dir-row:hover::before{ opacity: 1; }
+.dir-row:hover{ padding-left: clamp(14px, 2vw, 30px); padding-right: clamp(6px,1vw,18px); }
+html[dir="rtl"] .dir-row:hover{ padding-right: clamp(14px, 2vw, 30px); padding-left: clamp(6px,1vw,18px); }
+.dr-num{
+  font-family: var(--font-mono); font-size: 12px;
+  color: var(--ink-4); letter-spacing: .1em;
+}
+.dr-title{
+  font-weight: 500;
+  font-size: clamp(22px, 3.6vw, 46px);
+  letter-spacing: -.02em; line-height: 1.1;
+  transition: color .3s ease;
+}
+.dir-row:hover .dr-title{ color: var(--f-200); }
+.dr-arrow{
+  display:grid; place-items:center;
+  width: clamp(38px, 4vw, 52px); height: clamp(38px, 4vw, 52px);
+  border-radius: 999px;
+  border: 1px solid var(--glass-line-2);
+  background: rgba(255,255,255,.04);
+  transition: background .3s ease, transform .35s var(--ease-out), border-color .3s ease;
+}
+.dr-arrow svg{ width: 40%; height: 40%; transition: transform .35s var(--ease-out); }
+.dir-row:hover .dr-arrow{
   background: linear-gradient(180deg, var(--f-600), var(--f-800));
-  color: var(--bone-50);
-  border-color: rgba(0,0,0,0.4);
-  box-shadow: var(--float-2),
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    inset 0 -1px 0 rgba(0,0,0,0.45),
-    0 0 0 1px rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,.22);
+  transform: rotate(-45deg);
 }
-.btn-primary:hover{ filter: brightness(1.10); }
-.btn-secondary{
-  background: rgba(255,255,255,0.05);
-  color: var(--ink);
-  border-color: var(--glass-line-2);
+html[dir="rtl"] .dir-row:hover .dr-arrow{ transform: rotate(45deg); }
+
+/* =========================================================
+   HOW IT WORKS — three glass steps
+   ========================================================= */
+.how{ padding: clamp(110px, 16vh, 200px) 0; }
+.how-grid{
+  display:grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(14px, 2vw, 24px);
+}
+@media (max-width: 900px){ .how-grid{ grid-template-columns: 1fr; } }
+.how-card{
+  position:relative;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--glass-line-2);
+  background: rgba(15,25,20,0.45);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
   box-shadow: var(--float-1), var(--rim-dark);
+  padding: clamp(24px, 3vw, 40px);
+  display:grid; gap: 14px; align-content:start;
+  min-height: clamp(200px, 26vh, 280px);
+  transition: transform .4s var(--ease-out), border-color .3s ease;
 }
-.btn-secondary:hover{ background: rgba(255,255,255,0.10); }
-.btn-lg{ padding: 17px 26px; font-size: 15.5px; }
-.btn-arrow svg{ width: 14px; height: 14px; opacity: .85; transition: transform .15s; }
-.btn:hover .btn-arrow svg{ transform: translateX(2px); }
+.how-card:hover{ transform: translateY(-6px); border-color: rgba(255,255,255,.28); }
+.how-card .n{
+  font-family: var(--font-mono); font-size: 12px;
+  letter-spacing:.16em; color: var(--f-400);
+}
+.how-card h3{
+  margin:0; font-weight:500;
+  font-size: clamp(20px, 2.2vw, 28px);
+  letter-spacing:-.02em;
+}
+.how-card p{ margin:0; color: var(--ink-3); font-size: 14.5px; }
 
-/* CHROMATIC GLITCH — lifted from the design system. RGB-split ghosts
-   appear on hover; scanlines overlay sells the CRT/cyber vibe. */
-.btn-glitch{
-  background: rgba(20,40,30,0.82);
-  color: var(--cream-50);
-  border-color: rgba(255,255,255,0.14);
-  font-family: var(--font-mono);
-  font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
-  font-size: 13.5px;
-  padding: 14px 24px;
-  overflow: hidden;
+/* =========================================================
+   ACCESS
+   ========================================================= */
+.access{
+  padding: clamp(130px, 20vh, 260px) 0 clamp(80px, 10vh, 130px);
+  text-align:center;
 }
-.btn-glitch:hover{ background: rgba(20,40,30,0.92); }
-.btn-glitch::after{
-  content:""; position: absolute; inset: 0;
-  background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(255,255,255,0.05) 3px 4px);
-  pointer-events: none; z-index: 2; mix-blend-mode: overlay;
-}
-.glitch-text{ position: relative; display: inline-block; z-index: 3; }
-.glitch-text::before,
-.glitch-text::after{
-  content: attr(data-text);
-  position: absolute; top: 0; left: 0; width: 100%;
-  pointer-events: none; opacity: 0; mix-blend-mode: screen;
-}
-.btn-glitch:hover .glitch-text::before{
-  color: oklch(0.72 0.28 25); opacity: .95;
-  animation: glitchA .42s steps(2) infinite;
-}
-.btn-glitch:hover .glitch-text::after{
-  color: oklch(0.74 0.22 200); opacity: .95;
-  animation: glitchB .42s steps(2) infinite;
-}
-@keyframes glitchA{
-  0%,100% { clip-path: inset(0 0 0 0); transform: translate(-2px,-1px); }
-  20% { clip-path: inset(20% 0 50% 0); transform: translate(-3px,-1px); }
-  40% { clip-path: inset(60% 0 10% 0); transform: translate(-1px, 1px); }
-  60% { clip-path: inset(10% 0 70% 0); transform: translate(-4px, 0); }
-  80% { clip-path: inset(40% 0 30% 0); transform: translate(-2px,-2px); }
-}
-@keyframes glitchB{
-  0%,100% { clip-path: inset(0 0 0 0); transform: translate(2px,1px); }
-  25% { clip-path: inset(50% 0 20% 0); transform: translate(3px, 0); }
-  50% { clip-path: inset(10% 0 60% 0); transform: translate(1px, 2px); }
-  75% { clip-path: inset(70% 0 10% 0); transform: translate(4px,-1px); }
-}
-@media (prefers-reduced-motion: reduce){
-  .btn-glitch:hover .glitch-text::before,
-  .btn-glitch:hover .glitch-text::after{ animation: none; opacity: 0; }
-}
+.access .wrap{ display:flex; flex-direction:column; align-items:center; gap: var(--s-5); }
+.access .sec-title{ font-size: clamp(36px, 6.6vw, 96px); max-width: 14ch; }
+.access .lede{ margin:0; color: var(--ink-2); max-width: 46ch; font-size: clamp(15px, 1.7vw, 19px); }
 
-/* PIXELATED 8-BIT — chamfered clip-path + raised 3D stack. Stacks
-   onto .btn-glitch so the CTA gets RGB-split ghosts AND the arcade
-   button silhouette/press. */
-.btn-pixel{
-  font-family: var(--font-mono);
-  font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
-  font-size: 12.5px;
-  background: linear-gradient(180deg, var(--f-500), var(--f-800));
-  color: var(--cream-50);
-  border-radius: 0 !important;
-  border: 0;
-  padding: 14px 24px;
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,0.30),
-    inset 0 -3px 0 rgba(0,0,0,0.40),
-    0 6px 0 oklch(0.14 0.04 150),
-    0 14px 26px rgba(0,0,0,.35);
-  clip-path: polygon(
-    0 4px, 4px 4px, 4px 0,
-    calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
-    100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px),
-    calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px),
-    0 calc(100% - 4px)
-  );
+/* =========================================================
+   FOOTER + giant scrubbed wordmark
+   ========================================================= */
+.giant-wm{
+  overflow:hidden; pointer-events:none;
+  padding: clamp(30px, 6vh, 80px) 0 0;
 }
-.btn-pixel:hover{ filter: brightness(1.10); }
-.btn-pixel:active{
-  transform: translateY(4px);
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,0.18),
-    inset 0 -2px 0 rgba(0,0,0,0.35),
-    0 2px 0 oklch(0.14 0.04 150),
-    0 6px 14px rgba(0,0,0,.30);
+.giant-wm span{
+  display:block; width:max-content;
+  font-weight: 600;
+  font-size: clamp(90px, 22vw, 340px);
+  line-height: .8; letter-spacing: -.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px oklch(0.80 0.05 150 / .22);
+  white-space: nowrap;
+  will-change: transform;
 }
-
-/* MICRO FOOTER */
 .micro-footer{
-  display:flex; justify-content: space-between; align-items: center;
-  gap: var(--s-3); flex-wrap: wrap;
-  padding: 14px 4px 18px;
+  display:flex; justify-content:space-between; align-items:center;
+  gap: var(--s-3); flex-wrap:wrap;
+  padding: 26px 0 30px;
   font-family: var(--font-mono);
   font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
   color: var(--ink-4);
+  border-top: 1px solid var(--glass-line);
 }
-.micro-footer .dot{ color: var(--f-400); }
 
 /* =========================================================
-   APPLY MODAL
+   APPLY MODAL (unchanged mechanics, restyled buttons)
    ========================================================= */
 dialog.apply-modal{
   width: min(94vw, 600px);
@@ -691,112 +701,68 @@ dialog.apply-modal::backdrop{
   backdrop-filter: blur(8px) saturate(120%);
   -webkit-backdrop-filter: blur(8px) saturate(120%);
 }
-dialog.apply-modal[open]{ animation: dlg-in .25s ease-out both; }
-dialog.apply-modal[open]::backdrop{ animation: dlg-fade .25s ease-out both; }
-@keyframes dlg-in{ from{ transform: translateY(12px); opacity: 0; } to{ transform: none; opacity: 1; } }
+dialog.apply-modal[open]{ animation: dlg-in .3s var(--ease-out) both; }
+dialog.apply-modal[open]::backdrop{ animation: dlg-fade .3s ease-out both; }
+@keyframes dlg-in{ from{ transform: translateY(14px) scale(.99); opacity: 0; } to{ transform:none; opacity: 1; } }
 @keyframes dlg-fade{ from{ opacity: 0; } to{ opacity: 1; } }
 @media (max-width: 600px){
-  dialog.apply-modal{
-    width: 100vw; height: 100svh; max-height: 100svh;
-    border-radius: 0; border: 0;
-  }
+  dialog.apply-modal{ width: 100vw; height: 100svh; max-height: 100svh; border-radius: 0; border: 0; }
 }
-
-.apply-shell{
-  display: grid; grid-template-rows: auto 1fr auto;
-  max-height: inherit; height: 100%;
-  min-height: 0;
-}
+.apply-shell{ display:grid; grid-template-rows: auto 1fr auto; max-height: inherit; height:100%; min-height:0; }
 .apply-shell > *{ min-height: 0; }
-#apply-form{
-  display: grid;
-  grid-template-rows: 1fr auto;
-  min-height: 0;
-  overflow: hidden;
-}
+#apply-form{ display:grid; grid-template-rows: 1fr auto; min-height:0; overflow:hidden; }
 .apply-head{
   padding: 22px 28px 14px;
   display:grid; grid-template-columns: 1fr auto; gap: var(--s-4);
   border-bottom: 1px solid var(--glass-line);
-  position: relative;
 }
 .apply-head h2{
   margin: 6px 0 4px;
   font-size: clamp(22px, 3vw, 28px);
-  letter-spacing: -.02em; font-weight: 500;
-  line-height: 1.05;
+  letter-spacing: -.02em; font-weight: 500; line-height: 1.05;
 }
-.apply-head h2 em{
-  font-family: var(--font-serif); font-style: italic; font-weight: 400;
-  color: var(--f-300);
-}
-.apply-head p{
-  margin: 0;
-  color: var(--ink-3);
-  font-size: 13.5px;
-  max-width: 48ch;
-}
+.apply-head h2 em{ font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--f-300); }
+.apply-head p{ margin:0; color: var(--ink-3); font-size: 13.5px; max-width: 48ch; }
 .apply-close{
-  appearance: none; border: 0; background: rgba(255,255,255,0.05);
+  appearance:none; border:0; background: rgba(255,255,255,0.05);
   width: 36px; height: 36px; border-radius: 999px;
-  color: var(--ink-2); cursor: pointer;
-  display:grid; place-items: center;
+  color: var(--ink-2); cursor:pointer;
+  display:grid; place-items:center;
   border: 1px solid var(--glass-line);
-  transition: background .15s, color .15s;
+  transition: background .15s, color .15s, transform .3s var(--ease-out);
 }
-.apply-close:hover{ color: var(--ink); background: rgba(255,255,255,0.10); }
+.apply-close:hover{ color: var(--ink); background: rgba(255,255,255,0.10); transform: rotate(90deg); }
 .apply-close svg{ width: 16px; height: 16px; }
-
 .apply-body{
   padding: 18px 28px 10px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  min-height: 0;
+  overflow-y: auto; overflow-x: hidden; min-height: 0;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.18) transparent;
 }
 .apply-body::-webkit-scrollbar{ width: 8px; }
-.apply-body::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,0.18); border-radius: 999px;
-}
-
-fieldset.apply-group{
-  border: 0; padding: 0; margin: 0 0 18px;
-  display: grid; gap: var(--s-3);
-}
+.apply-body::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.18); border-radius: 999px; }
+fieldset.apply-group{ border:0; padding:0; margin: 0 0 18px; display:grid; gap: var(--s-3); }
 fieldset.apply-group > legend{
   font-family: var(--font-mono);
   font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
   color: var(--ink-3);
   padding-bottom: 4px;
-  display:flex; align-items: center; gap: var(--s-3);
+  display:flex; align-items:center; gap: var(--s-3);
 }
 fieldset.apply-group > legend::after{
-  content:""; flex: 1; height: 1px;
+  content:""; flex:1; height:1px;
   background: linear-gradient(90deg, rgba(255,255,255,0.18), transparent);
 }
 html[lang="ar"] fieldset.apply-group > legend,
-html[lang="he"] fieldset.apply-group > legend{
-  letter-spacing: .02em; text-transform: none;
-}
-
-.field{ display:flex; flex-direction: column; gap: 6px; }
-.field-row{
-  display:grid; grid-template-columns: 1fr 1fr; gap: var(--s-3);
-}
+html[lang="he"] fieldset.apply-group > legend{ letter-spacing: .02em; text-transform: none; }
+.field{ display:flex; flex-direction:column; gap: 6px; }
+.field-row{ display:grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
 @media (max-width: 520px){ .field-row{ grid-template-columns: 1fr; } }
-
-.field label{
-  font-size: 12.5px; color: var(--ink-2);
-  font-weight: 500;
-}
+.field label{ font-size: 12.5px; color: var(--ink-2); font-weight: 500; }
 .field label .req{ color: var(--clay-500); margin-left: 4px; }
 .field .hint{ font-size: 11.5px; color: var(--ink-4); }
-
-.field input,
-.field select,
-.field textarea{
+.field input, .field select, .field textarea{
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--glass-line-2);
   border-radius: var(--r-md);
@@ -807,16 +773,9 @@ html[lang="he"] fieldset.apply-group > legend{
   transition: background .15s, border-color .15s;
   width: 100%;
 }
-.field textarea{
-  resize: vertical;
-  min-height: 92px;
-  line-height: 1.5;
-}
-.field input::placeholder,
-.field textarea::placeholder{ color: var(--ink-4); }
-.field input:focus,
-.field select:focus,
-.field textarea:focus{
+.field textarea{ resize: vertical; min-height: 92px; line-height: 1.5; }
+.field input::placeholder, .field textarea::placeholder{ color: var(--ink-4); }
+.field input:focus, .field select:focus, .field textarea:focus{
   outline: none;
   border-color: var(--f-400);
   background: rgba(255,255,255,0.07);
@@ -833,131 +792,81 @@ html[dir="rtl"] .field select{
   background-position: left 13px center;
   padding-right: 13px; padding-left: 36px;
 }
-.field input.invalid,
-.field select.invalid,
-.field textarea.invalid{
+.field input.invalid, .field select.invalid, .field textarea.invalid{
   border-color: var(--clay-500);
   box-shadow: 0 0 0 3px rgba(220, 130, 70, 0.20);
 }
-
-.hidden-pot{ position: absolute; left: -9999px; top: 0; width: 1px; height: 1px; opacity: 0; }
-
+.hidden-pot{ position:absolute; left:-9999px; top:0; width:1px; height:1px; opacity:0; }
 .apply-foot{
   padding: 16px 28px 22px;
-  display:flex; align-items: center; gap: var(--s-4);
+  display:flex; align-items:center; gap: var(--s-4);
   border-top: 1px solid var(--glass-line);
   background: rgba(0,0,0,0.18);
 }
 .apply-foot .meta{
   font-family: var(--font-mono); font-size: 11px;
-  color: var(--ink-4); letter-spacing: .08em;
-  flex: 1;
+  color: var(--ink-4); letter-spacing: .08em; flex: 1;
 }
-.apply-foot .meta b{ color: var(--bone-100); font-weight: 500; }
 .apply-foot button[type="submit"]{ min-width: 200px; }
-
-/* spinner inside the submit button */
 .btn .spin{
-  display: inline-block;
-  width: 14px; height: 14px;
-  border-radius: 999px;
+  display:inline-block; width: 14px; height: 14px; border-radius: 999px;
   border: 2px solid rgba(255,255,255,0.25);
   border-top-color: rgba(255,255,255,0.95);
   animation: spin .8s linear infinite;
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
-
-/* SUCCESS state */
 .apply-success{
-  padding: 36px 28px 40px;
-  text-align: center;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--s-4);
+  padding: 36px 28px 40px; text-align:center;
+  display:none; flex-direction:column; align-items:center; gap: var(--s-4);
 }
-.apply-modal[data-state="success"] .apply-success{ display: flex; }
+.apply-modal[data-state="success"] .apply-success{ display:flex; }
 .apply-modal[data-state="success"] form,
 .apply-modal[data-state="success"] .apply-foot,
 .apply-modal[data-state="success"] .apply-body,
-.apply-modal[data-state="success"] .apply-head{ display: none; }
-
+.apply-modal[data-state="success"] .apply-head{ display:none; }
 .apply-success .ok{
   width: 64px; height: 64px; border-radius: 999px;
   background: radial-gradient(circle, rgba(108,184,146,0.30), rgba(108,184,146,0.05) 75%);
-  display: grid; place-items: center;
-  margin-bottom: 4px;
+  display:grid; place-items:center; margin-bottom: 4px;
 }
 .apply-success .ok svg{ width: 32px; height: 32px; color: var(--f-300); }
-.apply-success h3{
-  margin: 0;
-  font-size: 26px; font-weight: 500;
-  letter-spacing: -.02em;
+.apply-success h3{ margin:0; font-size: 26px; font-weight:500; letter-spacing:-.02em; }
+.apply-success h3 em{ font-family: var(--font-serif); font-style:italic; font-weight:400; color: var(--f-300); }
+.apply-success p{ margin:0; color: var(--ink-2); max-width: 40ch; }
+.apply-success .micro{
+  font-family: var(--font-mono); font-size: 11px; letter-spacing:.14em;
+  color: var(--ink-4); margin-top: var(--s-3); text-transform: uppercase;
 }
-.apply-success h3 em{ font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--f-300); }
-.apply-success p{ margin: 0; color: var(--ink-2); max-width: 40ch; }
-.apply-success .micro{ font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--ink-4); margin-top: var(--s-3); text-transform: uppercase; }
-
-/* ERROR banner inside form */
 .apply-error{
-  display: none;
-  padding: 10px 14px;
+  display:none; padding: 10px 14px;
   border-radius: var(--r-md);
   background: rgba(180, 60, 40, 0.16);
   border: 1px solid rgba(220, 130, 90, 0.40);
   color: oklch(0.86 0.10 35);
-  font-size: 13px;
-  margin-bottom: 10px;
+  font-size: 13px; margin-bottom: 10px;
 }
-.apply-modal[data-error="1"] .apply-error{ display: block; }
-
+.apply-modal[data-error="1"] .apply-error{ display:block; }
 @media (max-width: 600px){
   .apply-head{ padding: 16px 18px 12px; }
-  .apply-head h2{ font-size: 22px; }
-  .apply-head p{ font-size: 13px; }
   .apply-body{ padding: 14px 18px 8px; }
-  .apply-foot{
-    padding: 12px 18px 16px;
-    flex-direction: column-reverse;
-    align-items: stretch;
-    gap: 10px;
-  }
-  .apply-foot .meta{ text-align: center; font-size: 10.5px; }
-  .apply-foot button[type="submit"]{ width: 100%; min-width: 0; }
-  fieldset.apply-group{ margin-bottom: 14px; }
-  .field input,
-  .field select,
-  .field textarea{ font-size: 16px; }
-}
-
-@media (prefers-reduced-motion: reduce){
-  dialog.apply-modal[open], dialog.apply-modal[open]::backdrop{ animation: none; }
-  .eyebrow::before{ animation: none; }
+  .apply-foot{ padding: 12px 18px 16px; flex-direction: column-reverse; align-items: stretch; gap: 10px; }
+  .apply-foot .meta{ text-align:center; font-size: 10.5px; }
+  .apply-foot button[type="submit"]{ width:100%; min-width:0; }
+  .field input, .field select, .field textarea{ font-size: 16px; }
 }
 
 /* =========================================================
-   INTERACTIONS — cursor, spotlight, mouse-parallax,
-   on-load reveals. All gated on (hover: hover) +
-   prefers-reduced-motion.
+   CURSOR + SPOTLIGHT
    ========================================================= */
-
-/* Cursor coordinates exposed by JS (raw px from top-left).
-   Used by the custom cursor + spotlight; no parallax on hero. */
-:root{
-  --mxp: 50vw;
-  --myp: 50vh;
-}
-
-/* --- Spotlight that follows the cursor --- */
+:root{ --mxp: 50vw; --myp: 50vh; }
 .spotlight{
-  position: fixed; left: 0; top: 0;
+  position: fixed; left:0; top:0;
   width: 640px; height: 640px;
-  pointer-events: none;
-  z-index: 0;
-  transform: translate3d(var(--mxp), var(--myp), 0) translate(-50%, -50%);
+  pointer-events:none; z-index: 1;
+  transform: translate3d(var(--mxp), var(--myp), 0) translate(-50%,-50%);
   background: radial-gradient(50% 50% at 50% 50%,
-    oklch(0.80 0.14 150 / .22),
-    oklch(0.78 0.12 90 / .10) 45%,
+    oklch(0.80 0.14 150 / .16),
+    oklch(0.78 0.12 90 / .07) 45%,
     transparent 72%);
   mix-blend-mode: screen;
   filter: blur(12px);
@@ -967,21 +876,16 @@ html[dir="rtl"] .field select{
 }
 html.has-cursor .spotlight{ opacity: 1; }
 body:not(.is-ready) .spotlight{ opacity: 0 !important; }
-@media (hover: none), (pointer: coarse){ .spotlight{ display: none; } }
-@media (prefers-reduced-motion: reduce){ .spotlight{ display: none; } }
+@media (hover: none), (pointer: coarse){ .spotlight{ display:none; } }
+@media (prefers-reduced-motion: reduce){ .spotlight{ display:none; } }
 
-/* --- Custom cursor (fine-pointer devices only) --- */
 @media (hover: hover) and (pointer: fine){
   html.cursor-on, html.cursor-on body{ cursor: none; }
   html.cursor-on a, html.cursor-on button,
   html.cursor-on input, html.cursor-on select,
   html.cursor-on textarea, html.cursor-on label{ cursor: none; }
-
-  /* During preloader (before .is-ready) keep the native cursor */
   html.cursor-on body:not(.is-ready),
   html.cursor-on body:not(.is-ready) *{ cursor: auto; }
-
-  /* Re-enable native cursor inside the form modal so inputs feel normal */
   html.cursor-on dialog.apply-modal,
   html.cursor-on dialog.apply-modal *{ cursor: auto; }
   html.cursor-on dialog.apply-modal a,
@@ -991,174 +895,239 @@ body:not(.is-ready) .spotlight{ opacity: 0 !important; }
   html.cursor-on dialog.apply-modal select{ cursor: pointer; }
 
   .cursor-dot, .cursor-ring{
-    position: fixed; left: 0; top: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate3d(var(--mxp), var(--myp), 0) translate(-50%, -50%);
+    position: fixed; left:0; top:0;
+    pointer-events:none; z-index: 9999;
+    transform: translate3d(var(--mxp), var(--myp), 0) translate(-50%,-50%);
     will-change: transform;
   }
   .cursor-dot{
-    width: 5px; height: 5px;
-    border-radius: 999px;
+    width: 5px; height: 5px; border-radius: 999px;
     background: var(--bone-50);
     box-shadow: 0 0 8px oklch(0.95 0.05 150 / .6);
+    transition: opacity .3s ease;
   }
   .cursor-ring{
-    width: 34px; height: 34px;
-    border-radius: 999px;
+    width: 34px; height: 34px; border-radius: 999px;
     border: 1px solid rgba(255,255,255,0.40);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
     transition: width .25s ease, height .25s ease,
-                border-color .25s ease, background .25s ease,
-                opacity .25s ease;
+                border-color .25s ease, background .25s ease, opacity .25s ease;
   }
   html.cursor-hover .cursor-ring{
-    width: 54px; height: 54px;
+    width: 56px; height: 56px;
     border-color: rgba(255,255,255,0.75);
     background: rgba(255,255,255,0.05);
   }
-  html.cursor-press .cursor-ring{
-    width: 28px; height: 28px;
-    background: rgba(255,255,255,0.12);
-  }
-  html.modal-open .cursor-dot,
-  html.modal-open .cursor-ring{ opacity: 0; }
-  body:not(.is-ready) .cursor-dot,
-  body:not(.is-ready) .cursor-ring{ opacity: 0; }
-  .cursor-dot{ transition: opacity .3s ease; }
+  html.cursor-press .cursor-ring{ width: 28px; height: 28px; background: rgba(255,255,255,0.12); }
+  html.modal-open .cursor-dot, html.modal-open .cursor-ring{ opacity: 0; }
+  body:not(.is-ready) .cursor-dot, body:not(.is-ready) .cursor-ring{ opacity: 0; }
 }
-@media (hover: none), (pointer: coarse){
-  .cursor-dot, .cursor-ring{ display: none; }
-}
+@media (hover: none), (pointer: coarse){ .cursor-dot, .cursor-ring{ display:none; } }
 
-/* --- On-load entrance reveals ---
-   Two groups so entrance never collides with parallax on transform:
-   A) translateY + opacity — for elements without parallax
-   B) blur + opacity      — for hero parallax targets (crest / h1 / lede) */
-.topbar .brand-lock,
-.topbar .lang,
-.hero-crest,
-.hero .lede,
-.cta-row,
-.micro-footer span{ opacity: 0; }
-/* H1 itself stays visible — its .char children control visibility */
-
-.topbar .brand-lock,
-.topbar .lang,
-.cta-row,
-.micro-footer span{
-  transform: translateY(12px);
-  transition: opacity .9s cubic-bezier(.2,.6,.2,1),
-              transform .9s cubic-bezier(.2,.6,.2,1);
-}
-
-.hero-crest,
-.hero .lede{
-  filter: blur(6px);
-  transition: opacity .9s cubic-bezier(.2,.6,.2,1),
-              filter .9s ease;
-}
-/* H1 container stays visible — its individual chars handle their own
-   reveal via the converge effect (see JS convergeReveal). */
-.hero h1{ opacity: 1; }
-
-body.is-ready .topbar .brand-lock { opacity: 1; transform: none; transition-delay: 60ms; }
-body.is-ready .topbar .lang       { opacity: 1; transform: none; transition-delay: 140ms; }
-body.is-ready .hero-crest         { opacity: 1; filter: none;    transition-delay: 220ms; }
-body.is-ready .hero .lede         { opacity: 1; filter: none;    transition-delay: 480ms; }
-body.is-ready .cta-row            { opacity: 1; transform: none; transition-delay: 580ms; }
-body.is-ready .micro-footer span:nth-child(1){ opacity: 1; transform: none; transition-delay: 740ms; }
-body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; transition-delay: 820ms; }
-
+/* =========================================================
+   REDUCED MOTION — everything readable, nothing moves
+   ========================================================= */
 @media (prefers-reduced-motion: reduce){
-  .topbar .brand-lock, .topbar .lang,
-  .hero-crest, .hero h1, .hero .lede, .cta-row, .micro-footer span{
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-    transition: none !important;
-  }
+  .aurora, .aurora-2, .eyebrow::before, .hero-crest::after,
+  .scroll-hint i::after, .marquee-track{ animation: none !important; }
+  html.js [data-rv]{ opacity: 1 !important; transform: none !important; }
+  html.js .hero-el, html.js #nav, html.js .scroll-hint{ opacity: 1 !important; }
+  html.js .mask > .mline{ transform: none !important; }
+  *{ scroll-behavior: auto !important; }
 }
-
-/* Button micro-interaction — subtle scale + glow lift */
-.btn-primary{ transition: transform .15s ease, filter .15s ease, background .15s ease, box-shadow .25s ease; }
-.btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 12px 28px -10px oklch(0.55 0.14 150 / .55); }
-.btn-primary:active{ transform: translateY(0); }
 </style>
 </head>
 <body>
-
-<!-- Preloader — wordmark reveal + thin fill bar over the live atmosphere -->
-<div class="preloader" id="preloader" aria-hidden="true">
-  <div class="pre-stage">
-    <div class="pre-mark">
-      <img src="assets/logo-croncore.png" alt="" width="36" height="36" />
-    </div>
-    <div class="pre-word" aria-label="Croncore">
-      <span class="char">C</span><span class="char">R</span><span class="char">O</span><span class="char">N</span><span class="char">C</span><span class="char">O</span><span class="char">R</span><span class="char">E</span>
-    </div>
-    <div class="pre-sub" data-i18n="preload">Entering the circle</div>
-    <div class="pre-track-row">
-      <div class="pre-track"><span class="pre-fill"></span></div>
-      <div class="pre-num"><span id="preNum">0</span>%</div>
-    </div>
-  </div>
-</div>
 
 <div class="atmosphere"></div>
 <div class="aurora" aria-hidden="true"></div>
 <div class="aurora-2" aria-hidden="true"></div>
 <div class="spotlight" aria-hidden="true"></div>
 
-<main class="slide">
+<!-- PRELOADER -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pre-brand">
+    <img src="assets/logo-croncore.png" alt="" width="20" height="20" />
+    <span data-i18n="brand_sub">The Partners' Circle</span>
+  </div>
+  <div>
+    <div class="pre-word" aria-label="CRONCORE" id="preWord"></div>
+    <div class="pre-sub" data-i18n="preload">Entering the circle</div>
+  </div>
+  <div class="pre-count"><span id="preNum">0</span><span class="pct">%</span></div>
+  <div class="pre-line"><i id="preFill"></i></div>
+</div>
 
-  <header class="topbar">
-    <a class="brand-lock" href="#" aria-label="CRONCORE">
-      <img src="assets/logo-croncore.png" alt="" />
-      <span class="wm">CRONCORE</span>
-      <span class="sub" data-i18n="brand_sub">The Partners' Circle</span>
-    </a>
-    <div class="lang" role="group" aria-label="Language">
-      <button class="active" data-lang="en">EN</button>
-      <button data-lang="de">DE</button>
-      <button data-lang="ru">RU</button>
-      <button data-lang="ar">AR</button>
-      <button data-lang="he">HE</button>
-      <button data-lang="es">ES</button>
-    </div>
-  </header>
+<!-- NAV -->
+<header class="nav" id="nav">
+  <a class="brand-lock" href="#top" data-scroll>
+    <img src="assets/logo-croncore.png" alt="" />
+    <span class="wm">CRONCORE</span>
+    <span class="sub" data-i18n="brand_sub">The Partners' Circle</span>
+  </a>
+  <nav class="nav-links">
+    <a href="#services" data-scroll data-i18n="nav_services">Directions</a>
+    <a href="#how" data-scroll data-i18n="nav_how">How it works</a>
+    <a href="#access" data-scroll data-i18n="nav_access">Access</a>
+  </nav>
+  <div class="lang" role="group" aria-label="Language">
+    <button class="active" data-lang="en">EN</button>
+    <button data-lang="de">DE</button>
+    <button data-lang="ru">RU</button>
+    <button data-lang="ar">AR</button>
+    <button data-lang="he">HE</button>
+    <button data-lang="es">ES</button>
+  </div>
+</header>
 
+<main id="top">
+
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-crest" aria-hidden="true">
-      <img src="assets/logo-croncore.png" alt="" />
+    <canvas id="hero-gl" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div class="hero-crest hero-el" aria-hidden="true">
+        <img src="assets/logo-croncore.png" alt="" />
+      </div>
+      <h1 id="hero-h1" data-i18n-html="hero_h1">The Partners' <em>Circle</em>.</h1>
+      <p class="lede hero-el" data-i18n="hero_lede">Payments, investments, SPV, legal, concierge — through one private channel.</p>
+      <div class="cta-row hero-el">
+        <button class="btn btn-primary btn-lg" type="button" id="open-apply">
+          <span data-i18n="btn_apply">Request access</span>
+          <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button>
+        <a class="btn btn-ghost btn-lg enter-world" href="game/" hidden>
+          <span data-i18n="btn_world">Enter the world</span>
+          <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
     </div>
-    <h1 data-i18n-html="hero_h1">The Partners' <em>Circle</em>.</h1>
-    <p class="lede" data-i18n="hero_lede">Payments, investments, SPV, legal, concierge — through one private channel.</p>
-    <div class="cta-row">
-      <button class="btn btn-glitch btn-pixel" type="button" id="open-apply">
-        <span class="glitch-text" data-i18n="btn_apply" data-text="Request access">Request access</span>
-      </button>
-      <a class="btn btn-secondary" id="enter-world" href="game/" hidden>
-        <span data-i18n="btn_world">Enter the world</span>
-        <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
+    <div class="scroll-hint" aria-hidden="true">
+      <span data-i18n="hero_scroll">Scroll</span><i></i>
     </div>
   </section>
 
-  <div class="micro-footer">
-    <span data-i18n="footer_l1">© 2026 CRONCORE · By invitation only</span>
-    <span data-i18n="footer_l2">Information shared is not investment, legal or tax advice</span>
+  <!-- MANIFESTO -->
+  <section class="manifesto">
+    <div class="wrap">
+      <span class="eyebrow" data-rv data-i18n="man_eyebrow">The idea</span>
+      <p class="man-line">
+        <span class="mask"><span class="mline" data-i18n-html="man_l1">A private circle of <em>partners</em>.</span></span>
+      </p>
+      <p class="man-line dim">
+        <span class="mask"><span class="mline" data-i18n="man_l2">One channel for payments, investments, SPV, legal and concierge — run by people who answer.</span></span>
+      </p>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee-track"></div>
   </div>
+
+  <!-- DIRECTIONS -->
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" data-rv data-i18n="svc_eyebrow">Directions</span>
+        <h2 class="sec-title" data-rv data-i18n-html="svc_title">Six private <em>directions</em>.</h2>
+      </div>
+      <div class="dir-list">
+        <a class="dir-row" data-rv data-dir="payments">
+          <span class="dr-num mono">01</span>
+          <span class="dr-title" data-i18n="form_dir_payments">Payments &amp; Fintech</span>
+          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="dir-row" data-rv data-dir="invest">
+          <span class="dr-num mono">02</span>
+          <span class="dr-title" data-i18n="form_dir_invest">Investments &amp; DeFi</span>
+          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="dir-row" data-rv data-dir="spv">
+          <span class="dr-num mono">03</span>
+          <span class="dr-title" data-i18n="form_dir_spv">SPV &amp; Tokenization</span>
+          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="dir-row" data-rv data-dir="legal">
+          <span class="dr-num mono">04</span>
+          <span class="dr-title" data-i18n="form_dir_legal">Legal &amp; Corporate</span>
+          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="dir-row" data-rv data-dir="concierge">
+          <span class="dr-num mono">05</span>
+          <span class="dr-title" data-i18n="form_dir_concierge">Concierge &amp; Real Estate</span>
+          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="dir-row" data-rv data-dir="network">
+          <span class="dr-num mono">06</span>
+          <span class="dr-title" data-i18n="form_dir_network">Private Network</span>
+          <span class="dr-arrow arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" data-rv data-i18n="how_eyebrow">Process</span>
+        <h2 class="sec-title" data-rv data-i18n-html="how_title">From a message to <em>the right room</em>.</h2>
+      </div>
+      <div class="how-grid">
+        <div class="how-card" data-rv>
+          <span class="n mono">01</span>
+          <h3 data-i18n="how1_t">One message</h3>
+          <p data-i18n="how1_d">Describe the task in a few lines — context, goal, timeline.</p>
+        </div>
+        <div class="how-card" data-rv>
+          <span class="n mono">02</span>
+          <h3 data-i18n="how2_t">The right room</h3>
+          <p data-i18n="how2_d">A partner takes it directly. No relays, no tickets.</p>
+        </div>
+        <div class="how-card" data-rv>
+          <span class="n mono">03</span>
+          <h3 data-i18n="how3_t">Quiet execution</h3>
+          <p data-i18n="how3_d">Updates in your channel until it's closed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCESS -->
+  <section class="access" id="access">
+    <div class="wrap">
+      <span class="eyebrow" data-rv data-i18n="acc_eyebrow">Access</span>
+      <h2 class="sec-title" data-rv data-i18n-html="acc_title">Enter the Partners' <em>Circle</em>.</h2>
+      <p class="lede" data-rv data-i18n="acc_lede">By invitation — or by a request that deserves one.</p>
+      <div class="cta-row" data-rv>
+        <button class="btn btn-primary btn-lg" type="button" id="open-apply-2">
+          <span data-i18n="btn_apply">Request access</span>
+          <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button>
+        <a class="btn btn-ghost btn-lg enter-world" href="game/" hidden>
+          <span data-i18n="btn_world">Enter the world</span>
+          <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="giant-wm" aria-hidden="true"><span id="giant-wm">CRONCORE</span></div>
+    <div class="wrap">
+      <div class="micro-footer">
+        <span data-i18n="footer_l1">© 2026 CRONCORE · By invitation only</span>
+        <span data-i18n="footer_l2">Information shared is not investment, legal or tax advice</span>
+      </div>
+    </div>
+  </footer>
 
 </main>
 
-<!-- ============================================================
-     APPLY MODAL
-     ============================================================ -->
+<!-- APPLY MODAL -->
 <dialog id="apply-modal" class="apply-modal" aria-labelledby="apply-title">
   <div class="apply-shell">
-
     <header class="apply-head">
       <div>
         <span class="eyebrow" data-i18n="form_eyebrow">Private request</span>
@@ -1172,17 +1141,14 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
 
     <form id="apply-form" novalidate>
       <div class="apply-body">
-
         <div class="apply-error" data-i18n="form_error_generic">Could not send. Please try again or use email.</div>
 
         <fieldset class="apply-group">
           <legend data-i18n="form_g_contact">Contact</legend>
-
           <div class="field">
             <label for="f-name"><span data-i18n="form_name">Name</span><span class="req">*</span></label>
             <input id="f-name" name="name" type="text" required autocomplete="name" maxlength="120" data-i18n-placeholder="form_name_ph" placeholder="Full name" />
           </div>
-
           <div class="field-row">
             <div class="field">
               <label for="f-tg"><span data-i18n="form_telegram">Telegram</span><span class="req">*</span></label>
@@ -1197,7 +1163,6 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
 
         <fieldset class="apply-group">
           <legend data-i18n="form_g_request">Request</legend>
-
           <div class="field">
             <label for="f-dir"><span data-i18n="form_direction">Direction</span><span class="req">*</span></label>
             <select id="f-dir" name="direction" required>
@@ -1211,7 +1176,6 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
               <option value="other"     data-i18n="form_dir_other">Something else</option>
             </select>
           </div>
-
           <div class="field-row">
             <div class="field">
               <label for="f-jur" data-i18n="form_jurisdiction">Jurisdiction</label>
@@ -1240,7 +1204,6 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
               </select>
             </div>
           </div>
-
           <div class="field">
             <label for="f-tim" data-i18n="form_timeline">Timeline</label>
             <select id="f-tim" name="timeline">
@@ -1256,7 +1219,6 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
 
         <fieldset class="apply-group">
           <legend data-i18n="form_g_details">Details</legend>
-
           <div class="field">
             <label for="f-msg"><span data-i18n="form_message">Brief</span><span class="req">*</span></label>
             <textarea id="f-msg" name="message" required minlength="20" maxlength="1500" data-i18n-placeholder="form_message_ph" placeholder="What do you need, what's the context, what does success look like…"></textarea>
@@ -1264,7 +1226,6 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
           </div>
         </fieldset>
 
-        <!-- spam honeypot, hidden visually + from screen readers -->
         <input class="hidden-pot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
       </div>
 
@@ -1272,8 +1233,8 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
         <div class="meta">
           <span data-i18n="form_privacy">Private · not stored beyond delivery to the partner network.</span>
         </div>
-        <button class="btn btn-glitch btn-pixel" type="submit" id="submit-btn">
-          <span class="glitch-text label" data-i18n="form_submit" data-text="Send request">Send request</span>
+        <button class="btn btn-primary" type="submit" id="submit-btn">
+          <span class="label" data-i18n="form_submit">Send request</span>
         </button>
       </footer>
     </form>
@@ -1284,20 +1245,24 @@ body.is-ready .micro-footer span:nth-child(2){ opacity: 1; transform: none; tran
       </div>
       <h3 data-i18n-html="form_success_title">Request <em>received</em>.</h3>
       <p data-i18n="form_success_text">A partner from the network will reach out within 48 hours through the channel you provided.</p>
-      <div class="cta-row" style="margin-top: var(--s-4); justify-content: center;">
-        <button class="btn btn-secondary" type="button" data-close data-i18n="form_success_close">Close</button>
+      <div class="cta-row" style="margin-top: var(--s-4); justify-content:center;">
+        <button class="btn btn-ghost" type="button" data-close data-i18n="form_success_close">Close</button>
       </div>
-      <div class="micro">CRONCORE · <span class="dot">·</span> The Partners' Circle</div>
+      <div class="micro">CRONCORE · The Partners' Circle</div>
     </div>
-
   </div>
 </dialog>
 
-<!-- Custom cursor (fine-pointer devices only — hidden via CSS otherwise) -->
 <div class="cursor-ring" aria-hidden="true"></div>
 <div class="cursor-dot" aria-hidden="true"></div>
 
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/vendor/lenis.min.js"></script>
+
 <script>
+document.documentElement.classList.add('js');
+
 /* ============================================================
    I18N
    ============================================================ */
@@ -1307,10 +1272,30 @@ const I18N = {
     meta_desc: "A private circle of partners — payments, investments, SPV, legal, concierge. By invitation.",
     preload: "Entering the circle",
     brand_sub: "The Partners' Circle",
+    nav_services: "Directions",
+    nav_how: "How it works",
+    nav_access: "Access",
     hero_h1: "The Partners' <em>Circle</em>.",
     hero_lede: "Payments, investments, SPV, legal, concierge — through one private channel.",
+    hero_scroll: "Scroll",
     btn_apply: "Request access",
     btn_world: "Enter the world",
+    man_eyebrow: "The idea",
+    man_l1: "A private circle of <em>partners</em>.",
+    man_l2: "One channel for payments, investments, SPV, legal and concierge — run by people who answer.",
+    svc_eyebrow: "Directions",
+    svc_title: "Six private <em>directions</em>.",
+    how_eyebrow: "Process",
+    how_title: "From a message to <em>the right room</em>.",
+    how1_t: "One message",
+    how1_d: "Describe the task in a few lines — context, goal, timeline.",
+    how2_t: "The right room",
+    how2_d: "A partner takes it directly. No relays, no tickets.",
+    how3_t: "Quiet execution",
+    how3_d: "Updates in your channel until it's closed.",
+    acc_eyebrow: "Access",
+    acc_title: "Enter the Partners' <em>Circle</em>.",
+    acc_lede: "By invitation — or by a request that deserves one.",
     footer_l1: "© 2026 CRONCORE · By invitation only",
     footer_l2: "Information shared is not investment, legal or tax advice",
     form_eyebrow: "Private request",
@@ -1372,10 +1357,30 @@ const I18N = {
     meta_desc: "Ein privater Kreis von Partnern — Zahlungen, Investitionen, SPV, Recht, Concierge. Auf Einladung.",
     preload: "Eintritt in den Kreis",
     brand_sub: "Der Partnerkreis",
+    nav_services: "Richtungen",
+    nav_how: "So funktioniert es",
+    nav_access: "Zugang",
     hero_h1: "Der Partner-<em>kreis</em>.",
     hero_lede: "Zahlungen, Investitionen, SPV, Recht, Concierge — über einen privaten Kanal.",
+    hero_scroll: "Scrollen",
     btn_apply: "Zugang anfragen",
     btn_world: "Die Welt betreten",
+    man_eyebrow: "Die Idee",
+    man_l1: "Ein privater Kreis von <em>Partnern</em>.",
+    man_l2: "Ein Kanal für Zahlungen, Investitionen, SPV, Recht und Concierge — geführt von Menschen, die antworten.",
+    svc_eyebrow: "Richtungen",
+    svc_title: "Sechs private <em>Richtungen</em>.",
+    how_eyebrow: "Prozess",
+    how_title: "Von einer Nachricht in <em>den richtigen Raum</em>.",
+    how1_t: "Eine Nachricht",
+    how1_d: "Beschreiben Sie die Aufgabe in wenigen Zeilen — Kontext, Ziel, Zeitrahmen.",
+    how2_t: "Der richtige Raum",
+    how2_d: "Ein Partner übernimmt direkt. Keine Weiterleitungen, keine Tickets.",
+    how3_t: "Stille Ausführung",
+    how3_d: "Updates in Ihrem Kanal, bis es abgeschlossen ist.",
+    acc_eyebrow: "Zugang",
+    acc_title: "Treten Sie in den Partner-<em>kreis</em> ein.",
+    acc_lede: "Auf Einladung — oder mit einer Anfrage, die eine verdient.",
     footer_l1: "© 2026 CRONCORE · Nur auf Einladung",
     footer_l2: "Geteilte Informationen sind keine Anlage-, Rechts- oder Steuerberatung",
     form_eyebrow: "Private Anfrage",
@@ -1437,10 +1442,30 @@ const I18N = {
     meta_desc: "Частный круг партнёров — платежи, инвестиции, SPV, право, concierge. По приглашению.",
     preload: "Вход в круг",
     brand_sub: "Круг партнёров",
+    nav_services: "Направления",
+    nav_how: "Как это работает",
+    nav_access: "Доступ",
     hero_h1: "Круг <em>Партнёров</em>.",
     hero_lede: "Платежи, инвестиции, SPV, право, concierge — через один частный канал.",
+    hero_scroll: "Листайте",
     btn_apply: "Оставить заявку",
     btn_world: "Войти в мир",
+    man_eyebrow: "Идея",
+    man_l1: "Частный круг <em>партнёров</em>.",
+    man_l2: "Один канал для платежей, инвестиций, SPV, права и concierge — им управляют люди, которые отвечают.",
+    svc_eyebrow: "Направления",
+    svc_title: "Шесть частных <em>направлений</em>.",
+    how_eyebrow: "Процесс",
+    how_title: "От сообщения — <em>в нужную комнату</em>.",
+    how1_t: "Одно сообщение",
+    how1_d: "Опишите задачу в нескольких строках — контекст, цель, сроки.",
+    how2_t: "Нужная комната",
+    how2_d: "Партнёр берёт задачу напрямую. Без пересылок и тикетов.",
+    how3_t: "Тихое исполнение",
+    how3_d: "Апдейты в вашем канале, пока задача не закрыта.",
+    acc_eyebrow: "Доступ",
+    acc_title: "Войдите в Круг <em>Партнёров</em>.",
+    acc_lede: "По приглашению — или по заявке, которая его заслуживает.",
     footer_l1: "© 2026 CRONCORE · Только по приглашению",
     footer_l2: "Информация в заявке не является инвестиционной, юридической или налоговой консультацией",
     form_eyebrow: "Частная заявка",
@@ -1502,10 +1527,30 @@ const I18N = {
     meta_desc: "دائرة شركاء خاصة — مدفوعات، استثمارات، SPV، قانون، كونسيرج. بالدعوة.",
     preload: "الدخول إلى الدائرة",
     brand_sub: "دائرة الشركاء",
+    nav_services: "الاتجاهات",
+    nav_how: "كيف يعمل",
+    nav_access: "الوصول",
     hero_h1: "دائرة <em>الشركاء</em>.",
     hero_lede: "مدفوعات، استثمارات، SPV، قانون، كونسيرج — عبر قناة خاصة واحدة.",
+    hero_scroll: "مرر",
     btn_apply: "اطلب الوصول",
     btn_world: "ادخل العالم",
+    man_eyebrow: "الفكرة",
+    man_l1: "دائرة خاصة من <em>الشركاء</em>.",
+    man_l2: "قناة واحدة للمدفوعات والاستثمارات وSPV والقانون والكونسيرج — يديرها أشخاص يجيبون.",
+    svc_eyebrow: "الاتجاهات",
+    svc_title: "ستة اتجاهات <em>خاصة</em>.",
+    how_eyebrow: "العملية",
+    how_title: "من رسالة إلى <em>الغرفة الصحيحة</em>.",
+    how1_t: "رسالة واحدة",
+    how1_d: "صف المهمة في بضعة أسطر — السياق، الهدف، الإطار الزمني.",
+    how2_t: "الغرفة الصحيحة",
+    how2_d: "يتولاها شريك مباشرة. بلا وسطاء، بلا تذاكر.",
+    how3_t: "تنفيذ هادئ",
+    how3_d: "تحديثات في قناتك حتى الإغلاق.",
+    acc_eyebrow: "الوصول",
+    acc_title: "ادخل دائرة <em>الشركاء</em>.",
+    acc_lede: "بالدعوة — أو بطلب يستحق واحدة.",
     footer_l1: "© 2026 CRONCORE · بالدعوة فقط",
     footer_l2: "المعلومات المقدمة لا تشكّل استشارة استثمارية أو قانونية أو ضريبية",
     form_eyebrow: "طلب خاص",
@@ -1567,10 +1612,30 @@ const I18N = {
     meta_desc: "מעגל פרטי של שותפים — תשלומים, השקעות, SPV, משפט, קונסיירז'. בהזמנה.",
     preload: "כניסה למעגל",
     brand_sub: "מעגל השותפים",
+    nav_services: "כיוונים",
+    nav_how: "איך זה עובד",
+    nav_access: "גישה",
     hero_h1: "מעגל <em>השותפים</em>.",
     hero_lede: "תשלומים, השקעות, SPV, משפט, קונסיירז' — דרך ערוץ פרטי אחד.",
+    hero_scroll: "גללו",
     btn_apply: "בקשו גישה",
     btn_world: "היכנסו לעולם",
+    man_eyebrow: "הרעיון",
+    man_l1: "מעגל פרטי של <em>שותפים</em>.",
+    man_l2: "ערוץ אחד לתשלומים, השקעות, SPV, משפט וקונסיירז' — מנוהל על ידי אנשים שעונים.",
+    svc_eyebrow: "כיוונים",
+    svc_title: "שישה כיוונים <em>פרטיים</em>.",
+    how_eyebrow: "תהליך",
+    how_title: "מהודעה — <em>לחדר הנכון</em>.",
+    how1_t: "הודעה אחת",
+    how1_d: "תארו את המשימה בכמה שורות — הקשר, מטרה, לוח זמנים.",
+    how2_t: "החדר הנכון",
+    how2_d: "שותף לוקח את זה ישירות. בלי העברות, בלי טיקטים.",
+    how3_t: "ביצוע שקט",
+    how3_d: "עדכונים בערוץ שלכם עד לסגירה.",
+    acc_eyebrow: "גישה",
+    acc_title: "היכנסו למעגל <em>השותפים</em>.",
+    acc_lede: "בהזמנה — או בבקשה שראויה לאחת.",
     footer_l1: "© 2026 CRONCORE · בהזמנה בלבד",
     footer_l2: "המידע אינו מהווה ייעוץ השקעות, משפטי או מס",
     form_eyebrow: "בקשה פרטית",
@@ -1632,10 +1697,30 @@ const I18N = {
     meta_desc: "Un círculo privado de socios — pagos, inversiones, SPV, legal, concierge. Por invitación.",
     preload: "Entrando al círculo",
     brand_sub: "El Círculo de Socios",
+    nav_services: "Direcciones",
+    nav_how: "Cómo funciona",
+    nav_access: "Acceso",
     hero_h1: "El Círculo de <em>Socios</em>.",
     hero_lede: "Pagos, inversiones, SPV, legal, concierge — a través de un único canal privado.",
+    hero_scroll: "Desliza",
     btn_apply: "Solicitar acceso",
     btn_world: "Entrar al mundo",
+    man_eyebrow: "La idea",
+    man_l1: "Un círculo privado de <em>socios</em>.",
+    man_l2: "Un canal para pagos, inversiones, SPV, legal y concierge — dirigido por personas que responden.",
+    svc_eyebrow: "Direcciones",
+    svc_title: "Seis direcciones <em>privadas</em>.",
+    how_eyebrow: "Proceso",
+    how_title: "De un mensaje a <em>la sala correcta</em>.",
+    how1_t: "Un mensaje",
+    how1_d: "Describe la tarea en unas líneas — contexto, objetivo, plazos.",
+    how2_t: "La sala correcta",
+    how2_d: "Un socio lo asume directamente. Sin intermediarios, sin tickets.",
+    how3_t: "Ejecución silenciosa",
+    how3_d: "Actualizaciones en tu canal hasta cerrarlo.",
+    acc_eyebrow: "Acceso",
+    acc_title: "Entra al Círculo de <em>Socios</em>.",
+    acc_lede: "Por invitación — o con una solicitud que la merezca.",
     footer_l1: "© 2026 CRONCORE · Solo por invitación",
     footer_l2: "La información compartida no constituye asesoramiento de inversión, legal o fiscal",
     form_eyebrow: "Solicitud privada",
@@ -1696,6 +1781,16 @@ const I18N = {
 
 const RTL_LANGS = new Set(["ar", "he"]);
 const SUPPORTED = Object.keys(I18N);
+const DIR_KEYS = ["payments","invest","spv","legal","concierge","network"];
+
+function buildMarquee(){
+  const d = I18N[document.documentElement.lang] || I18N.en;
+  const track = document.getElementById("marquee-track");
+  if (!track) return;
+  const items = DIR_KEYS.map(k => d["form_dir_" + k]).join(' <b>·</b> ');
+  const chunk = `<span>${items} <b>·</b></span>`;
+  track.innerHTML = chunk + chunk; /* two copies → seamless -50% loop */
+}
 
 function applyLang(lang){
   if (!I18N[lang]) lang = "en";
@@ -1723,7 +1818,9 @@ function applyLang(lang){
   document.querySelectorAll(".lang button").forEach(b => {
     b.classList.toggle("active", b.dataset.lang === lang);
   });
+  buildMarquee();
   try { localStorage.setItem("croncore_lang", lang); } catch(e){}
+  if (window.ScrollTrigger) requestAnimationFrame(() => ScrollTrigger.refresh());
 }
 
 function detectInitialLang(){
@@ -1736,17 +1833,21 @@ function detectInitialLang(){
 }
 
 /* ============================================================
-   APPLY MODAL — open / close / submit
+   APPLY MODAL
    ============================================================ */
 const modal = document.getElementById("apply-modal");
 const form  = document.getElementById("apply-form");
 const submitBtn = document.getElementById("submit-btn");
 
-function openApply(){
+function openApply(presetDir){
+  if (presetDir){
+    const sel = document.getElementById("f-dir");
+    if (sel) sel.value = presetDir;
+  }
   if (typeof modal.showModal === "function") modal.showModal();
   else modal.setAttribute("open", "");
   document.documentElement.classList.add("modal-open");
-  setTimeout(() => document.getElementById("f-name")?.focus(), 100);
+  setTimeout(() => document.getElementById("f-name")?.focus(), 120);
 }
 function closeApply(){
   modal.removeAttribute("data-error");
@@ -1759,13 +1860,14 @@ function closeApply(){
   }
 }
 
-document.getElementById("open-apply").addEventListener("click", openApply);
-
-/* «Enter the world» — the walkable 3D world needs WebGPU; keep the door
-   hidden on browsers that can't open it. */
-if (navigator.gpu) {
-  document.getElementById("enter-world").hidden = false;
-}
+document.getElementById("open-apply").addEventListener("click", () => openApply());
+document.getElementById("open-apply-2").addEventListener("click", () => openApply());
+document.querySelectorAll(".dir-row").forEach(row => {
+  row.addEventListener("click", (e) => {
+    e.preventDefault();
+    openApply(row.dataset.dir);
+  });
+});
 document.querySelectorAll("[data-close]").forEach(el => el.addEventListener("click", closeApply));
 modal.addEventListener("click", (e) => { if (e.target === modal) closeApply(); });
 modal.addEventListener("cancel", () => { closeApply(); });
@@ -1775,9 +1877,7 @@ function setSubmitting(on){
   const d = I18N[lang] || I18N.en;
   submitBtn.disabled = on;
   const label = submitBtn.querySelector(".label");
-  const text = on ? d.form_submitting : d.form_submit;
-  label.textContent = text;
-  if (label.classList.contains("glitch-text")) label.setAttribute("data-text", text);
+  label.textContent = on ? d.form_submitting : d.form_submit;
 }
 
 function normalizeTelegram(v){
@@ -1808,19 +1908,13 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   modal.removeAttribute("data-error");
 
-  // collect + normalise
   const fd = new FormData(form);
   const data = Object.fromEntries(fd.entries());
   data.telegram = normalizeTelegram(data.telegram);
   data.lang = document.documentElement.lang || "en";
 
-  // honeypot
-  if (data.website) {
-    showSuccess();
-    return;
-  }
+  if (data.website) { showSuccess(); return; } /* honeypot */
 
-  // local required check (HTML5 covers most, but ensure post-normalise telegram)
   let bad = false;
   ["name", "telegram", "direction", "message"].forEach(name => {
     const el = form.elements[name];
@@ -1844,11 +1938,9 @@ form.addEventListener("submit", async (e) => {
       if (!res.ok || !json.ok) throw new Error(json.error || ("HTTP " + res.status));
       showSuccess();
     } else if (mailto) {
-      // fallback: open default mail client with prefilled body
       const subject = encodeURIComponent("CRONCORE — " + (data.direction || "inquiry") + " — " + (data.name || ""));
       const body = encodeURIComponent(formatPlain(data));
       window.location.href = "mailto:" + mailto + "?subject=" + subject + "&body=" + body;
-      // assume the mail client opens; treat as success
       setTimeout(showSuccess, 500);
     } else {
       throw new Error("no endpoint configured");
@@ -1861,187 +1953,253 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-function showSuccess(){
-  modal.setAttribute("data-state", "success");
-}
+function showSuccess(){ modal.setAttribute("data-state", "success"); }
 
 /* ============================================================
-   TEXT FX — Codrops on-scroll typography animations, adapted
-   to single-slide.
-     • Effect 8 (glitch reveal) → preloader CRONCORE wordmark
-     • Effect 4 (chars converge to centre) → hero H1
-   GSAP-free; runs on initial reveal + on language switch.
+   MOTION SYSTEM — Lenis + GSAP ScrollTrigger
    ============================================================ */
-const GLITCH_SYMBOLS = "abcdefghijklmnopqrstuvwxyz!@#$%^&*-_+=;:<>,";
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let lenis = null;
 
-/* Walk text nodes inside `el`, wrap each grapheme in <span class="char">.
-   Preserves inline structure (<em>, etc). Idempotent — re-runs after
-   data-i18n-html replaces innerHTML on language switch. */
-function splitChars(el){
-  if (el.querySelector(".char")) return;
-  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
-  const texts = [];
-  let t; while ((t = walker.nextNode())) texts.push(t);
-  texts.forEach(node => {
-    const text = node.textContent;
-    if (!text) return;
-    const frag = document.createDocumentFragment();
-    for (const ch of text){
-      const s = document.createElement("span");
-      s.className = (ch === " " || ch === " ") ? "char char-space" : "char";
-      s.textContent = ch === " " ? " " : ch;
-      frag.appendChild(s);
-    }
-    node.parentNode.replaceChild(frag, node);
-  });
+if (!REDUCED && window.gsap && window.ScrollTrigger && window.Lenis){
+  gsap.registerPlugin(ScrollTrigger);
+  lenis = new Lenis({ autoRaf: false, lerp: 0.11, wheelMultiplier: 1.0 });
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  /* NB: keep gsap's default lagSmoothing — with it disabled, any main-thread
+     stall (font/shader compile) fast-forwards the preloader timeline. */
+} else if (window.gsap && window.ScrollTrigger && !REDUCED){
+  gsap.registerPlugin(ScrollTrigger);
 }
 
-/* Effect 8 — glitch reveal. Each char appears with a stagger, cycles
-   through random symbols for ~360ms, then settles. */
-function glitchReveal(scope, opts){
-  const chars = scope.querySelectorAll(".char");
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const o = Object.assign({ startDelay: 0, perChar: 90, cycles: 12, cycleMs: 30 }, opts || {});
-  chars.forEach((c, i) => {
-    const original = c.textContent;
-    c.style.opacity = "0";
-    if (c.classList.contains("char-space")){
-      setTimeout(() => { c.style.opacity = "1"; }, o.startDelay + i * o.perChar);
-      return;
-    }
-    if (reduced){
-      c.style.opacity = "1";
-      return;
-    }
-    setTimeout(() => {
-      c.style.opacity = "1";
-      let n = 0;
-      const tick = setInterval(() => {
-        c.textContent = GLITCH_SYMBOLS[Math.floor(Math.random() * GLITCH_SYMBOLS.length)];
-        n++;
-        if (n >= o.cycles){
-          clearInterval(tick);
-          c.textContent = original;
-        }
-      }, o.cycleMs);
-    }, o.startDelay + i * o.perChar);
-  });
+function scrollToTarget(sel){
+  const el = document.querySelector(sel);
+  if (!el) return;
+  if (lenis) lenis.scrollTo(el, { offset: -70, duration: 1.4 });
+  else el.scrollIntoView({ behavior: REDUCED ? "auto" : "smooth" });
 }
-
-/* Effect 4 — chars converge to centre from offset positions.
-   Stagger runs from centre outward (centre chars first). */
-function convergeReveal(scope, opts){
-  const chars = Array.from(scope.querySelectorAll(".char"));
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const vp = window.innerWidth || 1024;
-  const o = Object.assign({
-    /* viewport-aware so narrow phones don't fling chars off-screen */
-    spreadPerChar: Math.min(60, vp * 0.045),
-    maxSpread:     Math.min(280, vp * 0.35),
-    duration: 1100,        /* ms */
-    perCharDelay: 55,      /* ms, applied to distance from centre */
-    ease: "cubic-bezier(.4,0,.2,1)",
-    startDelay: 0,
-  }, opts || {});
-  if (!chars.length) return;
-  const n = chars.length;
-  const centre = (n - 1) / 2;
-
-  /* 1) initial scattered state — fly in from horizontal offsets */
-  chars.forEach((c, i) => {
-    if (reduced){
-      c.style.opacity = "1";
-      c.style.transform = "";
-      return;
-    }
-    const offset = Math.max(-o.maxSpread, Math.min(o.maxSpread, (i - centre) * o.spreadPerChar));
-    c.style.transition = "none";
-    c.style.transform = `translateX(${offset}px)`;
-    c.style.opacity = "0";
+document.querySelectorAll("[data-scroll]").forEach(a => {
+  a.addEventListener("click", (e) => {
+    const href = a.getAttribute("href");
+    if (href && href.startsWith("#")){ e.preventDefault(); scrollToTarget(href); }
   });
-  scope.classList.remove("fx-pending");
+});
 
-  if (reduced) return;
-
-  /* 2) on next frame, transition each char to its resting position.
-     Stagger from centre — middle chars arrive first. */
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      chars.forEach((c, i) => {
-        const dist = Math.abs(i - centre);
-        const delay = o.startDelay + dist * o.perCharDelay;
-        c.style.transition = `transform ${o.duration}ms ${o.ease} ${delay}ms, opacity ${o.duration * 0.7}ms ease ${delay}ms`;
-        c.style.transform = "";
-        c.style.opacity = "1";
-      });
+/* Scroll reveals */
+function initReveals(){
+  if (REDUCED || !window.gsap || !window.ScrollTrigger) {
+    document.querySelectorAll("[data-rv]").forEach(el => { el.style.opacity = 1; el.style.transform = "none"; });
+    return;
+  }
+  gsap.utils.toArray("[data-rv]").forEach(el => {
+    gsap.fromTo(el,
+      { y: 34, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 1.05, ease: "power3.out",
+        scrollTrigger: { trigger: el, start: "top 88%", once: true } });
+  });
+  gsap.utils.toArray(".mask > .mline").forEach(el => {
+    gsap.to(el, {
+      y: 0, yPercent: 0, duration: 1.2, ease: "power4.out",
+      startAt: { yPercent: 115 },
+      scrollTrigger: { trigger: el.parentElement, start: "top 86%", once: true }
     });
   });
+  /* giant footer wordmark scrub */
+  const wm = document.getElementById("giant-wm");
+  if (wm){
+    gsap.fromTo(wm, { xPercent: 6 }, {
+      xPercent: -14, ease: "none",
+      scrollTrigger: { trigger: wm, start: "top bottom", end: "bottom top", scrub: 1 }
+    });
+  }
+  /* hero content drifts up + fades as you scroll past */
+  const heroInner = document.querySelector(".hero-inner");
+  if (heroInner){
+    gsap.to(heroInner, {
+      yPercent: -14, autoAlpha: 0, ease: "none",
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "86% top", scrub: .6 }
+    });
+  }
+}
+
+/* Nav scroll state */
+const navEl = document.getElementById("nav");
+function onScrollNav(){
+  navEl.classList.toggle("scrolled", (window.scrollY || 0) > 40);
+}
+window.addEventListener("scroll", onScrollNav, { passive: true });
+
+/* ============================================================
+   MAGNETIC BUTTONS
+   ============================================================ */
+(function(){
+  if (!matchMedia("(hover: hover) and (pointer: fine)").matches || REDUCED) return;
+  const STRENGTH = 0.32;
+  document.querySelectorAll(".btn").forEach(btn => {
+    btn.addEventListener("pointermove", (e) => {
+      const r = btn.getBoundingClientRect();
+      /* fill origin for the ::after ripple */
+      btn.style.setProperty("--bx", (e.clientX - r.left) + "px");
+      btn.style.setProperty("--by", (e.clientY - r.top) + "px");
+      /* magnetic pull */
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      btn.style.transform = `translate(${dx * STRENGTH * .3}px, ${dy * STRENGTH * .6}px)`;
+    });
+    btn.addEventListener("pointerleave", () => {
+      btn.style.transform = "";
+    });
+  });
+})();
+
+/* ============================================================
+   PRELOADER — counter + masked wordmark + curtain lift
+   ============================================================ */
+(function(){
+  const pre = document.getElementById("preloader");
+  const word = document.getElementById("preWord");
+  const num = document.getElementById("preNum");
+  const fill = document.getElementById("preFill");
+  const html = document.documentElement;
+
+  /* build masked chars */
+  "CRONCORE".split("").forEach(ch => {
+    const m = document.createElement("span"); m.className = "m";
+    const c = document.createElement("span"); c.className = "c"; c.textContent = ch;
+    m.appendChild(c);
+    word.appendChild(m);
+  });
+
+  function finish(){
+    document.body.classList.add("is-ready");
+    document.body.classList.add("pre-done");
+    html.classList.remove("lock");
+    if (pre){ pre.classList.add("done"); pre.style.display = "none"; }
+    heroEntrance();
+  }
+
+  if (REDUCED || !window.gsap){
+    if (pre) pre.remove();
+    document.body.classList.add("is-ready");
+    document.body.classList.add("pre-done");
+    html.classList.remove("lock");
+    document.querySelectorAll("[data-rv], .hero-el, #nav, .scroll-hint").forEach(el => {
+      el.style.opacity = 1; el.style.transform = "none";
+    });
+    return;
+  }
+
+  html.classList.add("lock");
+
+  const chars = word.querySelectorAll(".c");
+  const state = { p: 0 };
+  const tl = gsap.timeline();
+
+  tl.to(".pre-brand", { opacity: 1, duration: .6, ease: "power2.out" }, .15)
+    .to(chars, { y: 0, yPercent: 0, startAt: { yPercent: 120 }, duration: 1.0, ease: "power4.out", stagger: .045 }, .25)
+    .to(".pre-sub", { opacity: 1, duration: .7, ease: "power2.out" }, .9)
+    .to(state, {
+      p: 100, duration: 2.05, ease: "power2.inOut",
+      onUpdate(){
+        num.textContent = Math.round(state.p);
+        fill.style.transform = `scaleX(${state.p / 100})`;
+      }
+    }, .35)
+    .to(chars, { yPercent: -120, duration: .7, ease: "power3.in", stagger: .03 }, "+=.15")
+    .to([".pre-sub", ".pre-brand", ".pre-count"], { opacity: 0, duration: .45, ease: "power2.in" }, "<")
+    .to(pre, { yPercent: -100, duration: .95, ease: "expo.inOut", onStart: () => {
+        document.body.classList.add("is-ready");
+        html.classList.remove("lock");
+        heroEntrance();
+      }, onComplete: () => {
+        pre.classList.add("done"); pre.style.display = "none";
+        document.body.classList.add("pre-done");
+      } }, "-=.1");
+
+  /* safety: never trap the user behind the curtain */
+  setTimeout(() => {
+    if (!document.body.classList.contains("is-ready")) finish();
+  }, 7000);
+})();
+
+/* Hero entrance after the curtain lifts */
+let heroPlayed = false;
+function heroEntrance(){
+  if (heroPlayed || REDUCED || !window.gsap) return;
+  heroPlayed = true;
+  const h1 = document.getElementById("hero-h1");
+  /* split into word masks (word-level: safe for AR/HE shaping) */
+  splitWords(h1);
+  const words = h1.querySelectorAll(".w");
+  gsap.timeline()
+    .fromTo("#nav", { y: -16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .9, ease: "power3.out" }, .1)
+    .fromTo(".hero-crest", { scale: .8, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.0, ease: "power3.out" }, .15)
+    .fromTo(words, { yPercent: 120 }, { yPercent: 0, duration: 1.1, ease: "power4.out", stagger: .07 }, .3)
+    .fromTo(".hero .lede", { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .9, ease: "power3.out" }, .75)
+    .fromTo(".hero .cta-row", { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .9, ease: "power3.out" }, .9)
+    .fromTo(".scroll-hint", { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, 1.2);
+}
+
+/* Wrap each word of an element (preserving <em>) in an overflow mask. */
+function splitWords(root){
+  if (!root || root.querySelector(".w")) return;
+  const wrap = (textNode) => {
+    const parts = textNode.textContent.split(/(\s+)/);
+    const frag = document.createDocumentFragment();
+    parts.forEach(p => {
+      if (!p) return;
+      if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+      const m = document.createElement("span");
+      m.style.cssText = "display:inline-block;overflow:hidden;vertical-align:top;";
+      const w = document.createElement("span");
+      w.className = "w";
+      w.style.cssText = "display:inline-block;will-change:transform;";
+      w.textContent = p;
+      m.appendChild(w);
+      frag.appendChild(m);
+    });
+    textNode.parentNode.replaceChild(frag, textNode);
+  };
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  const texts = []; let t;
+  while ((t = walker.nextNode())) texts.push(t);
+  texts.forEach(wrap);
+}
+
+/* Re-split hero h1 when language changes (innerHTML gets replaced) */
+function refreshHeroSplit(){
+  const h1 = document.getElementById("hero-h1");
+  if (!h1 || REDUCED || !window.gsap) return;
+  splitWords(h1);
+  if (document.body.classList.contains("is-ready")){
+    gsap.fromTo(h1.querySelectorAll(".w"),
+      { yPercent: 120 }, { yPercent: 0, duration: .9, ease: "power4.out", stagger: .05 });
+  }
 }
 
 /* ============================================================
-   INTERACTIONS — custom cursor, spotlight, on-load reveals.
-   Single-slide friendly: no scroll listeners.
+   HERO 3D — crystal core + partners' ring (three.js, vendored)
+   ============================================================ */
+/* module script injected below via <script type="module"> */
+
+/* ============================================================
+   ENTER-WORLD GATING — WebGPU browsers only
+   ============================================================ */
+if (navigator.gpu) {
+  document.querySelectorAll(".enter-world").forEach(el => el.hidden = false);
+}
+
+/* ============================================================
+   CURSOR + SPOTLIGHT
    ============================================================ */
 (function(){
   const html = document.documentElement;
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const fine    = matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-  /* Preloader timeline (slowed so the glitch reveal reads clearly):
-       0.20s  mark fades in (CSS, 0.8s)
-       0.50s  CRONCORE letters glitch-reveal (220ms stagger, 14 cycles)
-       1.40s  progress track fades in
-       1.40s  progress bar fills (2.0s)
-       2.10s  serif subline rises in (1.0s)
-       3.20s  hero entrance starts
-       3.40s  preloader fades out */
-  function boot(){
-    const pre = document.getElementById("preloader");
-    const word = pre && pre.querySelector(".pre-word");
-
-    if (reduced || !pre){
-      if (word) word.querySelectorAll(".char").forEach(c => c.style.opacity = "1");
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          document.body.classList.add("is-ready");
-        });
-      });
-      if (pre) pre.classList.add("done");
-      return;
-    }
-
-    if (word) glitchReveal(word, { startDelay: 500, perChar: 220, cycles: 14, cycleMs: 32 });
-
-    /* 0% → 100% counter, paced to match the preloader timeline */
-    const num = pre.querySelector("#preNum");
-    if (num){
-      const start = performance.now();
-      const DUR = 3200;
-      (function tick(now){
-        const p = Math.min(1, ((now || performance.now()) - start) / DUR);
-        num.textContent = Math.floor(p * 100);
-        if (p < 1) requestAnimationFrame(tick);
-      })();
-    }
-
-    setTimeout(() => document.body.classList.add("is-ready"), 3200);
-    setTimeout(() => pre.classList.add("done"), 3400);
-  }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot, { once: true });
-  } else {
-    boot();
-  }
-
-  if (!fine || reduced) return; /* touch / reduced motion: skip cursor */
+  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (!fine || REDUCED) return;
 
   html.classList.add("cursor-on", "has-cursor");
 
-  /* Raw cursor px → --mxp/--myp for the cursor dot/ring and spotlight.
-     No parallax on hero content (felt cheap, removed). */
-  let cx = window.innerWidth  / 2;
-  let cy = window.innerHeight / 2;
-
+  let cx = window.innerWidth / 2, cy = window.innerHeight / 2;
   function setRaw(px, py){
     html.style.setProperty("--mxp", px + "px");
     html.style.setProperty("--myp", py + "px");
@@ -2049,16 +2207,14 @@ function convergeReveal(scope, opts){
   setRaw(cx, cy);
 
   document.addEventListener("mousemove", (e) => {
-    cx = e.clientX; cy = e.clientY;
-    setRaw(cx, cy);
+    cx = e.clientX; cy = e.clientY; setRaw(cx, cy);
   }, { passive: true });
 
   document.addEventListener("mousedown", () => html.classList.add("cursor-press"));
   document.addEventListener("mouseup",   () => html.classList.remove("cursor-press"));
   window.addEventListener("blur",        () => html.classList.remove("cursor-press"));
 
-  /* Hover state on interactive elements (event delegation) */
-  const HOVER_SEL = 'a, button, [role="button"], input, select, textarea, label, [data-cursor="hover"]';
+  const HOVER_SEL = 'a, button, [role="button"], input, select, textarea, label, .dir-row, [data-cursor="hover"]';
   document.addEventListener("mouseover", (e) => {
     if (e.target.closest(HOVER_SEL)) html.classList.add("cursor-hover");
   });
@@ -2067,61 +2223,216 @@ function convergeReveal(scope, opts){
     const enter = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(HOVER_SEL);
     if (left && !enter) html.classList.remove("cursor-hover");
   });
-
-  /* When the cursor leaves the window, retire the custom cursor smoothly */
   document.addEventListener("mouseleave", () => html.classList.remove("has-cursor"));
   document.addEventListener("mouseenter", () => html.classList.add("has-cursor"));
-
-  /* Recompute on resize: raw px stays correct as it's clientXY based,
-     normalized re-derives from the next mousemove. */
 })();
 
 /* ============================================================
    BOOT
    ============================================================ */
-const heroH1 = document.querySelector(".hero h1");
-
-function refreshHeroChars(){
-  if (!heroH1) return;
-  heroH1.classList.add("fx-pending");
-  splitChars(heroH1);
-  /* If hero is already revealed (post-preloader), run converge now;
-     otherwise wait — the is-ready watcher below triggers it. */
-  if (document.body.classList.contains("is-ready")){
-    convergeReveal(heroH1);
-  }
-}
-
-/* Keep [data-text] (RGB-ghost source for the chromatic glitch) in
-   sync with the localised textContent. */
-function syncGlitchText(){
-  document.querySelectorAll(".glitch-text[data-text]").forEach(el => {
-    el.setAttribute("data-text", el.textContent.trim());
-  });
-}
-
-function setLang(lang){
-  applyLang(lang);
-  syncGlitchText();
-  refreshHeroChars();
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".lang button").forEach(b => {
-    b.addEventListener("click", () => setLang(b.dataset.lang));
+    b.addEventListener("click", () => { applyLang(b.dataset.lang); refreshHeroSplit(); });
   });
-  setLang(detectInitialLang());
-
-  /* Watch for the is-ready flip (set by the preloader) and fire the
-     hero H1 converge once chars are in place. */
-  const mo = new MutationObserver(() => {
-    if (document.body.classList.contains("is-ready") && heroH1){
-      mo.disconnect();
-      convergeReveal(heroH1);
-    }
-  });
-  mo.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  applyLang(detectInitialLang());
+  refreshHeroSplit();
+  initReveals();
+  onScrollNav();
 });
+</script>
+
+<script type="importmap">
+{ "imports": { "three": "./assets/vendor/three.module.min.js" } }
+</script>
+<script type="module">
+/* HERO 3D — crystal core + orbiting partners' ring.
+   Fails silently (CSS atmosphere remains) on any error. */
+try {
+  const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Wait until the preloader curtain has fully lifted before paying for
+     renderer + shader compilation — a main-thread stall here would freeze
+     the curtain/entrance animations on slower machines. */
+  await new Promise((resolve) => {
+    const ready = () => document.body.classList.contains("pre-done");
+    if (ready()) return resolve();
+    const mo = new MutationObserver(() => {
+      if (ready()){ mo.disconnect(); resolve(); }
+    });
+    mo.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+    setTimeout(() => { mo.disconnect(); resolve(); }, 10000); /* hard fallback */
+  });
+  await new Promise(r => setTimeout(r, 350)); /* let the hero entrance breathe */
+
+  const THREE = await import("three");
+  const { RoomEnvironment } = await import("./assets/vendor/RoomEnvironment.js");
+
+  const canvas = document.getElementById("hero-gl");
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  const heroEl = document.querySelector(".hero");
+
+  const size = () => ({ w: heroEl.clientWidth, h: heroEl.clientHeight });
+  let { w, h } = size();
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(w, h);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, w / h, .1, 60);
+  camera.position.set(0, 0, 9);
+
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
+
+  const FOREST = new THREE.Color('#3e7a58');
+  const CREAM  = new THREE.Color('#f2ead9');
+  const GOLD   = new THREE.Color('#d9b36a');
+
+  const root = new THREE.Group();
+  scene.add(root);
+
+  const gemGeo = new THREE.IcosahedronGeometry(.85, 0);
+  const gem = new THREE.Mesh(gemGeo, new THREE.MeshPhysicalMaterial({
+    color: 0xffffff, metalness: 0, roughness: .06,
+    transmission: 1, thickness: 2.2, ior: 1.45,
+    attenuationColor: FOREST, attenuationDistance: 2.6,
+    iridescence: .35, iridescenceIOR: 1.3,
+    clearcoat: 1, clearcoatRoughness: .08, flatShading: true,
+  }));
+  root.add(gem);
+  const edges = new THREE.LineSegments(
+    new THREE.EdgesGeometry(gemGeo),
+    new THREE.LineBasicMaterial({ color: CREAM, transparent: true, opacity: .16 }));
+  root.add(edges);
+  const heart = new THREE.Mesh(new THREE.IcosahedronGeometry(.3, 1),
+    new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: .9 }));
+  root.add(heart);
+  const heartGlow = new THREE.Mesh(new THREE.IcosahedronGeometry(.46, 1),
+    new THREE.MeshBasicMaterial({ color: FOREST, transparent: true, opacity: .26, blending: THREE.AdditiveBlending }));
+  root.add(heartGlow);
+
+  const RING_R = 2.9, NODES = 84;
+  const ring = new THREE.Group();
+  ring.rotation.x = THREE.MathUtils.degToRad(64);
+  ring.rotation.y = THREE.MathUtils.degToRad(-8);
+  root.add(ring);
+  const nodes = new THREE.InstancedMesh(
+    new THREE.SphereGeometry(.028, 8, 8),
+    new THREE.MeshBasicMaterial({ color: CREAM }), NODES);
+  const dummy = new THREE.Object3D();
+  const phases = new Float32Array(NODES);
+  for (let i = 0; i < NODES; i++) phases[i] = Math.random() * Math.PI * 2;
+  ring.add(nodes);
+  const circlePts = [];
+  for (let i = 0; i <= 128; i++){
+    const a = (i / 128) * Math.PI * 2;
+    circlePts.push(new THREE.Vector3(Math.cos(a) * RING_R, 0, Math.sin(a) * RING_R));
+  }
+  const circle = new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(circlePts),
+    new THREE.LineBasicMaterial({ color: FOREST, transparent: true, opacity: .45, blending: THREE.AdditiveBlending }));
+  ring.add(circle);
+
+  const DUST = 320;
+  const dustPos = new Float32Array(DUST * 3);
+  for (let i = 0; i < DUST; i++){
+    const r = 3.4 + Math.random() * 5.5;
+    const th = Math.random() * Math.PI * 2;
+    const ph = Math.acos(2 * Math.random() - 1);
+    dustPos[i*3]   = r * Math.sin(ph) * Math.cos(th);
+    dustPos[i*3+1] = (Math.random() - .5) * 6.5;
+    dustPos[i*3+2] = r * Math.sin(ph) * Math.sin(th) - 1.5;
+  }
+  const dustGeo = new THREE.BufferGeometry();
+  dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+    color: CREAM, size: .02, transparent: true, opacity: .4,
+    blending: THREE.AdditiveBlending, depthWrite: false }));
+  scene.add(dust);
+
+  scene.add(new THREE.AmbientLight(new THREE.Color('#12281c'), 2.2));
+  const key = new THREE.DirectionalLight(CREAM, 1.6);
+  key.position.set(4, 6, 6);
+  scene.add(key);
+  const rimG = new THREE.PointLight(FOREST, 24, 22);
+  rimG.position.set(-6, -2, 3);
+  scene.add(rimG);
+  const rimGold = new THREE.PointLight(GOLD, 12, 20);
+  rimGold.position.set(5, -4, -3);
+  scene.add(rimGold);
+
+  const mouse = new THREE.Vector2(0, 0);
+  addEventListener("pointermove", (e) => {
+    mouse.x = (e.clientX / innerWidth)  * 2 - 1;
+    mouse.y = (e.clientY / innerHeight) * 2 - 1;
+  }, { passive: true });
+
+  addEventListener("resize", () => {
+    ({ w, h } = size());
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
+
+  const clock = new THREE.Clock();
+  let raf = null;
+  let heroVisible = true;
+
+  function placeNodes(t){
+    for (let i = 0; i < NODES; i++){
+      const a = (i / NODES) * Math.PI * 2 + t * .1;
+      const pulse = 1 + Math.sin(t * 1.6 + phases[i]) * .45;
+      dummy.position.set(Math.cos(a) * RING_R, Math.sin(t * .9 + phases[i]) * .05, Math.sin(a) * RING_R);
+      dummy.scale.setScalar(pulse);
+      dummy.updateMatrix();
+      nodes.setMatrixAt(i, dummy.matrix);
+    }
+    nodes.instanceMatrix.needsUpdate = true;
+  }
+
+  function frame(){
+    const t = clock.getElapsedTime();
+    gem.rotation.y = t * .16;
+    gem.rotation.x = Math.sin(t * .23) * .18;
+    edges.rotation.copy(gem.rotation);
+    root.position.y = Math.sin(t * .7) * .08;
+    const hb = 1 + Math.sin(t * 1.8) * .12;
+    heart.scale.setScalar(hb);
+    heartGlow.scale.setScalar(hb * 1.15);
+    placeNodes(t);
+    ring.rotation.z = t * .05;
+    dust.rotation.y = t * .012;
+    root.rotation.y += ((mouse.x * .22) - root.rotation.y) * .04;
+    root.rotation.x += ((mouse.y * .14) - root.rotation.x) * .04;
+    camera.position.x += ((mouse.x * .3) - camera.position.x) * .03;
+    camera.position.y += ((-mouse.y * .22) - camera.position.y) * .03;
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+    raf = requestAnimationFrame(frame);
+  }
+
+  function play(){ if (!raf && heroVisible && !document.hidden) frame(); }
+  function pause(){ if (raf){ cancelAnimationFrame(raf); raf = null; } }
+
+  placeNodes(0);
+  if (REDUCED){
+    renderer.render(scene, camera);
+  } else {
+    /* pause when hero is out of view or tab hidden */
+    new IntersectionObserver((entries) => {
+      heroVisible = entries[0].isIntersecting;
+      heroVisible ? play() : pause();
+    }, { threshold: 0.02 }).observe(heroEl);
+    document.addEventListener("visibilitychange", () => {
+      document.hidden ? pause() : play();
+    });
+    play();
+  }
+} catch (err) {
+  console.warn("hero 3D disabled:", err);
+  document.getElementById("hero-gl")?.remove();
+}
 </script>
 
 </body>
