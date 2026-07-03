@@ -1463,7 +1463,7 @@ function openFromQuery(){
   const tl = gsap.timeline()
     .to(".pre-count", { opacity: .92, duration: .6, ease: "power2.out" }, .35)
     .to(state, {
-      p: 100, duration: 2.6, ease: "power2.inOut",
+      p: 100, duration: 3.2, ease: "power2.inOut",
       onUpdate(){
         /* never regress — the safety timeout below may have finished first */
         S.progress = Math.max(S.progress, state.p / 100);
@@ -1807,17 +1807,64 @@ try {
   halo.scale.setScalar(3.4);
   core.add(halo);
 
+  /* Each impulse: a small golden head + a fading additive trail, gliding
+     along a gently lifted arc — node → core → node. */
+  const TRAIL_N = 26;
   const pulses = [];
   for (let i = 0; i < MAX_PULSES; i++){
     const s = new THREE.Sprite(new THREE.SpriteMaterial({
       map: haloTex, color: GOLD, transparent: true, opacity: 0,
       blending: THREE.AdditiveBlending, depthWrite: false }));
-    s.scale.setScalar(.34);
+    s.scale.setScalar(.24);
     pulseGroup.add(s);
-    pulses.push({ sprite: s, active: false, leg: 0, a: 0, b: 0, t: 0, wait: .8 + i * .9 });
+
+    const tGeo = new THREE.BufferGeometry();
+    const tPos = new Float32Array(TRAIL_N * 3);
+    const tCol = new Float32Array(TRAIL_N * 3);
+    for (let k = 0; k < TRAIL_N; k++){
+      const f = Math.pow(1 - k / (TRAIL_N - 1), 2); /* bright head → dark tail */
+      tCol[k*3]   = GOLD.r * f;
+      tCol[k*3+1] = GOLD.g * f;
+      tCol[k*3+2] = GOLD.b * f;
+    }
+    tGeo.setAttribute("position", new THREE.BufferAttribute(tPos, 3));
+    tGeo.setAttribute("color", new THREE.BufferAttribute(tCol, 3));
+    const trail = new THREE.Line(tGeo, new THREE.LineBasicMaterial({
+      vertexColors: true, transparent: true, opacity: 0,
+      blending: THREE.AdditiveBlending, depthWrite: false }));
+    pulseGroup.add(trail);
+
+    pulses.push({ sprite: s, trail, tPos, active: false, leg: 0, a: 0, b: 0, t: 0, wait: 1.6 + i * 1.8 });
   }
   const pTmpA = new THREE.Vector3(), pTmpB = new THREE.Vector3(), pCenter = new THREE.Vector3();
+  const pMid = new THREE.Vector3(), pHead = new THREE.Vector3();
   const nodePosInRoot = (i, out) => out.copy(ringPos[i]).applyMatrix4(ring.matrix);
+  /* quadratic bezier with a lifted midpoint — a calm arc, not a laser */
+  function arcPoint(from, to, e, out){
+    pMid.lerpVectors(from, to, .5);
+    pMid.y += .6;
+    const u = 1 - e;
+    out.set(
+      u*u*from.x + 2*u*e*pMid.x + e*e*to.x,
+      u*u*from.y + 2*u*e*pMid.y + e*e*to.y,
+      u*u*from.z + 2*u*e*pMid.z + e*e*to.z
+    );
+    return out;
+  }
+  function seedTrail(p, v){
+    for (let k = 0; k < TRAIL_N; k++){
+      p.tPos[k*3] = v.x; p.tPos[k*3+1] = v.y; p.tPos[k*3+2] = v.z;
+    }
+    p.trail.geometry.attributes.position.needsUpdate = true;
+  }
+  function pushTrail(p, v){
+    const a = p.tPos;
+    for (let k = TRAIL_N - 1; k > 0; k--){
+      a[k*3] = a[(k-1)*3]; a[k*3+1] = a[(k-1)*3+1]; a[k*3+2] = a[(k-1)*3+2];
+    }
+    a[0] = v.x; a[1] = v.y; a[2] = v.z;
+    p.trail.geometry.attributes.position.needsUpdate = true;
+  }
 
   /* ---- dust ---- */
   const DUST = 340;
@@ -1894,20 +1941,20 @@ try {
       const cb = chaos[i];
       /* chaotic drift: slow orbit + bob around the base position */
       tmp.set(
-        cb.x + Math.sin(t * .7 + phases[i]) * .5,
-        cb.y + Math.cos(t * .5 + phases[i] * 1.3) * .5,
-        cb.z + Math.sin(t * .6 + phases[i] * .7) * .4
+        cb.x + Math.sin(t * .5 + phases[i]) * .5,
+        cb.y + Math.cos(t * .38 + phases[i] * 1.3) * .5,
+        cb.z + Math.sin(t * .44 + phases[i] * .7) * .4
       );
       tmp.lerp(ringPos[i], e);
       /* settled nodes keep a tiny communal pulse */
-      const pulse = 1 + Math.sin(t * 1.8 + phases[i]) * .4 * e;
+      const pulse = 1 + Math.sin(t * 1.1 + phases[i]) * .3 * e;
       /* lock-in pop: brief overshoot right as a node clicks into the chain */
       const pop = local > 0 && local < 1 ? 1 + Math.sin(local * Math.PI) * .9 : 1;
       /* message glow: sender/receiver beads swell for a moment */
-      highlight[i] *= Math.exp(-dt * 3.2);
+      highlight[i] *= Math.exp(-dt * 2.1);
 
       dummy.position.copy(tmp);
-      dummy.scale.setScalar((.8 + .5 * e) * pulse * pop * (1 + highlight[i] * .9));
+      dummy.scale.setScalar((.8 + .5 * e) * pulse * pop * (1 + highlight[i] * .65));
       dummy.updateMatrix();
       nodes.setMatrixAt(i, dummy.matrix);
     }
@@ -1926,24 +1973,24 @@ try {
     S._h = (S._h ?? 0) + ((S.hover || 0) - (S._h ?? 0)) * .07;
     const hov = S._h;
 
-    gem.rotation.y = t * (.22 + hov * .5);
-    gem.rotation.x = Math.sin(t * .3) * .22;
+    gem.rotation.y = t * (.12 + hov * .3);
+    gem.rotation.x = Math.sin(t * .2) * .2;
     edges.rotation.copy(gem.rotation);
-    core.position.y = Math.sin(t * .8) * .09 * flip;
+    core.position.y = Math.sin(t * .5) * .09 * flip;
     const coreBoost = 1 + hov * .07;
     core.scale.setScalar(coreScale * coreBoost);
-    const hb = 1 + Math.sin(t * (2.1 + hov * 2)) * .14 + heartFlash * .22;
+    const hb = 1 + Math.sin(t * (1.4 + hov * 1.4)) * .12 + heartFlash * .2;
     heart.scale.setScalar(hb);
     heartGlow.scale.setScalar(hb * 1.15);
-    halo.material.opacity = .5 + hov * .3 + heartFlash * .35 + Math.sin(t * 2.2) * .07;
-    halo.scale.setScalar(3.4 + Math.sin(t * 1.1) * .15 + hov * .5 + heartFlash * .4);
+    halo.material.opacity = .5 + hov * .3 + heartFlash * .35 + Math.sin(t * 1.5) * .07;
+    halo.scale.setScalar(3.4 + Math.sin(t * .8) * .15 + hov * .5 + heartFlash * .4);
 
-    ring.rotation.z = t * (.06 + S.dive * .9);
-    dust.rotation.y = t * .015;
+    ring.rotation.z = t * (.032 + S.dive * .9);
+    dust.rotation.y = t * .009;
 
     /* runner spark appears once the chain is closed; hurries when hovered */
-    runner.material.opacity = flip * (.75 + Math.sin(t * 3) * .25);
-    runner.rotation.y = -t * (1.1 + hov * 1.6);
+    runner.material.opacity = flip * (.7 + Math.sin(t * 1.8) * .25);
+    runner.rotation.y = -t * (.5 + hov * .9);
 
     /* --- impulses between partners (only once the chain is closed) --- */
     if (flip > .99){
@@ -1956,19 +2003,24 @@ try {
             pu.a = Math.floor(Math.random() * NODES);
             pu.b = (pu.a + 12 + Math.floor(Math.random() * (NODES - 24))) % NODES;
             highlight[pu.a] = 1;                    /* sender lights up */
+            nodePosInRoot(pu.a, pTmpA);
+            seedTrail(pu, pTmpA);
+            pu.trail.material.opacity = .8;
           }
           continue;
         }
-        pu.t += dt / 1.05;                          /* one leg ≈ a second */
+        pu.t += dt / 2.4;                           /* unhurried — one leg ≈ 2.4s */
         const e = easeInOut(Math.min(1, pu.t));
         if (pu.leg === 0){
           nodePosInRoot(pu.a, pTmpA);
-          pu.sprite.position.lerpVectors(pTmpA, pCenter, e);
+          arcPoint(pTmpA, pCenter, e, pHead);
         } else {
           nodePosInRoot(pu.b, pTmpB);
-          pu.sprite.position.lerpVectors(pCenter, pTmpB, e);
+          arcPoint(pCenter, pTmpB, e, pHead);
         }
-        pu.sprite.material.opacity = .95 - Math.abs(e - .5) * .3;
+        pu.sprite.position.copy(pHead);
+        pushTrail(pu, pHead);
+        pu.sprite.material.opacity = .9 - Math.abs(e - .5) * .25;
         if (pu.t >= 1){
           if (pu.leg === 0){
             pu.leg = 1; pu.t = 0;
@@ -1977,11 +2029,12 @@ try {
             highlight[pu.b] = 1;                    /* receiver lights up */
             pu.active = false;
             pu.sprite.material.opacity = 0;
-            pu.wait = .5 + Math.random() * 1.6;
+            pu.trail.material.opacity = 0;
+            pu.wait = 1.4 + Math.random() * 2.6;
           }
         }
       }
-      heartFlash *= Math.exp(-dt * 5.5);
+      heartFlash *= Math.exp(-dt * 3.8);
     }
 
     /* --- dive: the camera falls through the core --- */
@@ -1991,11 +2044,11 @@ try {
     heart.material.opacity = .9 + d * .1;
     heartGlow.material.opacity = .26 + d * .5 + heartFlash * .5;
 
-    /* cursor parallax — a touch stronger than before */
-    root.rotation.y += ((mouse.x * .3) - root.rotation.y) * .05;
-    root.rotation.x += ((mouse.y * .2) - root.rotation.x) * .05;
-    camera.position.x += ((mouse.x * .4) - camera.position.x) * .04;
-    camera.position.y += ((-mouse.y * .3) - camera.position.y) * .04;
+    /* cursor parallax — unhurried, follows with a soft lag */
+    root.rotation.y += ((mouse.x * .26) - root.rotation.y) * .035;
+    root.rotation.x += ((mouse.y * .18) - root.rotation.x) * .035;
+    camera.position.x += ((mouse.x * .36) - camera.position.x) * .028;
+    camera.position.y += ((-mouse.y * .26) - camera.position.y) * .028;
     camera.lookAt(0, 0, 0);
 
     renderer.render(scene, camera);
