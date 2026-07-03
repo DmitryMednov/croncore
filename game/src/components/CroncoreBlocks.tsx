@@ -1,18 +1,21 @@
-import { Billboard, Html } from '@react-three/drei';
-import { useMemo, useRef, useState } from 'react';
+import { Billboard } from '@react-three/drei';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Group, MeshStandardMaterial, Vector3 } from 'three';
-import { MathUtils } from 'three';
+import { CanvasTexture, Group, MeshStandardMaterial, MeshBasicMaterial, Vector3 } from 'three';
+import { MathUtils, SRGBColorSpace } from 'three';
 import { useGameStore } from '../core/store/gameStore';
 
 /**
  * Croncore "Investor's Circle" blocks — six floating monoliths arranged in
- * a ring around spawn. Each block is the 3D analogue of a section on the
- * marketing site.
+ * a ring around spawn, one per direction Croncore works in.
  *
- * Bruno-Simon-style proximity: walk the astronaut close to a monolith and
- * it wakes up — glow ramps in, the label panel unfolds. Walk away and it
- * goes quiet again. Hover (desktop) does the same; click opens the section.
+ * Labels are drawn into a canvas texture on a billboarded plane — NOT
+ * drei <Html>. The CSS3D transform path collapses to a tiny box under
+ * the WebGPU renderer, so the label lives inside the scene instead.
+ *
+ * Proximity: walk close and the monolith wakes — glow ramps in, the
+ * label card fades up. Hover (desktop) does the same; click opens the
+ * landing with the apply form preselected for that direction.
  */
 
 const BASE_URL: string =
@@ -25,8 +28,7 @@ type Block = {
     href: string;
 };
 
-/* The six directions Croncore works in — one monolith each. Clicking a
-   monolith opens the landing with the apply form preselected for it. */
+/* The six directions Croncore works in — one monolith each. */
 const BLOCKS: Block[] = [
     { key: 'payments',  title: 'Payments & Fintech',      sub: '01 · Accounts, acquiring, settlement rails',   href: '/?dir=payments'  },
     { key: 'invest',    title: 'Investments & DeFi',      sub: '02 · Allocations, treasury, structured deals', href: '/?dir=invest'    },
@@ -42,6 +44,55 @@ const Y_OFFSET = 4;
 /* Proximity thresholds (hysteresis so the panel doesn't flicker at the edge). */
 const NEAR_ENTER = 8.5;
 const NEAR_EXIT = 10.5;
+
+/* Label plane: canvas pixels + world size (same aspect). */
+const LABEL_W = 880, LABEL_H = 440;
+const PLANE_W = 4.4, PLANE_H = 2.2;
+
+function drawLabel(canvas: HTMLCanvasElement, title: string, sub: string) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    /* glass card */
+    const r = 44;
+    ctx.beginPath();
+    ctx.roundRect(8, 8, W - 16, H - 16, r);
+    ctx.fillStyle = 'rgba(6, 16, 11, 0.88)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(157, 238, 192, 0.35)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    /* top specular line */
+    const spec = ctx.createLinearGradient(0, 8, 0, 80);
+    spec.addColorStop(0, 'rgba(255,255,255,0.14)');
+    spec.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.beginPath();
+    ctx.roundRect(10, 10, W - 20, 70, [r, r, 0, 0]);
+    ctx.fillStyle = spec;
+    ctx.fill();
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    /* title — serif italic, like the landing */
+    ctx.fillStyle = '#dffbe9';
+    ctx.font = 'italic 400 84px "Newsreader", Georgia, serif';
+    ctx.fillText(title, W / 2, H * 0.36, W - 100);
+
+    /* sub */
+    ctx.fillStyle = '#9ec2ad';
+    ctx.font = '400 34px "Geist", ui-sans-serif, system-ui, sans-serif';
+    ctx.fillText(sub, W / 2, H * 0.60, W - 120);
+
+    /* CTA line */
+    ctx.fillStyle = '#6fb892';
+    ctx.font = '500 26px "JetBrains Mono", ui-monospace, monospace';
+    try { (ctx as any).letterSpacing = '6px'; } catch (e) { /* older engines */ }
+    ctx.fillText('CLICK TO OPEN · CRONCORE', W / 2, H * 0.80);
+    try { (ctx as any).letterSpacing = '0px'; } catch (e) { /* reset */ }
+}
 
 export function CroncoreBlocks({ visible = true }: { visible?: boolean }) {
     return (
@@ -90,8 +141,32 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
 
     const groupRef = useRef<Group>(null);
     const matRef = useRef<MeshStandardMaterial>(null);
+    const labelMatRef = useRef<MeshBasicMaterial>(null);
     const worldPos = useMemo(() => new Vector3(), []);
     const phase = index * 1.7; // desync the float bob per monolith
+
+    /* label canvas → texture; redrawn once web fonts arrive */
+    const labelTexture = useMemo(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = LABEL_W;
+        canvas.height = LABEL_H;
+        drawLabel(canvas, title, sub);
+        const tex = new CanvasTexture(canvas);
+        tex.colorSpace = SRGBColorSpace;
+        tex.anisotropy = 4;
+        (tex as any).__canvas = canvas;
+        return tex;
+    }, [title, sub]);
+
+    useEffect(() => {
+        let alive = true;
+        document.fonts?.ready?.then(() => {
+            if (!alive) return;
+            drawLabel((labelTexture as any).__canvas, title, sub);
+            labelTexture.needsUpdate = true;
+        });
+        return () => { alive = false; };
+    }, [labelTexture, title, sub]);
 
     const awake = near || hovered;
 
@@ -113,17 +188,17 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
             else if (near && d > NEAR_EXIT) setNear(false);
         }
 
-        // Glow ramps smoothly instead of snapping. Kept modest — at high
-        // intensity the tone-mapped face blows out to near-white and the
-        // label text becomes unreadable against it.
+        // Glow ramps smoothly instead of snapping. Kept modest so the
+        // face never blows out.
+        const k = Math.min(1, delta * 6);
         const mat = matRef.current;
         if (mat) {
-            const target = awake ? 1.0 : 0.5;
-            mat.emissiveIntensity = MathUtils.lerp(
-                mat.emissiveIntensity,
-                target,
-                Math.min(1, delta * 6)
-            );
+            mat.emissiveIntensity = MathUtils.lerp(mat.emissiveIntensity, awake ? 1.0 : 0.5, k);
+        }
+        // Label card fades with the same rhythm.
+        const lm = labelMatRef.current;
+        if (lm) {
+            lm.opacity = MathUtils.lerp(lm.opacity, awake ? 1 : 0, k);
         }
     });
 
@@ -157,80 +232,20 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
                 />
             </mesh>
 
-            {/* HTML label hovering just off the front face, always facing the
-                camera. Sits on its own dark glass card so it stays readable
-                no matter how bright the monolith face behind it gets. */}
-            <Billboard follow position={[0, 0, 0.55]}>
-                <Html
-                    transform
-                    center
-                    scale={0.014}
-                    pointerEvents="none"
-                    style={{
-                        pointerEvents: 'none',
-                        userSelect: 'none',
-                        width: 340,
-                        textAlign: 'center',
-                    }}
-                >
-                    <div
-                        style={{
-                            fontFamily: '"Geist", ui-sans-serif, system-ui, sans-serif',
-                            color: '#e6fff0',
-                            letterSpacing: '-0.02em',
-                            background: awake ? 'rgba(6, 16, 11, 0.86)' : 'rgba(6, 16, 11, 0)',
-                            border: `1px solid ${awake ? 'rgba(157, 238, 192, 0.28)' : 'rgba(157, 238, 192, 0)'}`,
-                            borderRadius: 16,
-                            padding: '20px 24px 18px',
-                            boxShadow: awake ? '0 18px 50px rgba(0,0,0,.55)' : 'none',
-                            textShadow: '0 2px 18px rgba(0,0,0,.9)',
-                            transition: 'background .45s ease, border-color .45s ease, box-shadow .45s ease',
-                        }}
-                    >
-                        <div
-                            style={{
-                                fontFamily: '"Newsreader", Georgia, serif',
-                                fontStyle: 'italic',
-                                fontWeight: 400,
-                                fontSize: 38,
-                                lineHeight: 1,
-                                color: '#dffbe9',
-                                marginBottom: 8,
-                                opacity: awake ? 1 : 0.55,
-                                transform: awake ? 'translateY(0)' : 'translateY(6px)',
-                                transition: 'opacity .45s ease, transform .45s ease',
-                            }}
-                        >
-                            {title}
-                        </div>
-
-                        {/* Details unfold only when the astronaut is close (or hover). */}
-                        <div
-                            style={{
-                                opacity: awake ? 1 : 0,
-                                transform: awake ? 'translateY(0)' : 'translateY(10px)',
-                                transition: 'opacity .45s ease .08s, transform .45s ease .08s',
-                            }}
-                        >
-                            <div style={{ fontSize: 13, color: '#9ec2ad', maxWidth: 280, margin: '0 auto' }}>
-                                {sub}
-                            </div>
-                            <div
-                                style={{
-                                    marginTop: 14,
-                                    fontFamily: '"JetBrains Mono", ui-monospace, monospace',
-                                    fontSize: 10,
-                                    letterSpacing: '.2em',
-                                    textTransform: 'uppercase',
-                                    color: hovered ? '#bff5d3' : '#6fb892',
-                                    transition: 'color .15s',
-                                }}
-                            >
-                                {hovered ? '› Click to open' : '› Click to open · Croncore'}
-                            </div>
-                        </div>
-                    </div>
-                </Html>
+            {/* In-scene label card: canvas texture on a billboarded plane —
+                survives any renderer, unlike CSS3D-transformed HTML. */}
+            <Billboard follow position={[0, 0, 1.1]}>
+                <mesh renderOrder={10}>
+                    <planeGeometry args={[PLANE_W, PLANE_H]} />
+                    <meshBasicMaterial
+                        ref={labelMatRef}
+                        map={labelTexture}
+                        transparent
+                        opacity={0}
+                        depthWrite={false}
+                        toneMapped={false}
+                    />
+                </mesh>
             </Billboard>
         </group>
     );
