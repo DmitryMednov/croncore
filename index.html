@@ -1460,21 +1460,31 @@ function openFromQuery(){
   }
 
   const state = { p: 0 };
-  gsap.timeline()
+  const tl = gsap.timeline()
     .to(".pre-count", { opacity: .92, duration: .6, ease: "power2.out" }, .35)
     .to(state, {
       p: 100, duration: 2.6, ease: "power2.inOut",
       onUpdate(){
-        S.progress = state.p / 100;
-        num.textContent = Math.round(state.p);
+        /* never regress — the safety timeout below may have finished first */
+        S.progress = Math.max(S.progress, state.p / 100);
+        num.textContent = Math.round(S.progress * 100);
       }
     }, .3)
     .add(() => { S.flipAt = performance.now(); })            /* circle tilts, core ignites */
     .to(".pre-count", { opacity: 0, duration: .5, ease: "power2.in" }, "+=.05")
     .add(() => { pre.classList.add("done"); heroEntrance(); }, "-=.15");
 
-  /* never trap the visitor */
-  setTimeout(() => { if (!heroEntrance.done){ S.progress = 1; if (!S.flipAt) S.flipAt = performance.now(); pre.classList.add("done"); heroEntrance(); } }, 8000);
+  /* never trap the visitor — and kill the timeline so it can't rewind
+     the assembly it is superseding */
+  setTimeout(() => {
+    if (!heroEntrance.done){
+      tl.kill();
+      S.progress = 1;
+      if (!S.flipAt) S.flipAt = performance.now();
+      pre.classList.add("done");
+      heroEntrance();
+    }
+  }, 8000);
 })();
 
 /* ============================================================
@@ -1746,6 +1756,15 @@ try {
     new THREE.LineBasicMaterial({ color: GOLD, transparent: true, opacity: 0, blending: THREE.AdditiveBlending }));
   ring.add(runner);
 
+  /* --- impulses: partners talking through the core.
+     A spark leaves a bead, strikes the emerald, and carries on to
+     another bead; both beads glow briefly at send and receive. --- */
+  const MAX_PULSES = 3;
+  const highlight = new Float32Array(NODES);
+  let heartFlash = 0;
+  const pulseGroup = new THREE.Group();
+  root.add(pulseGroup);
+
   /* ---- the core (hidden until the chain closes) ---- */
   const core = new THREE.Group();
   core.scale.setScalar(.0001);
@@ -1787,6 +1806,18 @@ try {
   }));
   halo.scale.setScalar(3.4);
   core.add(halo);
+
+  const pulses = [];
+  for (let i = 0; i < MAX_PULSES; i++){
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: haloTex, color: GOLD, transparent: true, opacity: 0,
+      blending: THREE.AdditiveBlending, depthWrite: false }));
+    s.scale.setScalar(.34);
+    pulseGroup.add(s);
+    pulses.push({ sprite: s, active: false, leg: 0, a: 0, b: 0, t: 0, wait: .8 + i * .9 });
+  }
+  const pTmpA = new THREE.Vector3(), pTmpB = new THREE.Vector3(), pCenter = new THREE.Vector3();
+  const nodePosInRoot = (i, out) => out.copy(ringPos[i]).applyMatrix4(ring.matrix);
 
   /* ---- dust ---- */
   const DUST = 340;
@@ -1838,8 +1869,11 @@ try {
   const tmp = new THREE.Vector3();
   let raf = null;
 
+  let lastT = 0;
   function frame(){
     const t = clock.getElapsedTime();
+    const dt = Math.min(.05, Math.max(.001, t - lastT));
+    lastT = t;
     const p = S.progress;
 
     /* flip factor 0→1 after the chain closes */
@@ -1869,9 +1903,11 @@ try {
       const pulse = 1 + Math.sin(t * 1.8 + phases[i]) * .4 * e;
       /* lock-in pop: brief overshoot right as a node clicks into the chain */
       const pop = local > 0 && local < 1 ? 1 + Math.sin(local * Math.PI) * .9 : 1;
+      /* message glow: sender/receiver beads swell for a moment */
+      highlight[i] *= Math.exp(-dt * 3.2);
 
       dummy.position.copy(tmp);
-      dummy.scale.setScalar((.8 + .5 * e) * pulse * pop);
+      dummy.scale.setScalar((.8 + .5 * e) * pulse * pop * (1 + highlight[i] * .9));
       dummy.updateMatrix();
       nodes.setMatrixAt(i, dummy.matrix);
     }
@@ -1896,11 +1932,11 @@ try {
     core.position.y = Math.sin(t * .8) * .09 * flip;
     const coreBoost = 1 + hov * .07;
     core.scale.setScalar(coreScale * coreBoost);
-    const hb = 1 + Math.sin(t * (2.1 + hov * 2)) * .14;
+    const hb = 1 + Math.sin(t * (2.1 + hov * 2)) * .14 + heartFlash * .22;
     heart.scale.setScalar(hb);
     heartGlow.scale.setScalar(hb * 1.15);
-    halo.material.opacity = .5 + hov * .3 + Math.sin(t * 2.2) * .07;
-    halo.scale.setScalar(3.4 + Math.sin(t * 1.1) * .15 + hov * .5);
+    halo.material.opacity = .5 + hov * .3 + heartFlash * .35 + Math.sin(t * 2.2) * .07;
+    halo.scale.setScalar(3.4 + Math.sin(t * 1.1) * .15 + hov * .5 + heartFlash * .4);
 
     ring.rotation.z = t * (.06 + S.dive * .9);
     dust.rotation.y = t * .015;
@@ -1909,12 +1945,51 @@ try {
     runner.material.opacity = flip * (.75 + Math.sin(t * 3) * .25);
     runner.rotation.y = -t * (1.1 + hov * 1.6);
 
+    /* --- impulses between partners (only once the chain is closed) --- */
+    if (flip > .99){
+      pCenter.set(0, core.position.y, 0);
+      for (const pu of pulses){
+        if (!pu.active){
+          pu.wait -= dt;
+          if (pu.wait <= 0){
+            pu.active = true; pu.leg = 0; pu.t = 0;
+            pu.a = Math.floor(Math.random() * NODES);
+            pu.b = (pu.a + 12 + Math.floor(Math.random() * (NODES - 24))) % NODES;
+            highlight[pu.a] = 1;                    /* sender lights up */
+          }
+          continue;
+        }
+        pu.t += dt / 1.05;                          /* one leg ≈ a second */
+        const e = easeInOut(Math.min(1, pu.t));
+        if (pu.leg === 0){
+          nodePosInRoot(pu.a, pTmpA);
+          pu.sprite.position.lerpVectors(pTmpA, pCenter, e);
+        } else {
+          nodePosInRoot(pu.b, pTmpB);
+          pu.sprite.position.lerpVectors(pCenter, pTmpB, e);
+        }
+        pu.sprite.material.opacity = .95 - Math.abs(e - .5) * .3;
+        if (pu.t >= 1){
+          if (pu.leg === 0){
+            pu.leg = 1; pu.t = 0;
+            heartFlash = 1;                         /* the impulse strikes the emerald */
+          } else {
+            highlight[pu.b] = 1;                    /* receiver lights up */
+            pu.active = false;
+            pu.sprite.material.opacity = 0;
+            pu.wait = .5 + Math.random() * 1.6;
+          }
+        }
+      }
+      heartFlash *= Math.exp(-dt * 5.5);
+    }
+
     /* --- dive: the camera falls through the core --- */
     const d = S.dive;
     camera.position.z = BZ - d * (BZ - 2.6);
     renderer.toneMappingExposure = 1.0 + d * .9;
     heart.material.opacity = .9 + d * .1;
-    heartGlow.material.opacity = .26 + d * .5;
+    heartGlow.material.opacity = .26 + d * .5 + heartFlash * .5;
 
     /* cursor parallax — a touch stronger than before */
     root.rotation.y += ((mouse.x * .3) - root.rotation.y) * .05;

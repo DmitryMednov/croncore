@@ -165,7 +165,7 @@ export function LoadingScreen() {
                         letterSpacing: isMobile ? '0.3rem' : '0.5rem',
                         marginBottom: isMobileLandscape ? '1rem' : '2rem',
                     }}>
-                        CRONCORE · THE PARTNERS' CIRCLE
+                        THE PARTNERS' CIRCLE
                     </div>
 
                     {/* Intro Text */}
@@ -177,15 +177,10 @@ export function LoadingScreen() {
                         fontSize: isMobileLandscape ? '0.75rem' : 'inherit',
                     }}>
                         <p>
-                            Past the landing page lies the Circle itself — a quiet world
-                            where the partners keep their rooms. Six monoliths stand around
-                            the core, one for each direction Croncore works in: payments,
-                            investments, SPV, legal, concierge, the private network.
-                        </p>
-
-                        <p>
-                            Walk up to a monolith and it wakes. Push the letters at the spawn.
-                            Nothing here asks for attention — everything answers when approached.
+                            The Circle itself — a CRONCORE world where the partners keep
+                            their rooms. Six monoliths stand around the core, one for each
+                            direction Croncore works in: payments, investments, SPV, legal,
+                            concierge, the private network.
                         </p>
 {/* 
                         {!gpuError && (
