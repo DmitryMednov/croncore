@@ -233,9 +233,12 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
             </mesh>
 
             {/* In-scene label card: canvas texture on a billboarded plane —
-                survives any renderer, unlike CSS3D-transformed HTML. */}
+                survives any renderer, unlike CSS3D-transformed HTML.
+                depthTest off + high renderOrder: the card reads like a
+                floating sign and is never swallowed by the monolith no
+                matter the camera angle. */}
             <Billboard follow position={[0, 0, 1.1]}>
-                <mesh renderOrder={10}>
+                <mesh renderOrder={999}>
                     <planeGeometry args={[PLANE_W, PLANE_H]} />
                     <meshBasicMaterial
                         ref={labelMatRef}
@@ -243,6 +246,7 @@ function Monolith({ index, position, rotationY, title, sub, href }: MonolithProp
                         transparent
                         opacity={0}
                         depthWrite={false}
+                        depthTest={false}
                         toneMapped={false}
                     />
                 </mesh>
