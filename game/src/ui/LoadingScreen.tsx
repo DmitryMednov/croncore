@@ -165,7 +165,7 @@ export function LoadingScreen() {
                         letterSpacing: isMobile ? '0.3rem' : '0.5rem',
                         marginBottom: isMobileLandscape ? '1rem' : '2rem',
                     }}>
-                        FALSE EARTH
+                        CRONCORE · THE PARTNERS' CIRCLE
                     </div>
 
                     {/* Intro Text */}
@@ -177,14 +177,15 @@ export function LoadingScreen() {
                         fontSize: isMobileLandscape ? '0.75rem' : 'inherit',
                     }}>
                         <p>
-                            After drifting beyond the edge of space, the journey reaches ground again.
-                            A surface extends in every direction, without a visible boundary.
-                            No matter how far it continues, the horizon does not draw closer.
+                            Past the landing page lies the Circle itself — a quiet world
+                            where the partners keep their rooms. Six monoliths stand around
+                            the core, one for each direction Croncore works in: payments,
+                            investments, SPV, legal, concierge, the private network.
                         </p>
 
                         <p>
-                            With each step, something descends and alters the surface, leaving traces behind.
-                            The drift does not end here; it continues in another form.
+                            Walk up to a monolith and it wakes. Push the letters at the spawn.
+                            Nothing here asks for attention — everything answers when approached.
                         </p>
 {/* 
                         {!gpuError && (

@@ -25,13 +25,15 @@ type Block = {
     href: string;
 };
 
+/* The six directions Croncore works in — one monolith each. Clicking a
+   monolith opens the landing with the apply form preselected for it. */
 const BLOCKS: Block[] = [
-    { key: 'services', title: 'Services',     sub: 'Six private directions',            href: '/#services' },
-    { key: 'advisor',  title: 'Advisor',      sub: 'Start with a question',             href: '/#access'   },
-    { key: 'how',      title: 'How it works', sub: 'From a message to the right room',  href: '/#how'      },
-    { key: 'access',   title: 'Access',       sub: "Enter The Investor's Circle",       href: '/#access'   },
-    { key: 'payments', title: 'Payments',     sub: '01 · Infrastructure',               href: '/#services' },
-    { key: 'spv',      title: 'SPV',          sub: '03 · Structure',                    href: '/#services' },
+    { key: 'payments',  title: 'Payments & Fintech',      sub: '01 · Accounts, acquiring, settlement rails',   href: '/?dir=payments'  },
+    { key: 'invest',    title: 'Investments & DeFi',      sub: '02 · Allocations, treasury, structured deals', href: '/?dir=invest'    },
+    { key: 'spv',       title: 'SPV & Tokenization',      sub: '03 · Vehicles, cap tables, real-world assets', href: '/?dir=spv'       },
+    { key: 'legal',     title: 'Legal & Corporate',       sub: '04 · Jurisdictions, structuring, compliance',  href: '/?dir=legal'     },
+    { key: 'concierge', title: 'Concierge & Real Estate', sub: '05 · Relocation, property, quiet logistics',   href: '/?dir=concierge' },
+    { key: 'network',   title: 'Private Network',         sub: '06 · Introductions inside the circle',         href: '/?dir=network'   },
 ];
 
 const RADIUS = 22;
